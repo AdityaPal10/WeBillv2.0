@@ -9,11 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.teamblue.WeBillv2.R;
-import com.teamblue.WeBillv2.fragments.AccountFragment;
-import com.teamblue.WeBillv2.fragments.AddBillFragment;
-import com.teamblue.WeBillv2.fragments.FriendFragment;
-import com.teamblue.WeBillv2.fragments.ReceiptFragment;
-import com.teamblue.WeBillv2.fragments.SpendingActivityFragment;
+import com.teamblue.WeBillv2.view.fragments.AccountFragment;
+import com.teamblue.WeBillv2.view.fragments.AddBillFragment;
+import com.teamblue.WeBillv2.view.fragments.FriendFragment;
+import com.teamblue.WeBillv2.view.fragments.ReceiptFragment;
+import com.teamblue.WeBillv2.view.fragments.SpendingActivityFragment;
 
 import org.jetbrains.annotations.NotNull;
 

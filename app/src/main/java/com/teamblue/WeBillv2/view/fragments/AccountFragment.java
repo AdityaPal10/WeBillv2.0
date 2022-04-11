@@ -1,4 +1,4 @@
-package com.teamblue.WeBillv2.fragments;
+package com.teamblue.WeBillv2.view.fragments;
 
 import android.os.Bundle;
 
@@ -12,11 +12,11 @@ import com.teamblue.WeBillv2.R;
 
 
 /**
- * friend fragment subclass.
+ *  account fragment subclass.
  */
-public class FriendFragment extends Fragment {
+public class AccountFragment extends Fragment {
 
-    public FriendFragment() {
+    public AccountFragment() {
         // Required empty public constructor
     }
 
@@ -25,6 +25,6 @@ public class FriendFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends, container, false);
+        return inflater.inflate(R.layout.fragment_account, container, false);
     }
 }

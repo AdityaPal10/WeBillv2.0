@@ -1,4 +1,4 @@
-package com.teamblue.WeBillv2.fragments;
+package com.teamblue.WeBillv2.view.fragments;
 
 import android.os.Bundle;
 

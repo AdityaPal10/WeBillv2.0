@@ -1,4 +1,4 @@
-package com.teamblue.WeBillv2.fragments;
+package com.teamblue.WeBillv2.view.fragments;
 
 import android.os.Bundle;
 
@@ -12,11 +12,11 @@ import com.teamblue.WeBillv2.R;
 
 
 /**
- * spending fragments subclass.
+ *  addbill fragment subclass.
  */
-public class SpendingActivityFragment extends Fragment {
+public class AddBillFragment extends Fragment {
 
-    public SpendingActivityFragment() {
+    public AddBillFragment() {
         // Required empty public constructor
     }
 
@@ -25,6 +25,7 @@ public class SpendingActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_spending_activity, container, false);
+
+        return inflater.inflate(R.layout.fragment_add_bill, container, false);
     }
 }

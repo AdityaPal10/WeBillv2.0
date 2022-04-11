@@ -7,7 +7,7 @@
     android:background="#009688"
     android:foregroundTint="#FBFBFB"
     android:textAlignment="center"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
 
     <TextView
         android:id="@+id/textView"

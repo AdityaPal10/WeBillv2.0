@@ -1,4 +1,4 @@
-package com.teamblue.WeBillv2;
+package com.teamblue.WeBillv2.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.view.SIgnUpView;
 import com.teamblue.WeBillv2.view.FriendsView;
 
