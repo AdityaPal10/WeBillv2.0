@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/friends"
+        android:icon="@drawable/friendlogo"
+        android:title="Friends" />
+
+    <item
+        android:id="@+id/receipt"
+        android:icon="@drawable/bill4"
+        android:title="Receipts" />
+
+    <item
+        android:id="@+id/addbills"
+        android:icon="@drawable/plus"
+        android:title="Add Bills" />
+
+    <item
+        android:id="@+id/spendingactivity"
+        android:icon="@drawable/dollarbills"
+        android:title="Spending Activity" />
+
+    <item
+        android:id="@+id/account"
+        android:icon="@drawable/user"
+        android:title="Account" />
+</menu>
