@@ -34,4 +34,7 @@ dependencies {
 
     //custom library
     implementation 'nl.joery.animatedbottombar:library:1.0.4'
+
+    // Stripe Android SDK
+    implementation 'com.stripe:stripe-android:19.3.0'
 }
