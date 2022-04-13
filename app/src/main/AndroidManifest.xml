@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.teamblue.WeBillv2.view.SIgnUpView"
+            android:name="com.teamblue.WeBillv2.view.SignUpView"
             android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
         <activity
             android:name="com.teamblue.WeBillv2.view.MyAccountView"

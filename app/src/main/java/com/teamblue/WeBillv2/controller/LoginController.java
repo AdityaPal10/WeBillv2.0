@@ -17,4 +17,9 @@ public class LoginController {
         Log.d(TAG,"attempting login");
         loginService.authorizeLogin(context,email,password);
     }
+
+    public void signUp(Context context,EditText email,EditText username,EditText password){
+        Log.d(TAG,"attempting sign up");
+        loginService.registerUser(context,email,username,password);
+    }
 }
