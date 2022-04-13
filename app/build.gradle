@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 32
-    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.teamblue.WeBillv2"
         minSdkVersion 21
@@ -34,6 +33,7 @@ dependencies {
 
     //custom library
     implementation 'nl.joery.animatedbottombar:library:1.0.4'
+    //implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     // Stripe Android SDK
     implementation 'com.stripe:stripe-android:19.3.0'
