@@ -43,12 +43,13 @@ public class FriendFragment extends Fragment {
         ArrayList<Double> paymentAmount;
         ArrayList<Integer> buttonAction;
 
-        public CustomAdapter(Context acontext){
-            /*
+        /*
             1. make network call using retrofit
             2. from response received populate lists
             3. set context=acontext
              */
+        public CustomAdapter(Context acontext){
+            context = acontext;
         }
 
 
