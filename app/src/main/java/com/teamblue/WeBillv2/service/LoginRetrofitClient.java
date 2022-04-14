@@ -1,12 +1,14 @@
 package com.teamblue.WeBillv2.service;
 
+import com.teamblue.WeBillv2.model.pojo.Constants;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginRetrofitClient {
 
     private static Retrofit retrofit;
-    private static String BASE_URL = "https://webill-app.herokuapp.com/";
+    private static String BASE_URL = Constants.API_URL;
 
     public static Retrofit getRetrofitInstance(){
         if(retrofit==null){

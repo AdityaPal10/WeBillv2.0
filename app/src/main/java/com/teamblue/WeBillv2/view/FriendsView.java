@@ -5,16 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.view.fragments.AccountFragment;
 import com.teamblue.WeBillv2.view.fragments.AddBillFragment;
-import com.teamblue.WeBillv2.view.fragments.FriendChildFragment;
 import com.teamblue.WeBillv2.view.fragments.FriendFragment;
 import com.teamblue.WeBillv2.view.fragments.ReceiptFragment;
 import com.teamblue.WeBillv2.view.fragments.SpendingActivityFragment;
@@ -27,18 +23,12 @@ public class FriendsView extends AppCompatActivity {
     private static final String TAG = FriendsView.class.getSimpleName();
     AnimatedBottomBar animatedBottomBar;
     FragmentManager fragmentManager;
-    //private Button addFriendBttn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_home);
         setTitle("We Bill");
-        //addFriendBttn = (Button) findViewById(R.id.btn_addFriends);
-        //addFriendBttn.setOnClickListener((View.OnClickListener) this);
-
-
-
 
         animatedBottomBar = findViewById(R.id.animatedBottomBar);
 
@@ -49,19 +39,6 @@ public class FriendsView extends AppCompatActivity {
             fragmentManager.beginTransaction().replace(R.id.fragment_container, friendFragment)
                     .commit();
         }
-
-        addFriendBttn.setOnClickListener(new View.OnClickListener() {
-                                             public void onClick(View v) {
-                                                 Fragment fragment = null;
-                                                 fragment = new FriendChildFragment();
-
-
-                                             }
-                                         }
-
-
-
-
 
         animatedBottomBar.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
             @Override

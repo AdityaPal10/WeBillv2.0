@@ -1,5 +1,6 @@
 package com.teamblue.WeBillv2.view.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,18 +8,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
-
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.teamblue.WeBillv2.R;
+import java.util.ArrayList;
 
 
 /**
  * friend fragment subclass.
  */
-public class FriendFragment<addFriendBttn> extends Fragment {
+public class FriendFragment extends Fragment {
+
+    Context context;
 
     public FriendFragment() {
         // Required empty public constructor
+        Toast.makeText(context, "friends", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -28,86 +36,71 @@ public class FriendFragment<addFriendBttn> extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_friends, container, false);
     }
-    public class FragmentInsideFragmentTestActivity extends Activity {
+    public class CustomAdapter extends BaseAdapter {
 
-        private Button addFriendBttn;
-        addFriendBttn = (Button) findViewById(R.id.btn_addFriends);
+        ArrayList<Integer> friendAvatar;
+        ArrayList<String> friendNames;
+        ArrayList<Integer> paymentDirection;
+        ArrayList<Double> paymentAmount;
+        ArrayList<Integer> buttonAction;
+
+        public CustomAdapter(Context acontext){
+            /*
+            1. make network call using retrofit
+            2. from response received populate lists
+            3. set context=acontext
+             */
+        }
 
 
-        /** Called when the activity is first created. */
+
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.main);
-
-            button1 =(Button) this.findViewById(R.id.button1);
-            button1.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    onButtonClick(view);
-                }
-            });
-
-            button2 =(Button) this.findViewById(R.id.button2);
-            button2.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    onButtonClick(view);
-                }
-            });
-
-            button3 =(Button) this.findViewById(R.id.button3);
-            button3.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    onButtonClick(view);
-                }
-            });
-
-            button4 =(Button) this.findViewById(R.id.button4);
-            button4.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    onButtonClick(view);
-                }
-            });
+        public int getCount() {
+            return friendNames.size();
         }
 
-        public void onButtonClick(View v) {
-            Fragment fg;
+        @Override
+        public Object getItem(int position) {
 
-            switch (v.getId()) {
-                case R.id.button1:
-                    fg=FirstFragment.newInstance();
-                    replaceFragment(fg);
-                    break;
-                case R.id.button2:
-                    fg=SecondFragment.newInstance();
-                    replaceFragment(fg);
-                    break;
-                case R.id.button3:
-                    fg=FirstFragment.newInstance();
-                    replaceFragment(fg);
-                    break;
-                case R.id.button4:
-                    fg=SecondFragment.newInstance();
-                    replaceFragment(fg);
-                    break;
+            return friendNames.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup viewGroup) {
+
+            View row;
+            if (view==null){
+                LayoutInflater inflater=(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                row = inflater.inflate(R.layout.friends_ledger_row, viewGroup, false);
             }
-        }
-
-        private void replaceFragment(Fragment newFragment) {
-            FragmentTransaction trasection = getFragmentManager().beginTransaction();
-
-            if(!newFragment.isAdded()) {
-                try {
-                    //FragmentTransaction trasection =
-                    getFragmentManager().beginTransaction();
-                    trasection.replace(R.id.linearLayout2, newFragment);
-                    trasection.addToBackStack(null);
-                    trasection.commit();
-                } catch (Exception e) {
-                    // TODO: handle exception
-                    // AppConstants.printLog(e.getMessage());
-                } else {
-                    trasection.show(newFragment);
-                }
+            else{
+                row=view;
             }
+            Button bttnLedger=(Button) row.findViewById(R.id.bttnLedger);
+            TextView ledgerName=(TextView) row.findViewById(R.id.friendNameLedger);
+            TextView ledgerAmount=(TextView) row.findViewById(R.id.amountLedger);
+            TextView ledgerDirection=(TextView) row.findViewById(R.id.paymentDirectionLedger);
+            ImageView imageView = (ImageView)row.findViewById(R.id.imageViewLedger);
+
+            ledgerName.setText(friendNames.get(position));
+            ledgerAmount.setText(String.valueOf(paymentAmount.get(position)));
+            ledgerDirection.setText(paymentDirection.get(position)==0?"Owes You:":"You Owe:");
+            bttnLedger.setText(paymentDirection.get(position)==0?"Remind":"Pay");
+            //imageView.setImageDrawable(R.);
+
+            bttnLedger.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(), "Amount paid:", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            return row;
         }
+    }
 }
