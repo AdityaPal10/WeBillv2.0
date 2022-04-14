@@ -15,7 +15,7 @@ import com.teamblue.WeBillv2.controller.LoginController;
 public class MainActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signUpButton;
-    private EditText emailEditText;
+    private EditText usernameEditText;
     private EditText passwordEditText;
 
 //    private Button btnSkip; // Skip login for developer testing (Delete after finished)
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton = (Button) findViewById(R.id.registerButtonSignUp);
         signUpButton = (Button) findViewById(R.id.btnSignUp);
-        emailEditText = (EditText) findViewById(R.id.emailEditTextSignUp);
+        usernameEditText = (EditText) findViewById(R.id.emailEditTextSignUp);
         passwordEditText = (EditText) findViewById(R.id.usernameEditTextSignUp);
 
 //        btnSkip = (Button) findViewById(R.id.btnSkip); // Skip login for developer testing (Delete after finished)
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //call login controller's login method
-                loginController.login(getApplicationContext(),emailEditText,passwordEditText);
+                loginController.login(getApplicationContext(),usernameEditText,passwordEditText);
             }
         });
 

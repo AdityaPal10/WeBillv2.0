@@ -2,6 +2,7 @@ package com.teamblue.WeBillv2.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import retrofit2.Response;
 public class LoginService extends AppCompatActivity {
 
     private String TAG = "Login";
+    private String USERNAME="";
 
     /*
     making network call to our backend api to authorize login.
@@ -34,12 +36,12 @@ public class LoginService extends AppCompatActivity {
        Return type:
        void - the function if successful will start an intent to the friends activity.
      */
-    public void authorizeLogin(Context context,EditText email, EditText password){
+    public void authorizeLogin(Context context,EditText username, EditText password){
         //1. create an instance of login methods interface defined in our LoginMethods class
         LoginMethods loginMethods = LoginRetrofitClient.getRetrofitInstance().create(LoginMethods.class);
         //2. create a call object which will make the REST API call to our backend by passing in email and password as paramaters
-        Call<LoginModel> call = loginMethods.login(new User(email.getText().toString().trim(),password.getText().toString().trim()));
-        Log.d(TAG,email.getText().toString().trim());
+        Call<LoginModel> call = loginMethods.login(new User(username.getText().toString().trim(),password.getText().toString().trim()));
+        Log.d(TAG,username.getText().toString().trim());
         Log.d(TAG,password.getText().toString().trim());
 
         /*3. create a callback for our call object, once its finished the network call, it will use this callback to further
@@ -57,7 +59,14 @@ public class LoginService extends AppCompatActivity {
                     LoginModel loginResponse = (LoginModel) response.body();
                     Log.d(TAG,"login successful");
                     Toast.makeText(context,loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                    USERNAME = username.getText().toString().trim();
 
+                    //set it to preferences
+                    SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Constants.USERNAME_KEY,USERNAME);
+                    editor.apply();
+                    Log.d(TAG,sharedPreferences.getString(Constants.USERNAME_KEY,""));
 
                     //move to activity if successful login
                     if(loginResponse.getStatus()==Constants.RESPONSE_OK){
@@ -71,14 +80,14 @@ public class LoginService extends AppCompatActivity {
 
                     else{
                         //on login fail- clear out the text boxes, to allow user to re-enter details
-                        email.setText("");
+                        username.setText("");
                         password.setText("");
                         Toast.makeText(context,"login unsuccessful",Toast.LENGTH_LONG).show();
                     }
                 }else{
                     //network call was unsuccessful, allow users to re-enter their details
                     Log.d(TAG,"login unsuccessful");
-                    email.setText("");
+                    username.setText("");
                     password.setText("");
                     Toast.makeText(context,"login unsuccessful",Toast.LENGTH_LONG).show();
                 }
@@ -129,6 +138,13 @@ public class LoginService extends AppCompatActivity {
                     Log.d(TAG,"sign up successful");
                     Toast.makeText(context,signUpResponse.getMessage(), Toast.LENGTH_LONG).show();
 
+                    //making network call to get user
+                    //getUser(email.getText().toString().trim());
+                    //set it to preferences
+                    SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Constants.USERNAME_KEY,USERNAME);
+                    editor.apply();
 
                     //move to activity if successful login
                     if(signUpResponse.getStatus()==Constants.RESPONSE_OK){
@@ -164,4 +180,5 @@ public class LoginService extends AppCompatActivity {
             }
         });
     }
+
 }
