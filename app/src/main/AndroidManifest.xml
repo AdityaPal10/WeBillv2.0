@@ -32,7 +32,7 @@
             android:name="com.teamblue.WeBillv2.view.AddBillView"
             android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
         <activity
-            android:name="com.teamblue.WeBillv2.view.FriendsView"
+            android:name="com.teamblue.WeBillv2.view.MenuView"
             android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
     </application>
 

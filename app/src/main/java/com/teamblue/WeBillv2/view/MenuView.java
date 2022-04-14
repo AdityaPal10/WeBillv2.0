@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
-public class FriendsView extends AppCompatActivity {
-    private static final String TAG = FriendsView.class.getSimpleName();
+public class MenuView extends AppCompatActivity {
+    private static final String TAG = MenuView.class.getSimpleName();
     AnimatedBottomBar animatedBottomBar;
     FragmentManager fragmentManager;
 
