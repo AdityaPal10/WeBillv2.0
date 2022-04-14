@@ -3,16 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#53C5BA"
+    android:background="#FFFFFF"
     tools:context=".view.fragments.FriendFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="40dp"
         android:text="Friends"
-        android:textColor="#fff"
+        android:fontFamily="@font/calibri"
+        android:textColor="#000000"
         android:textSize="26sp" />
 
 </RelativeLayout>
