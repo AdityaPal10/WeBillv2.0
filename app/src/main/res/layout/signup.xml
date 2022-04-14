@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:foregroundTint="#FBFBFB"
     android:textAlignment="center"
-    tools:context=".view.SIgnUpView">
+    tools:context=".view.SignUpView">
 
     <TextView
         android:id="@+id/textView"
