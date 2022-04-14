@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
 
+//    private Button btnSkip; // Skip login for developer testing (Delete after finished)
+
     private LoginController loginController = new LoginController();
 
     @Override
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.emailEditTextSignUp);
         passwordEditText = (EditText) findViewById(R.id.usernameEditTextSignUp);
 
+//        btnSkip = (Button) findViewById(R.id.btnSkip); // Skip login for developer testing (Delete after finished)
+
         //set on click listener for login button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 loginController.login(getApplicationContext(),emailEditText,passwordEditText);
             }
         });
+
+
 
         //set on click listener for sign up button
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
                 segueToSignUpActivity();
             }
         });
+
+//        // Skip login for developer testing (Delete after finished)
+//        btnSkip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent goFriendPage = new Intent(MainActivity.this,FriendsView.class);
+//                startActivity(goFriendPage);
+//            }
+//        });
     }
 
     public void segueToSignUpActivity(){

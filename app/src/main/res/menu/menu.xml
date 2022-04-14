@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <item
         android:id="@+id/friends"
-        android:icon="@drawable/friendlogo"
+        android:icon="@drawable/friends"
         android:title="Friends" />
 
     <item
         android:id="@+id/receipt"
-        android:icon="@drawable/bill4"
-        android:title="Receipts" />
+        android:icon="@drawable/invoice"
+        android:title="My Bills" />
 
     <item
         android:id="@+id/addbills"
@@ -18,8 +20,8 @@
 
     <item
         android:id="@+id/spendingactivity"
-        android:icon="@drawable/dollarbills"
-        android:title="Spending Activity" />
+        android:icon="@drawable/activity"
+        android:title="Activity" />
 
     <item
         android:id="@+id/account"

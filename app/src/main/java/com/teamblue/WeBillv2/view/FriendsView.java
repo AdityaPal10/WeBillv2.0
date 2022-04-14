@@ -1,5 +1,6 @@
 package com.teamblue.WeBillv2.view;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -41,6 +42,11 @@ public class FriendsView extends AppCompatActivity {
         }
 
         animatedBottomBar.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
+            @Override
+            public void onTabReselected(int i, @NonNull AnimatedBottomBar.Tab tab) {
+
+            }// optional but can't delete this for 'nl.joery.animatedbottombar:library:1.1.0' (used to be 1.0.4)
+
             @Override
             public void onTabSelected(int lastIndex, @Nullable AnimatedBottomBar.Tab lastTab, int newIndex, @NotNull AnimatedBottomBar.Tab newTab) {
                 Fragment fragment = null;
