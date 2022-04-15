@@ -53,7 +53,7 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
                 myDialog.show();
             }
         });
-
+        //Basic settings for spinner inside a Fragment
         spinnerMonths = (Spinner) myDialog.findViewById(R.id.spinnerMonths);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 getActivity().getBaseContext(),
@@ -69,6 +69,7 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
         return view;
     }
 
+    // Do spinner's functions here, now a demo of showing Toast text when select a month
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String textMonth = spinnerMonths.getSelectedItem().toString();
