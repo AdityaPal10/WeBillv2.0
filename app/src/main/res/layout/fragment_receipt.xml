@@ -1,30 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragmentReceiptTop"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF">
 
-    <TextView
-        android:id="@+id/tvReceiptText"
+    <RelativeLayout
+        android:id="@+id/fragmentReceiptTop"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/calibri"
-        android:text="My Bills"
-        android:textColor="#000000"
-        android:textSize="26sp" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btnFilterMonth"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="35dp"
-        android:background="@drawable/filter"
-        android:fontFamily="@font/calibri"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvReceiptText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/calibri"
+            android:text="My Bills"
+            android:textColor="#000000"
+            android:textSize="26sp" />
+
+        <Button
+            android:id="@+id/btnFilterMonth"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="35dp"
+            android:background="@drawable/filter"
+            android:fontFamily="@font/calibri"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnAddCard"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="235dp"
+            android:fontFamily="@font/calibri"
+            android:text="+"
+            android:textStyle="bold" />
+
+
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fragmentReceiptTop"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/receiptContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+    </ScrollView>
+
+
 </RelativeLayout>
+
+
