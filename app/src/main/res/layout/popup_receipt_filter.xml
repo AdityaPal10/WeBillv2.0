@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="200dp">
+
+    <TextView
+        android:id="@+id/tvFilterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/calibri"
+        android:text="Filter"
+        android:textColor="#000000"
+        android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/tvSelectMonthText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/calibri"
+        android:text="Select Month"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <Spinner
+        android:id="@+id/spinnerMonths"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="20dp" />
+
+
+    <Button
+        android:id="@+id/btnFilterApply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="Apply"/>
+
+</RelativeLayout>
