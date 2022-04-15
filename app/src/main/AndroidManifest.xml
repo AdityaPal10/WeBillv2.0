@@ -14,7 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.teamblue.WeBillv2.view.MainActivity"
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <activity
+            android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,17 +29,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.teamblue.WeBillv2.view.SignUpView"
-            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
+            android:name=".view.SignUpView"
+            android:parentActivityName=".view.MainActivity" />
         <activity
-            android:name="com.teamblue.WeBillv2.view.MyAccountView"
-            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
+            android:name=".view.MyAccountView"
+            android:parentActivityName=".view.MainActivity" />
         <activity
-            android:name="com.teamblue.WeBillv2.view.AddBillView"
-            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
+            android:name=".view.AddBillView"
+            android:parentActivityName=".view.MainActivity" />
         <activity
-            android:name="com.teamblue.WeBillv2.view.MenuView"
-            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
+            android:name=".view.MenuView"
+            android:parentActivityName=".view.MainActivity" />
     </application>
 
 </manifest>
