@@ -10,14 +10,14 @@
 
         <EditText
             android:id="@+id/edtBillAmount"
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:hint="BillAmount"
             android:textSize="20dp" />
 
         <EditText
             android:id="@+id/edtActivityName"
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edtBillAmount"
             android:hint="ActivityName"
@@ -25,7 +25,7 @@
 
         <EditText
             android:id="@+id/edtDate"
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edtActivityName"
             android:hint="Date"
