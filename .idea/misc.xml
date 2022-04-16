@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/drawable/ic_lock_white_24dp.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_person_foreground.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_settings_foreground.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/roundedbutton.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/user.xml" value="0.2965" />
         <entry key="app/src/main/res/layout-v31/activity_main.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3885416666666667" />
@@ -24,6 +25,7 @@
         <entry key="app/src/main/res/layout/friends_home.xml" value="0.301314459049545" />
         <entry key="app/src/main/res/layout/friends_ledger_row.xml" value="0.5635416666666667" />
         <entry key="app/src/main/res/layout/popup_receipt_bill_info.xml" value="0.38796296296296295" />
+        <entry key="app/src/main/res/layout/popup_receipt_click_details.xml" value="0.5548717948717948" />
         <entry key="app/src/main/res/layout/popup_receipt_filter.xml" value="0.3885416666666667" />
         <entry key="app/src/main/res/layout/signup.xml" value="0.5314814814814814" />
         <entry key="app/src/main/res/layout/test.xml" value="0.5548717948717948" />
