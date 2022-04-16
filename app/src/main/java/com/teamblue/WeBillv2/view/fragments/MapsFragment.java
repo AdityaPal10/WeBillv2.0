@@ -2,12 +2,14 @@ package com.teamblue.WeBillv2.view.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,12 +17,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.pojo.LocationItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class MapsFragment extends Fragment {
 
-    // TODO add heatmap and map clusters
     private int ZOOM = 15;  // ranges from 2 to 21; the higher the num, the more zoomed in
+    private ClusterManager<LocationItem> clusterManager;
 
     // 4. the map callback
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -45,30 +58,20 @@ public class MapsFragment extends Fragment {
             // move cam to map coordinates and zoom in
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(boston, ZOOM));
 
+            // initialize the cluster manager with the context and the map
+            clusterManager = new ClusterManager<LocationItem>(getContext(), googleMap);
 
-            // when the map is clicked
-            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(@NonNull LatLng latLng) {
-                    // initialize marker options
-                    MarkerOptions markerOptions = new MarkerOptions();
+            // point the map's listeners at the listeners implemented by the cluster manager
+            googleMap.setOnCameraIdleListener(clusterManager);
+            googleMap.setOnMarkerClickListener(clusterManager);
 
-                    // set position of marker to where the user clicked on the map
-                    markerOptions.position(latLng);
-
-                    // set title of marker
-                    markerOptions.title(latLng.latitude + " : " + latLng.longitude);
-
-                    // remove any and all existing markers on the map
-                    googleMap.clear();
-
-                    // animating to zoom in on the marker
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM));
-
-                    // add marker on map
-                    googleMap.addMarker(markerOptions);
-                }
-            });
+            // read location data and add to map
+            try {
+                List<LocationItem> locationItems = readItems(R.raw.locations);
+                clusterManager.addItems(locationItems);
+            } catch (JSONException e) {
+                Toast.makeText(getContext(), "Error reading list of locations", Toast.LENGTH_LONG).show();
+            }
         }
     };
 
@@ -93,6 +96,22 @@ public class MapsFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+    }
+
+    private List<LocationItem> readItems(@RawRes int resource) throws JSONException {
+        List<LocationItem> result = new ArrayList<>();
+        InputStream inputStream = getContext().getResources().openRawResource(resource);
+        String json = new Scanner(inputStream).useDelimiter("\\A").next();
+        JSONArray array = new JSONArray(json);
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject object = array.getJSONObject(i);
+            double lat = object.getDouble("lat");
+            double lng = object.getDouble("lng");
+            String name = object.getString("name");
+            LocationItem newItem = new LocationItem(lat, lng, name, null);
+            result.add(newItem);
+        }
+        return result;
     }
 
 }

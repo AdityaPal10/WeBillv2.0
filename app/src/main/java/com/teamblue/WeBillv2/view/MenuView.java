@@ -13,6 +13,7 @@ import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.view.fragments.AccountFragment;
 import com.teamblue.WeBillv2.view.fragments.AddBillFragment;
 import com.teamblue.WeBillv2.view.fragments.FriendFragment;
+import com.teamblue.WeBillv2.view.fragments.MapsFragment;
 import com.teamblue.WeBillv2.view.fragments.ReceiptFragment;
 import com.teamblue.WeBillv2.view.fragments.SpendingActivityFragment;
 
@@ -64,7 +65,7 @@ public class MenuView extends AppCompatActivity {
                         fragment = new ReceiptFragment();
                         break;
                     case R.id.spendingactivity:
-                        fragment = new SpendingActivityFragment();
+                        fragment = new MapsFragment();
                         break;
                 }
 
