@@ -1,6 +1,7 @@
 package com.teamblue.WeBillv2.view;
 
 import android.content.DialogInterface;
+import android.icu.number.Precision;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -125,7 +126,9 @@ public class SplitBillActivity extends AppCompatActivity {
                         addCard(edtAddFriendName.getText().toString(),
                                 edtAddFriendAmount.getText().toString());
                         RemainAmount = RemainAmount - Double.valueOf(edtAddFriendAmount.getText().toString());
-                        tvRemainAmount.setText(RemainAmount.toString());
+                        DecimalFormat df = new DecimalFormat("###.##");
+                        tvRemainAmount.setText(df.format(RemainAmount));
+//                        tvRemainAmount.setText(RemainAmount.toString());
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -156,7 +159,8 @@ public class SplitBillActivity extends AppCompatActivity {
                 LinearFriendSplit.removeView(cardview);
                 CurrentAmount = Double.valueOf(tvFriendSplitAmount.getText().toString());
                 RemainAmount = RemainAmount + CurrentAmount;
-                tvRemainAmount.setText(RemainAmount.toString());
+                DecimalFormat df = new DecimalFormat("###.##");
+                tvRemainAmount.setText(df.format(RemainAmount));
             }
         });
         
