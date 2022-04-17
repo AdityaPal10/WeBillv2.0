@@ -105,9 +105,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/system_accent3_1000"
-        tools:srcCompat="@tools:sample/avatars"
-        tools:targetApi="s" />
+        android:src="@drawable/we_bill_logo_temp"/>
 
 
 
