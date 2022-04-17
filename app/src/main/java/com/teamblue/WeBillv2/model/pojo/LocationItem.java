@@ -6,11 +6,15 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
+/**
+ * last updated: 2022/04/15
+ * A class to represent a location to be denoted by a marker in the map fragment
+ */
 public class LocationItem implements ClusterItem {
 
-    private final LatLng position;
-    private final String title;
-    private final String snippet;
+    private final LatLng position;  // lat,lng coordinates of the location
+    private final String title;     // name of the location i.e. business name
+    private final String snippet;   // description of the location
 
     public LocationItem(double lat, double lng, String title, String snippet) {
         position = new LatLng(lat, lng);
