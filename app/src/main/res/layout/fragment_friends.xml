@@ -227,7 +227,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <ImageView
-                        android:id="@+id/imgFriend2"
+                        android:id="@+id/imageViewLedger_cardview"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_alignParentLeft="true"
@@ -236,7 +236,7 @@
                         android:src="@drawable/boy1" />
 
                     <TextView
-                        android:id="@+id/tvFriendName2"
+                        android:id="@+id/friendNameLedger_cardview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Aditya"
@@ -246,15 +246,15 @@
                         android:textStyle="bold"
                         android:textSize="17dp"
                         android:fontFamily="@font/calibri"
-                        android:layout_toRightOf="@+id/imgFriend2"/>
+                        android:layout_toRightOf="@+id/imageViewLedger_cardview"/>
 
                     <TextView
-                        android:id="@+id/tvFriendStatus2"
+                        android:id="@+id/amountLedger_cardview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="45dp"
-                        android:layout_toRightOf="@+id/imgFriend2"
+                        android:layout_toRightOf="@+id/imageViewLedger_cardview"
                         android:fontFamily="@font/calibri"
                         android:text="You Owe: $10"
                         android:textColor="#EC0D5C"
