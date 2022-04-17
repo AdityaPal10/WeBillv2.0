@@ -30,10 +30,9 @@
                 android:id="@+id/cardViewEnterBill"
                 android:layout_width="400dp"
                 android:layout_height="500dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
