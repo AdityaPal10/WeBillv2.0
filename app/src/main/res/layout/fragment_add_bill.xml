@@ -170,8 +170,8 @@
         </ScrollView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="140dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="140dp"
             app:cardBackgroundColor="#FFFFFF"
             app:cardCornerRadius="20dp"
             app:cardElevation="5dp"
@@ -180,16 +180,26 @@
             app:cardUseCompatPadding="true"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="-15dp">
+            android:layout_marginBottom="-10dp">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <Button
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:id="@+id/btnScanBill"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_centerInParent="true"
                     android:background="@drawable/document" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scan"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="12dp"
+                    android:textColor="#606060"/>
             </RelativeLayout>
 
 
