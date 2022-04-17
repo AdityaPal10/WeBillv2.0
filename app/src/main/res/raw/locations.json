@@ -1,0 +1,10 @@
+[
+  {"lat" : 42.3587, "lng" : -71.0575, "name" : "Old State House"} ,
+  {"lat" : 42.3551, "lng" : -71.0657, "name" : "Boston Common"} ,
+  {"lat" : 42.3663, "lng" : -71.0544, "name" : "Old North Church"} ,
+  {"lat" : 42.3637, "lng" : -71.0537, "name" : "The Paul Revere House"} ,
+  {"lat" : 42.3602, "lng" : -71.0551, "name" : "Faneuil Hall Marketplace"} ,
+  {"lat" : 42.3575, "lng" : -71.0617, "name" : "Granary Burying Ground"} ,
+  {"lat" : 42.3580, "lng" : -71.0602, "name" : "King's Chapel"} ,
+  {"lat" : 42.3725, "lng" : -71.0566, "name" : "USS Constitution"}
+]
