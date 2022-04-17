@@ -66,6 +66,7 @@
                 android:layout_toRightOf="@+id/btnProfilePic">
 
                 <TextView
+                    android:id="@+id/tvAccountPageUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -102,6 +103,23 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/settingsTextRelativeLayout"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnChangeUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:background="@color/Transparent"
+            android:paddingLeft="-250dp"
+            android:text="Change Username"
+            android:textAllCaps="false"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/btnResetPassword"
+            android:background="#F1F1F1" />
 
         <Button
             android:id="@+id/btnResetPassword"
@@ -163,16 +181,17 @@
         android:text="Made with :) Team Blue @ BU CS501"
         android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"/>
+
     <Button
         android:id="@+id/btnLogOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Log Out"
-        android:textColor="#004AAD"
-        android:background="@color/Transparent"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@color/Transparent"
+        android:text="Log Out"
+        android:textColor="#004AAD" />
 
 
 </RelativeLayout>
