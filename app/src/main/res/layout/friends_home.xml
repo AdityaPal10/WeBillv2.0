@@ -29,7 +29,7 @@
         app:abb_selectedTabType="text"
         app:abb_tabAnimation="slide"
         app:abb_tabAnimationSelected="slide"
-        app:abb_iconSize="40dp"
+        app:abb_iconSize="35dp"
         app:abb_tabColor="#000000"
         app:abb_indicatorAppearance="round"
         app:abb_indicatorLocation="bottom"
