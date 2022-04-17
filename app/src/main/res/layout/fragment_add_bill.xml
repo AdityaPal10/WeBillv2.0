@@ -70,6 +70,7 @@
                             android:src="@drawable/bill" />
 
                         <EditText
+                            android:id="@+id/edtActivityNameAddBill"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imgBill"
@@ -94,11 +95,12 @@
                             android:src="@drawable/coin" />
 
                         <EditText
+                            android:id="@+id/edtTotalAmountAddBill"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imgAmount"
                             android:hint="Total Amount"
-                            android:inputType="text"
+                            android:inputType="numberDecimal"
                             android:textAlignment="center" />
                     </RelativeLayout>
 
@@ -118,11 +120,12 @@
                             android:src="@drawable/calendar" />
 
                         <EditText
+                            android:id="@+id/edtDateAddBill"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imgDate"
                             android:hint="Date"
-                            android:inputType="text"
+                            android:inputType="date"
                             android:textAlignment="center" />
                     </RelativeLayout>
 
@@ -141,6 +144,7 @@
                             android:src="@drawable/pin" />
 
                         <EditText
+                            android:id="@+id/edtAddressAddBill"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imgAddress"
@@ -150,8 +154,8 @@
                     </RelativeLayout>
 
                     <Button
-                        android:id="@+id/btnReceiptDetails"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/btnEnterAddBill"
+                        android:layout_width="120dp"
                         android:layout_height="45dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
@@ -159,6 +163,8 @@
                         android:background="@drawable/roundedbutton"
                         android:fontFamily="@font/calibri"
                         android:text="Enter"
+                        android:textAllCaps="false"
+                        android:textSize="20dp"
                         android:textStyle="bold"
                         app:cornerRadius="38dp" />
 
