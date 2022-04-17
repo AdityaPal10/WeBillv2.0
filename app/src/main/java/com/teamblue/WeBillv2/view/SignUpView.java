@@ -1,7 +1,6 @@
 package com.teamblue.WeBillv2.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,8 +10,6 @@ import android.widget.EditText;
 
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.controller.LoginController;
-
-import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 public class SignUpView extends AppCompatActivity {
     private static final String TAG = SignUpView.class.getSimpleName();

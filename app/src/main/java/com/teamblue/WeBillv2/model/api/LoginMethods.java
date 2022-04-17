@@ -11,6 +11,9 @@ import retrofit2.http.POST;
 public interface LoginMethods {
 
 
+    @POST("getUser")
+    Call<User> getUser(@Body User user);
+
     @POST("login")
     Call<LoginModel> login(@Body User user);
 
