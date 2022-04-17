@@ -1,57 +1,216 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#009688"
+    android:background="#FFFFFF"
     tools:context=".view.fragments.AddBillFragment">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="250dp"
-        android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
-        android:layout_marginBottom="76dp"
-        android:src="@drawable/scanner"
-        app:layout_constraintBottom_toTopOf="@+id/captureImageButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/captureImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="55dp"
-        android:backgroundTint="#00BCD4"
-        android:text="Click Picture"
-        android:textColor="#3F51B5"
-        app:layout_constraintBottom_toTopOf="@+id/detectTextButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <Button
-        android:id="@+id/detectTextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="107dp"
-        android:backgroundTint="#00BCD4"
-        android:text="Detect Text"
-        android:textColor="#3F51B5"
-        app:layout_constraintBottom_toTopOf="@+id/resultTextView"
-        app:layout_constraintStart_toStartOf="@+id/captureImageButton"
-        app:layout_constraintTop_toBottomOf="@+id/captureImageButton" />
-
     <TextView
-        android:id="@+id/resultTextView"
+        android:id="@+id/tvAddBillText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="94dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detectTextButton" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/calibri"
+        android:text="Add New Bill"
+        android:textColor="#000000"
+        android:textSize="26sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="450dp"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewEnterBill"
+                android:layout_width="400dp"
+                android:layout_height="500dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="130dp"
+
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
+                app:cardMaxElevation="12dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="450dp">
+
+                    <TextView
+                        android:id="@+id/tvMAB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/calibri"
+                        android:text="Manually Add Bill"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/AddBillActivityNameLayout"
+                        android:layout_width="280dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/tvMAB"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp">
+
+                        <ImageView
+                            android:id="@+id/imgBill"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/bill" />
+
+                        <EditText
+                            android:id="@+id/edtActivityNameAddBill"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/imgBill"
+                            android:hint="Activity Name"
+                            android:inputType="text"
+                            android:textAlignment="center" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/AddBillTotalAmountLayout"
+                        android:layout_width="280dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/AddBillActivityNameLayout"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp">
+
+                        <ImageView
+                            android:id="@+id/imgAmount"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/coin" />
+
+                        <EditText
+                            android:id="@+id/edtTotalAmountAddBill"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/imgAmount"
+                            android:hint="Total Amount"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/AddBillDateLayout"
+                        android:layout_width="280dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/AddBillTotalAmountLayout"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp">
+
+                        <ImageView
+                            android:id="@+id/imgDate"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/calendar" />
+
+                        <EditText
+                            android:id="@+id/edtDateAddBill"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/imgDate"
+                            android:hint="Date"
+                            android:inputType="date"
+                            android:textAlignment="center" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="280dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/AddBillDateLayout"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddress"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/pin" />
+
+                        <EditText
+                            android:id="@+id/edtAddressAddBill"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/imgAddress"
+                            android:hint="Address"
+                            android:inputType="text"
+                            android:textAlignment="center" />
+                    </RelativeLayout>
+
+                    <Button
+                        android:id="@+id/btnEnterAddBill"
+                        android:layout_width="120dp"
+                        android:layout_height="45dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="45dp"
+                        android:background="@drawable/roundedbutton"
+                        android:fontFamily="@font/calibri"
+                        android:text="Enter"
+                        android:textAllCaps="false"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        app:cornerRadius="38dp" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+        </ScrollView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="130dp"
+            android:layout_height="140dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="-10dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="12dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/btnScanBill"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/document" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="Scan"
+                    android:textColor="#606060"
+                    android:textSize="12dp" />
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,284 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".view.fragments.AddBillFragment">
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvSplitBillText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="40dp"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:fontFamily="@font/calibri"-->
+<!--        android:text="Split Bill"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="26sp" />-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewEnterBill"
+            android:layout_width="400dp"
+            android:layout_height="380dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="0dp"
+
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            app:cardMaxElevation="12dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/btnSaveBill"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentRight="true"
+                    android:text="Save"
+                    android:textAllCaps="false"
+                    android:background="@drawable/roundedbutton"/>
+
+                <TextView
+                    android:id="@+id/tvBC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="Bill Conclusion"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+
+                <RelativeLayout
+                    android:id="@+id/AddBillActivityNameLayout"
+                    android:layout_width="280dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/tvBC"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:id="@+id/imgBill"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/bill" />
+
+                    <EditText
+                        android:id="@+id/edtActivityNameSplitBill"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/imgBill"
+                        android:hint="Activity Name"
+                        android:inputType="text"
+                        android:textAlignment="center" />
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/tvTotalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvPaidByText"
+                    android:fontFamily="@font/calibri"
+                    android:text="Total: $"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="20dp"/>
+
+                <TextView
+                    android:id="@+id/tvTotalAmountSplitBill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tvTotalText"
+                    android:layout_above="@+id/tvPaidByText"
+                    android:hint="300"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="20dp"
+                    android:layout_marginBottom="18dp"/>
+
+
+                <RelativeLayout
+                    android:id="@+id/AddBillDateLayout"
+                    android:layout_width="280dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/AddBillActivityNameLayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imgDate"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/calendar" />
+
+                    <EditText
+                        android:id="@+id/edtDateSplitBill"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/imgDate"
+                        android:hint="Date"
+                        android:inputType="date"
+                        android:textAlignment="center" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="280dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/AddBillDateLayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imgAddress"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/pin" />
+
+                    <EditText
+                        android:id="@+id/edtAddressSplitBill"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/imgAddress"
+                        android:hint="Address"
+                        android:inputType="text"
+                        android:textAlignment="center" />
+                </RelativeLayout>
+
+                <Button
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/Transparent"
+                    android:text="Items"
+                    android:textAllCaps="false"
+                    android:textColor="#2665B8" />
+
+                <TextView
+                    android:id="@+id/tvPaidByText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="Paid By:"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_toRightOf="@+id/tvPaidByText"
+                    android:fontFamily="@font/calibri"
+                    android:hint="Default Username"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/PaidByLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/cardViewEnterBill"
+            android:layout_marginTop="-20dp">
+
+
+            <TextView
+                android:id="@+id/tvSplitWithText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/calibri"
+                android:text="Split With:"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnAddSplitFriend"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/tvSplitWithText"
+                android:background="@drawable/roundedbutton"
+                android:text="+" />
+
+            <TextView
+                android:id="@+id/tvRemainAmountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/btnAddSplitFriend"
+                android:fontFamily="@font/calibri"
+                android:text="Remain: $"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvRemainAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/tvRemainAmountText"
+                android:fontFamily="@font/calibri"
+                android:text="0.00"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/PaidByLayout">
+
+            <LinearLayout
+                android:id="@+id/LinearFriendSplit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
