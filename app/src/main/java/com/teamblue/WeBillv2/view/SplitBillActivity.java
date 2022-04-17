@@ -111,7 +111,7 @@ public class SplitBillActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Double CheckRemainAmount = Double.valueOf(tvRemainAmount.getText().toString());
-                        if(TextUtils.isEmpty(edtAddFriendName.getText().toString()) &&
+                        if(TextUtils.isEmpty(edtAddFriendName.getText().toString()) ||
                                 TextUtils.isEmpty(edtAddFriendAmount.getText().toString())){
                             edtAddFriendName.setError("Must Not Be Empty!");
                             edtAddFriendAmount.setError("Must Not Be Empty!");

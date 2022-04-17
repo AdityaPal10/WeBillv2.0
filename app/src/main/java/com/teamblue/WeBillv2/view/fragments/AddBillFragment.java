@@ -52,13 +52,16 @@ public class AddBillFragment extends Fragment {
             public void onClick(View view) {
 
                 //Checking for no total amount empty error
-                if(TextUtils.isEmpty(edtActivityNameAddBill.getText().toString())  &&
-                        TextUtils.isEmpty(edtTotalAmountAddBill.getText().toString()) &&
-                        TextUtils.isEmpty(edtDateAddBill.getText().toString())  &&
-                        TextUtils.isEmpty(edtAddressAddBill.getText().toString())) {
+                if(TextUtils.isEmpty(edtActivityNameAddBill.getText().toString())) {
                     edtActivityNameAddBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtTotalAmountAddBill.getText().toString())) {
                     edtTotalAmountAddBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtDateAddBill.getText().toString())){
                     edtDateAddBill.setError("Must Not Be Empty!");
+                        return;
+                }else if(TextUtils.isEmpty(edtAddressAddBill.getText().toString())){
                     edtAddressAddBill.setError("Must Not Be Empty!");
                     return;
                 }else{
