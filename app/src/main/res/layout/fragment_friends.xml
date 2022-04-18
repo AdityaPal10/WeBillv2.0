@@ -78,31 +78,31 @@
                 android:layout_marginLeft="26dp"
                 android:layout_marginTop="60dp"
                 android:layout_toRightOf="@+id/imgProfilePic"
-                android:text="To Pay:"
+                android:text="To Pay: $"
                 android:textColor="#EC0D5C"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvToPayNumber"
+                android:id="@+id/tvMyToPayNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="0dp"
                 android:layout_marginTop="60dp"
                 android:layout_toRightOf="@+id/tvToPay"
-                android:text="$20.00"
+                android:text="0.00"
                 android:textColor="#EC0D5C"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvToTakeBack"
+                android:id="@+id/tvMyToTakeBackNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="26dp"
                 android:layout_marginTop="100dp"
                 android:layout_toRightOf="@+id/imgProfilePic"
-                android:text="To Take Back:"
+                android:text="To Take Back: $"
                 android:textColor="#138806"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -111,10 +111,10 @@
                 android:id="@+id/tvToTakeBackNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="0dp"
                 android:layout_marginTop="100dp"
-                android:layout_toRightOf="@+id/tvToTakeBack"
-                android:text="$50.00"
+                android:layout_toRightOf="@+id/tvMyToTakeBackNumber"
+                android:text="0.00"
                 android:textColor="#138806"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -136,270 +136,28 @@
         android:textSize="20dp"
         android:textStyle="bold" />
 <!--    If no friend or clean balance, set this textview to "You have no expenses"-->
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/tvFriendStatusText">
 
     <ScrollView
         android:id="@+id/listViewFriend"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tvFriendStatusText"
         tools:context=".MainActivity">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/containerFriendCards"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewFriendList1"
-                android:layout_width="350dp"
-                android:layout_height="110dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="true"
-                app:cardCornerRadius="10dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imgFriend1"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:src="@drawable/boy4" />
-
-                    <TextView
-                        android:id="@+id/tvFriendName1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Zeqi"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
-                        android:textColor="#000000"
-                        android:textStyle="bold"
-                        android:textSize="17dp"
-                        android:fontFamily="@font/calibri"
-                        android:layout_toRightOf="@+id/imgFriend1"/>
-
-                    <TextView
-                        android:id="@+id/tvFriendStatus1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/imgFriend1"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="45dp"
-                        android:textColor="#138806"
-                        android:text="Owes You: $30"
-                        android:textStyle="bold"
-                        android:textSize="25dp"
-                        android:fontFamily="@font/calibri"/>
-
-                    <Button
-                        android:id="@+id/btnRemind1"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/bell"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="30dp"
-                        />
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewFriendList2"
-                android:layout_width="350dp"
-                android:layout_height="110dp"
-                android:layout_below="@+id/cardViewFriendList1"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="true"
-                app:cardCornerRadius="10dp">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:id="@+id/imgFriend2"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:src="@drawable/boy1" />
-
-                    <TextView
-                        android:id="@+id/tvFriendName2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Aditya"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
-                        android:textColor="#000000"
-                        android:textStyle="bold"
-                        android:textSize="17dp"
-                        android:fontFamily="@font/calibri"
-                        android:layout_toRightOf="@+id/imgFriend2"/>
-
-                    <TextView
-                        android:id="@+id/tvFriendStatus2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="45dp"
-                        android:layout_toRightOf="@+id/imgFriend2"
-                        android:fontFamily="@font/calibri"
-                        android:text="You Owe: $10"
-                        android:textColor="#EC0D5C"
-                        android:textSize="25dp"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/btnRemind2"
-                        android:layout_width="37dp"
-                        android:layout_height="37dp"
-                        android:background="@drawable/credit_card"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="30dp"
-                        />
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewFriendList3"
-                android:layout_width="350dp"
-                android:layout_height="110dp"
-                android:layout_below="@+id/cardViewFriendList2"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="true"
-                app:cardCornerRadius="10dp">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imgFriend3"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:src="@drawable/boy2" />
-                    <TextView
-                        android:id="@+id/tvFriendName3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Navoneel"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
-                        android:textColor="#000000"
-                        android:textStyle="bold"
-                        android:textSize="17dp"
-                        android:fontFamily="@font/calibri"
-                        android:layout_toRightOf="@+id/imgFriend3"/>
-
-                    <TextView
-                        android:id="@+id/tvFriendStatus3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/imgFriend3"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="45dp"
-                        android:textColor="#138806"
-                        android:text="Owes You: $20"
-                        android:textStyle="bold"
-                        android:textSize="25dp"
-                        android:fontFamily="@font/calibri"/>
-
-                    <Button
-                        android:id="@+id/btnRemind3"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/bell"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="30dp"
-                        />
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewFriendList4"
-                android:layout_width="350dp"
-                android:layout_height="110dp"
-                android:layout_below="@+id/cardViewFriendList3"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="true"
-                app:cardCornerRadius="10dp">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imgFriend4"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:src="@drawable/boy3" />
-
-                    <TextView
-                        android:id="@+id/tvFriendName4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Harsh"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
-                        android:textColor="#000000"
-                        android:textStyle="bold"
-                        android:textSize="17dp"
-                        android:fontFamily="@font/calibri"
-                        android:layout_toRightOf="@+id/imgFriend4"/>
-
-                    <TextView
-                        android:id="@+id/tvFriendStatus4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="45dp"
-                        android:layout_toRightOf="@+id/imgFriend4"
-                        android:fontFamily="@font/calibri"
-                        android:text="You Owe: $10"
-                        android:textColor="#EC0D5C"
-                        android:textSize="25dp"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/btnRemind4"
-                        android:layout_width="37dp"
-                        android:layout_height="37dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="30dp"
-                        android:background="@drawable/credit_card" />
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
 
     </ScrollView>
+
+</RelativeLayout>
+
 
 
 </RelativeLayout>
