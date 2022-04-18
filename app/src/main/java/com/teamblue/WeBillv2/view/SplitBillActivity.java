@@ -1,6 +1,7 @@
 package com.teamblue.WeBillv2.view;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.number.Precision;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,15 +19,25 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
 
 import org.w3c.dom.Text;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
 
 public class SplitBillActivity extends AppCompatActivity {
 
+    private static int AUTOCOMPLETE_REQUEST_CODE = 701;
     private EditText edtActivityNameSplitBill,edtTotalAmountSplitBill,edtDateSplitBill,edtAddressSplitBill;
     private TextView tvRemainAmount, tvTotalAmountSplitBill;
     private String getActivityName, getTotalAmount, getDate, getAddress;
@@ -39,6 +50,12 @@ public class SplitBillActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_split_bill);
+
+        // Initialize the Google Maps Places SDK and create PlacesClient instance
+        // we need this for the autocomplete feature in the address field
+        if (!Places.isInitialized())
+            Places.initialize(getBaseContext(), BuildConfig.MAPS_API_KEY);
+        PlacesClient placesClient = Places.createClient(getBaseContext());
 
         edtActivityNameSplitBill = (EditText) findViewById(R.id.edtActivityNameSplitBill);
         tvTotalAmountSplitBill = (TextView) findViewById(R.id.tvTotalAmountSplitBill);
@@ -85,6 +102,22 @@ public class SplitBillActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
+        edtAddressSplitBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // set the fields to specify which types of place data to return after the user
+                // has made a selection
+                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS);
+
+                // start the autocomplete intent
+                Intent autocompleteIntent = new Autocomplete
+                        .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                        .build(getBaseContext());
+                startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+            }
+        });
+
         BigDecimal amount3 = new BigDecimal("2.15");
         buildAddSplitFriendDialog();
         btnAddSplitFriend = findViewById(R.id.btnAddSplitFriend);
@@ -94,6 +127,22 @@ public class SplitBillActivity extends AppCompatActivity {
                 AddSplitFriendDialog.show();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                edtAddressSplitBill.setText(place.getAddress());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error
+            } else if (resultCode == AutocompleteActivity.RESULT_CANCELED) {
+                // The user canceled the operation
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /************Build Dialog For Adding Split Friends Card************/
