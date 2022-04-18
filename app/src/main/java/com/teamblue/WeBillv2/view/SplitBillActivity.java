@@ -37,7 +37,7 @@ import java.util.List;
 
 public class SplitBillActivity extends AppCompatActivity {
 
-    private static int AUTOCOMPLETE_REQUEST_CODE = 701;
+    private static int AUTOCOMPLETE_REQUEST_CODE = 7001;
     private EditText edtActivityNameSplitBill,edtTotalAmountSplitBill,edtDateSplitBill,edtAddressSplitBill;
     private TextView tvRemainAmount, tvTotalAmountSplitBill;
     private String getActivityName, getTotalAmount, getDate, getAddress;
@@ -103,12 +103,14 @@ public class SplitBillActivity extends AppCompatActivity {
 //            }
 //        });
 
+
+        // set the autocomplete feature to activate when user clicks on address field
         edtAddressSplitBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // set the fields to specify which types of place data to return after the user
                 // has made a selection
-                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS);
+                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
 
                 // start the autocomplete intent
                 Intent autocompleteIntent = new Autocomplete
@@ -133,10 +135,11 @@ public class SplitBillActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                // actually populate the address field with user's selection
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 edtAddressSplitBill.setText(place.getAddress());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error
+                Toast.makeText(getBaseContext(), "Address not found", Toast.LENGTH_SHORT).show();
             } else if (resultCode == AutocompleteActivity.RESULT_CANCELED) {
                 // The user canceled the operation
             }

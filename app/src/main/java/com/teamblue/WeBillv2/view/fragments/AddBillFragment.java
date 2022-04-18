@@ -40,7 +40,7 @@ import java.util.List;
 public class AddBillFragment extends Fragment {
 
 
-    private static int AUTOCOMPLETE_REQUEST_CODE = 701;
+    private static int AUTOCOMPLETE_REQUEST_CODE = 7001;
     private EditText edtActivityNameAddBill,edtTotalAmountAddBill,edtDateAddBill,edtAddressAddBill;
     private Button btnEnterAddBill,btnScanBill;
 
@@ -53,10 +53,11 @@ public class AddBillFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                // actually populate the address field with the user's selection
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 edtAddressAddBill.setText(place.getAddress());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error
+                Toast.makeText(getContext(), "Address not found", Toast.LENGTH_SHORT).show();
             } else if (resultCode == AutocompleteActivity.RESULT_CANCELED) {
                 // The user canceled the operation
             }
@@ -85,12 +86,13 @@ public class AddBillFragment extends Fragment {
             Places.initialize(getContext(), BuildConfig.MAPS_API_KEY);
         PlacesClient placesClient = Places.createClient(getContext());
 
+        // set to the autocomplete feature to activate after the user clicks on the address field
         edtAddressAddBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // set the fields to specify which types of place data to return after the user
                 // has made a selection
-                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS);
+                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
 
                 // start the autocomplete intent
                 Intent autocompleteIntent = new Autocomplete
