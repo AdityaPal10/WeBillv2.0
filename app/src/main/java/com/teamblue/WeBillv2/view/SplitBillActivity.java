@@ -103,6 +103,23 @@ public class SplitBillActivity extends AppCompatActivity {
 //            }
 //        });
 //        BigDecimal amount3 = new BigDecimal("2.15");
+
+        // set the autocomplete feature to activate when user clicks on address field
+        edtAddressSplitBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // set the fields to specify which types of place data to return after the user
+                // has made a selection
+                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
+
+                // start the autocomplete intent
+                Intent autocompleteIntent = new Autocomplete
+                        .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                        .build(getBaseContext());
+                startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+            }
+        });
+
         buildAddSplitFriendDialog();
         btnAddSplitFriend = findViewById(R.id.btnAddSplitFriend);
         btnAddSplitFriend.setOnClickListener(new View.OnClickListener() {
