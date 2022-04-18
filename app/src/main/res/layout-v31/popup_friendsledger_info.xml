@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/Amount"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:hint="Amount"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/friendName"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Amount"
+            android:hint="Friend Name"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/paymentDirection"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/friendName"
+            android:hint="payment Direction"
+            android:textSize="20dp" />
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

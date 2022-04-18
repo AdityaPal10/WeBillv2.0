@@ -1,7 +1,6 @@
 package com.teamblue.WeBillv2.view.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -16,16 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.R;
-
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 
 
 /**
@@ -139,7 +133,7 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
         TextView tvActivityName = view.findViewById(R.id.tvActivityName);
         TextView tvReceiptDate = view.findViewById(R.id.tvReceiptDate);
 
-        Button btnRemoveCard = view.findViewById(R.id.btnRemoveCard);
+        Button btnRemoveCard = view.findViewById(R.id.btnRemoveFriendCard);
         Button btnReceiptDetails = view.findViewById(R.id.btnReceiptDetails);
 
         //4 handing the details button

@@ -22,34 +22,34 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imgFriend1"
-                android:layout_width="90dp"
-                android:layout_height="150dp"
+                android:id="@+id/imgFriend"
+                android:layout_width="110dp"
+                android:layout_height="93dp"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/receipt1" />
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="175dp"
+                android:layout_marginTop="47dp"
+                android:src="@drawable/boy1" />
 
             <TextView
-                android:id="@+id/tvBillAmountText"
+                android:id="@+id/tvAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="50dp"
-                android:layout_toRightOf="@+id/imgFriend1"
                 android:fontFamily="@font/calibri"
-                android:text="Bill Amount: $"
+                android:text="$20"
                 android:textColor="#000000"
                 android:textSize="17dp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvReceiptAmount"
+                android:id="@+id/tvFriendAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="50dp"
-                android:layout_toRightOf="@+id/tvBillAmountText"
+                android:layout_toRightOf="@+id/tvAmount"
                 android:fontFamily="@font/calibri"
                 android:text="0.00"
                 android:textColor="#000000"
@@ -57,29 +57,27 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvActivityName"
+                android:id="@+id/tvFriendName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAmount"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/imgFriend1"
-                android:layout_below="@+id/tvBillAmountText"
                 android:fontFamily="@font/calibri"
-                android:text="Star Market"
+                android:text="Aditya"
                 android:textColor="#138806"
                 android:textSize="25dp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvReceiptDate"
+                android:id="@+id/tvDirection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvActivityName"
+                android:layout_below="@+id/tvFriendName"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/imgFriend1"
                 android:fontFamily="@font/calibri"
-                android:text="01/01/2022"
+                android:text="Owes"
                 android:textColor="#000000"
                 android:textSize="17dp"
                 android:textStyle="bold" />
@@ -95,7 +93,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/btnReceiptDetails"
+                android:id="@+id/btnFriendDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_alignParentBottom="true"

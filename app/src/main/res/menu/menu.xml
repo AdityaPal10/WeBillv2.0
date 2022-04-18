@@ -24,6 +24,11 @@
         android:title="Activity" />
 
     <item
+        android:id="@+id/btnAddFriends"
+        android:icon="@drawable/plus"
+        android:title="Add Friend" />
+
+    <item
         android:id="@+id/account"
         android:icon="@drawable/user"
         android:title="Account" />

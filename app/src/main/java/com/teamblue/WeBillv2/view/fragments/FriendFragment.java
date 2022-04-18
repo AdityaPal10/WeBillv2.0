@@ -1,20 +1,22 @@
 package com.teamblue.WeBillv2.view.fragments;
 
-import android.content.Context;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.teamblue.WeBillv2.R;
-import java.util.ArrayList;
 
 
 /**
@@ -22,85 +24,153 @@ import java.util.ArrayList;
  */
 public class FriendFragment extends Fragment {
 
-    Context context;
+    private Button btnFilterMonth,btnAddCard;
+    private Spinner spinnerMonths;
+    private Dialog filterDialog;
+    private Dialog addFriendDialog;
+    private Dialog friendDetailsDialog;
+
+    LinearLayout friendContainer;
+
 
     public FriendFragment() {
         // Required empty public constructor
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends, container, false);
-    }
-    public class CustomAdapter extends BaseAdapter {
+        View view = inflater.inflate(R.layout.fragment_friendsdempty, container, false);
 
-        ArrayList<Integer> friendAvatar;
-        ArrayList<String> friendNames;
-        ArrayList<Integer> paymentDirection;
-        ArrayList<Double> paymentAmount;
-        ArrayList<Integer> buttonAction;
-
-        /*
-            1. make network call using retrofit
-            2. from response received populate lists
-            3. set context=acontext
-             */
-        public CustomAdapter(Context acontext){
-            context = acontext;
-        }
-
-
-
-        @Override
-        public int getCount() {
-            return friendNames.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-
-            return friendNames.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
-
-            View row;
-            if (view==null){
-                LayoutInflater inflater=(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.friends_ledger_row, viewGroup, false);
+        //1 handling filter button and its pop up window
+        filterDialog = new Dialog(this.getContext());
+        filterDialog.setContentView(R.layout.popup_receipt_filter);
+        btnFilterMonth = (Button) view.findViewById(R.id.btnFilterMonth);
+        btnFilterMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterDialog.show();
             }
-            else{
-                row=view;
+        });
+
+        //2 Basic settings for spinner inside a Fragment
+       /* spinnerMonths = (Spinner) filterDialog.findViewById(R.id.spinnerMonths);// since spinner is inside myDialog, don't use view.getContext()
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                getActivity().getBaseContext(),
+                R.array.months,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMonths.setAdapter(adapter);
+        spinnerMonths.setOnItemSelectedListener(this);*/
+
+        //3 handling the receiptContainer
+        btnAddCard = (Button) view.findViewById(R.id.btnAddFriendCard);
+        friendContainer = (LinearLayout) view.findViewById(R.id.friendContainer);
+
+        buildDialog();// building the layout for pop-up window and wait for call
+        btnAddCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addFriendDialog.show();
             }
-            Button bttnLedger=(Button) row.findViewById(R.id.bttnLedger);
-            TextView ledgerName=(TextView) row.findViewById(R.id.friendNameLedger);
-            TextView ledgerAmount=(TextView) row.findViewById(R.id.amountLedger);
-            TextView ledgerDirection=(TextView) row.findViewById(R.id.paymentDirectionLedger);
-            ImageView imageView = (ImageView)row.findViewById(R.id.imageViewLedger);
+        });
 
-            ledgerName.setText(friendNames.get(position));
-            ledgerAmount.setText(String.valueOf(paymentAmount.get(position)));
-            ledgerDirection.setText(paymentDirection.get(position)==0?"Owes You:":"You Owe:");
-            bttnLedger.setText(paymentDirection.get(position)==0?"Remind":"Pay");
-            //imageView.setImageDrawable(R.);
-
-            bttnLedger.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getContext(), "Amount paid:", Toast.LENGTH_LONG).show();
-                }
-            });
-
-            return row;
-        }
+        return view;
     }
+
+    //2.1 Do spinner's functions here, now a demo of showing Toast text when select a month
+   /* @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String textMonth = spinnerMonths.getSelectedItem().toString();
+        Toast.makeText(this.getContext(), textMonth, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }*/
+
+    //3.1 add Friend Dialog
+    private void buildDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        View view = getLayoutInflater().inflate(R.layout.popup_friend_info_fill, null);
+
+        EditText edtFriendName = view.findViewById(R.id.edtfriendName);
+
+        builder.setView(view);
+        builder.setTitle("Enter Friend Details")
+                .setPositiveButton("Add Friend", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        addCard(edtFriendName.getText().toString(), "0", "NONE");
+                    }
+                                //edtfriendAmount.getText().toString(),
+                                //edtDirection.getText().toString());
+
+
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+        addFriendDialog = builder.create();
+    }
+    //3.2 once finished entering the information, pass them into the current new Friend cardView
+    private void addCard(String friendName, String friendAmount, String friendDirection) {
+        View view = getLayoutInflater().inflate(R.layout.cardview_friend, null);
+
+        TextView tvFriendName = view.findViewById(R.id.tvFriendName);
+        TextView tvFriendAmount = view.findViewById(R.id.tvFriendAmount);
+        TextView tvDirection = view.findViewById(R.id.tvDirection);
+
+        Button btnRemoveFriendCard = view.findViewById(R.id.btnRemoveFriendCard);
+        Button btnFriendDetails = view.findViewById(R.id.btnFriendDetails);
+
+        //4 handing the friends details button
+        btnFriendDetails.setOnClickListener(new View.OnClickListener() { // when user click "details" at friend cardView
+            @Override
+            public void onClick(View view) {
+                buildBillDetails(friendName,friendAmount,friendDirection); // pass any information we want to the pop up window
+                friendDetailsDialog.show();
+            }
+
+        });
+
+
+        btnRemoveFriendCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                friendContainer.removeView(view);
+            }
+        });
+        tvFriendName.setText(friendName);
+        tvFriendAmount.setText(friendAmount);
+        tvDirection.setText(friendDirection);
+        friendContainer.addView(view);
+    }
+
+    //4.1 Render the friends details pop up windows here
+    private void buildBillDetails(String BillAmount,String ActivityName,String Date){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        View viewFriendDetails = getLayoutInflater().inflate(R.layout.popup_receipt_click_details, null);
+
+        TextView tvTotal = viewFriendDetails.findViewById(R.id.tvTotal);
+        TextView tvActivityText = viewFriendDetails.findViewById(R.id.tvActivityText);
+        TextView tvDate = viewFriendDetails.findViewById(R.id.tvDate);
+
+        builder.setView(viewFriendDetails);
+
+        tvTotal.setText(BillAmount);
+        tvActivityText.setText(ActivityName);
+        tvDate.setText(Date);
+        friendDetailsDialog = builder.create();
+    }
+
+
 }
