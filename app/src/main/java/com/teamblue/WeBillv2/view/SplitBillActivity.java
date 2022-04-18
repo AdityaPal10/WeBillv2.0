@@ -85,7 +85,7 @@ public class SplitBillActivity extends AppCompatActivity {
 //
 //            }
 //        });
-        BigDecimal amount3 = new BigDecimal("2.15");
+//        BigDecimal amount3 = new BigDecimal("2.15");
         buildAddSplitFriendDialog();
         btnAddSplitFriend = findViewById(R.id.btnAddSplitFriend);
         btnAddSplitFriend.setOnClickListener(new View.OnClickListener() {
