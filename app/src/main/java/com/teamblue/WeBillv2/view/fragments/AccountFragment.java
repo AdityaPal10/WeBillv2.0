@@ -69,15 +69,15 @@ public class AccountFragment extends Fragment {
             }
         });
 
-        /******Dialog for User Logout ****************/
-        buildChangeUsernameDialog();// build contents here
-        btnChangeUsername = (Button) view.findViewById(R.id.btnChangeUsername);
-        btnChangeUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogChangeUsername.show();
-            }
-        });
+
+//        buildChangeUsernameDialog();// build contents here
+//        btnChangeUsername = (Button) view.findViewById(R.id.btnChangeUsername);
+//        btnChangeUsername.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialogChangeUsername.show();
+//            }
+//        });
 
 
 
@@ -86,30 +86,30 @@ public class AccountFragment extends Fragment {
         return view;
     }
 
-    private void buildChangeUsernameDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());
-        //Choose Dialog Layout here
-        View dialogView = getLayoutInflater().inflate(R.layout.popup_change_username, null);
-
-        edtChangeUserName = dialogView.findViewById(R.id.edtChangeUserName);
-
-        builder.setView(dialogView);
-        builder.setTitle("Change Your Username Here")
-                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        tvAccountPageUsername.setText(edtChangeUserName.getText().toString()); //set new username to textview
-                        savedUsername = edtChangeUserName.getText().toString(); //save new username to sharedPreference
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-        dialogChangeUsername = builder.create();
-    }
+//    private void buildChangeUsernameDialog() {
+//        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());
+//        //Choose Dialog Layout here
+//        View dialogView = getLayoutInflater().inflate(R.layout.popup_change_username, null);
+//
+//        edtChangeUserName = dialogView.findViewById(R.id.edtChangeUserName);
+//
+//        builder.setView(dialogView);
+//        builder.setTitle("Change Your Username Here")
+//                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        tvAccountPageUsername.setText(edtChangeUserName.getText().toString()); //set new username to textview
+//                        savedUsername = edtChangeUserName.getText().toString(); //save new username to sharedPreference
+//                    }
+//                })
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
+//        dialogChangeUsername = builder.create();
+//    }
 
     private void buildUserLogoutDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());
