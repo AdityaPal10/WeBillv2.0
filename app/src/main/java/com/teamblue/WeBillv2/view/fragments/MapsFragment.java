@@ -67,6 +67,7 @@ public class MapsFragment extends Fragment {
 
             // read location data and add to map
             try {
+                // TODO: make a call to the backend to get a json file/object of locations
                 List<LocationItem> locationItems = readItems(R.raw.locations);
                 clusterManager.addItems(locationItems);
             } catch (JSONException e) {
@@ -98,6 +99,8 @@ public class MapsFragment extends Fragment {
         }
     }
 
+
+    // TODO: revise function to read from json object (from backend, not from resources)
     private List<LocationItem> readItems(@RawRes int resource) throws JSONException {
         List<LocationItem> result = new ArrayList<>();
         InputStream inputStream = getContext().getResources().openRawResource(resource);
@@ -108,7 +111,8 @@ public class MapsFragment extends Fragment {
             double lat = object.getDouble("lat");
             double lng = object.getDouble("lng");
             String name = object.getString("name");
-            LocationItem newItem = new LocationItem(lat, lng, name, null);
+            String snippet = null;
+            LocationItem newItem = new LocationItem(lat, lng, name, snippet);
             result.add(newItem);
         }
         return result;
