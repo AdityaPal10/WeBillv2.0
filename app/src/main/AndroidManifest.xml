@@ -40,12 +40,15 @@
             android:name=".view.AddBillView"
             android:parentActivityName=".view.MainActivity" />
         <activity
-
             android:name="com.teamblue.WeBillv2.view.MenuView"
             android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
         <activity
             android:name="com.teamblue.WeBillv2.view.SplitBillActivity"
             android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity" />
+        <activity
+            android:name="com.teamblue.WeBillv2.view.ScanBillActivity"
+            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
