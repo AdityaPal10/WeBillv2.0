@@ -1,8 +1,12 @@
 package com.teamblue.WeBillv2.view.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -16,8 +20,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.view.MainActivity;
+import com.teamblue.WeBillv2.view.ScanBillActivity;
 import com.teamblue.WeBillv2.view.SplitBillActivity;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -25,6 +41,8 @@ import com.teamblue.WeBillv2.view.SplitBillActivity;
  */
 public class AddBillFragment extends Fragment {
 
+
+    private static int AUTOCOMPLETE_REQUEST_CODE = 7001;
     private EditText edtActivityNameAddBill,edtTotalAmountAddBill,edtDateAddBill,edtAddressAddBill;
     private Button btnEnterAddBill,btnScanBill;
 
@@ -32,6 +50,23 @@ public class AddBillFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // actually populate the address field with the user's selection
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                edtAddressAddBill.setText(place.getAddress());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Toast.makeText(getContext(), "Address not found", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == AutocompleteActivity.RESULT_CANCELED) {
+                // The user canceled the operation
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +81,30 @@ public class AddBillFragment extends Fragment {
         edtAddressAddBill = (EditText) view.findViewById(R.id.edtAddressAddBill);
         btnEnterAddBill = (Button) view.findViewById(R.id.btnEnterAddBill);
         btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
+
+
+
+        // Initialize the Google Maps Places SDK and create PlacesClient instance
+        // we need this for the autocomplete feature in the address field
+        if (!Places.isInitialized())
+            Places.initialize(getContext(), BuildConfig.MAPS_API_KEY);
+        PlacesClient placesClient = Places.createClient(getContext());
+
+        // set to the autocomplete feature to activate after the user clicks on the address field
+        edtAddressAddBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // set the fields to specify which types of place data to return after the user
+                // has made a selection
+                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
+
+                // start the autocomplete intent
+                Intent autocompleteIntent = new Autocomplete
+                        .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                        .build(getContext());
+                startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+            }
+        });
 
         btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,9 +140,12 @@ public class AddBillFragment extends Fragment {
         btnScanBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /********TODO: Start Scan Bill Activity here (not fragment!)********/
+                Intent gotoScanBillActivity = new Intent(view.getContext(), ScanBillActivity.class);
+                startActivity(gotoScanBillActivity);
             }
         });
+
+
 
 //        edtTotalAmountAddBill.addTextChangedListener(new TextWatcher() {
 //            @Override

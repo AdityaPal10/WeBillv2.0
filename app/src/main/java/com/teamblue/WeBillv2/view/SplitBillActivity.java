@@ -1,6 +1,7 @@
 package com.teamblue.WeBillv2.view;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.number.Precision;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,19 +19,30 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.view.fragments.AddBillFragment;
 
 import org.w3c.dom.Text;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
 
 public class SplitBillActivity extends AppCompatActivity {
 
-    private EditText edtActivityNameSplitBill,edtTotalAmountSplitBill,edtDateSplitBill,edtAddressSplitBill;
+    private static int AUTOCOMPLETE_REQUEST_CODE = 7001;
+    private EditText edtActivityNameSplitBill,edtTotalAmountSplitBill,edtDateSplitBill,edtAddressSplitBill,edtPayerName;
     private TextView tvRemainAmount, tvTotalAmountSplitBill;
     private String getActivityName, getTotalAmount, getDate, getAddress;
-    private Button btnAddSplitFriend;
+    private Button btnAddSplitFriend,btnSaveBill;
     private Double RemainAmount, CurrentAmount,TotalAmount;
     LinearLayout LinearFriendSplit;
     AlertDialog AddSplitFriendDialog;
@@ -40,12 +52,56 @@ public class SplitBillActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_split_bill);
 
+        // Initialize the Google Maps Places SDK and create PlacesClient instance
+        // we need this for the autocomplete feature in the address field
+        if (!Places.isInitialized())
+            Places.initialize(getBaseContext(), BuildConfig.MAPS_API_KEY);
+        PlacesClient placesClient = Places.createClient(getBaseContext());
+
         edtActivityNameSplitBill = (EditText) findViewById(R.id.edtActivityNameSplitBill);
-        tvTotalAmountSplitBill = (TextView) findViewById(R.id.tvTotalAmountSplitBill);
         edtDateSplitBill = (EditText) findViewById(R.id.edtDateSplitBill);
         edtAddressSplitBill = (EditText) findViewById(R.id.edtAddressSplitBill);
+        edtPayerName = (EditText) findViewById(R.id.edtPayerName);
+        tvTotalAmountSplitBill = (TextView) findViewById(R.id.tvTotalAmountSplitBill);
         tvRemainAmount = (TextView) findViewById(R.id.tvRemainAmount);
         LinearFriendSplit = findViewById(R.id.LinearFriendSplit);
+        btnSaveBill = (Button) findViewById(R.id.btnSaveBill);
+
+        /******** Check Final Bill Information Completeness *********/
+        btnSaveBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(TextUtils.isEmpty(edtActivityNameSplitBill.getText().toString())) {
+                    edtActivityNameSplitBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtDateSplitBill.getText().toString())) {
+                    edtDateSplitBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtAddressSplitBill.getText().toString())){
+                    edtAddressSplitBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtPayerName.getText().toString())) {
+                    edtPayerName.setError("Must Not Be Empty!");
+                    return;
+                }else if(Double.valueOf(tvRemainAmount.getText().toString()) != 0 ) {
+                    Toast.makeText(SplitBillActivity.this, "You Still Have Remain Amount", Toast.LENGTH_SHORT).show();
+                    return;
+                } else{
+    /**********TODO: After Finishing a Bill Information, put all data needed to whatever fragment/activity the app needs *******/
+                    Bundle bundle = new Bundle();
+                    bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameSplitBill.getText().toString());
+                    bundle.putString("BILL_DATE",edtDateSplitBill.getText().toString());
+                    bundle.putString("BILL_ADDRESS",edtAddressSplitBill.getText().toString());
+                    bundle.putString("BILL_TOTAL_AMOUNT",tvTotalAmountSplitBill.getText().toString());
+                    //Right now I just go to ScanBillActivity Again, I wanted to goto AddBillFragment but I don't know how......
+                    //It's fine if we are not able to do this, just let the user do their stuffs once finished one bill......
+                    Intent gotoScanBillActivity = new Intent(view.getContext(), ScanBillActivity.class);
+                    gotoScanBillActivity.putExtras(bundle);
+                    startActivity(gotoScanBillActivity);
+                }
+            }
+        });
+
 
         /************Get Bundles from AddBillFragment Here************/
         getActivityName = (String) getIntent().getExtras().get("BILL_ACTIVITY_NAME");
@@ -86,6 +142,23 @@ public class SplitBillActivity extends AppCompatActivity {
 //            }
 //        });
 //        BigDecimal amount3 = new BigDecimal("2.15");
+
+        // set the autocomplete feature to activate when user clicks on address field
+        edtAddressSplitBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // set the fields to specify which types of place data to return after the user
+                // has made a selection
+                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
+
+                // start the autocomplete intent
+                Intent autocompleteIntent = new Autocomplete
+                        .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                        .build(getBaseContext());
+                startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+            }
+        });
+
         buildAddSplitFriendDialog();
         btnAddSplitFriend = findViewById(R.id.btnAddSplitFriend);
         btnAddSplitFriend.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +167,23 @@ public class SplitBillActivity extends AppCompatActivity {
                 AddSplitFriendDialog.show();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // actually populate the address field with user's selection
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                edtAddressSplitBill.setText(place.getAddress());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Toast.makeText(getBaseContext(), "Address not found", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == AutocompleteActivity.RESULT_CANCELED) {
+                // The user canceled the operation
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /************Build Dialog For Adding Split Friends Card************/

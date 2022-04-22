@@ -24,7 +24,8 @@
 
         <activity
             android:name=".view.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,19 +37,29 @@
             android:exported="false" />
         <activity
             android:name=".view.SignUpView"
-            android:parentActivityName=".view.MainActivity" />
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.MyAccountView"
-            android:parentActivityName=".view.MainActivity" />
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.AddBillView"
-            android:parentActivityName=".view.MainActivity" />
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.MenuView"
-            android:parentActivityName=".view.MainActivity" />
+            android:name="com.teamblue.WeBillv2.view.MenuView"
+            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.SplitBillActivity"
-            android:parentActivityName=".view.MainActivity" />
+            android:name="com.teamblue.WeBillv2.view.SplitBillActivity"
+            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.teamblue.WeBillv2.view.ScanBillActivity"
+            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
