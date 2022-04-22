@@ -190,5 +190,16 @@
         android:elevation="10dp"
         android:src="@drawable/ai_circle"/>
 
+<!--    <ImageView-->
+<!--        android:id="@+id/idIVCaptureImage"-->
+<!--        android:layout_width="90dp"-->
+<!--        android:layout_height="90dp"-->
+<!--        android:layout_below="@+id/tvHeyText"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:background="@drawable/oval_shadow"-->
+<!--        android:elevation="10dp"-->
+<!--        android:src="@drawable/ai_circle"/>-->
+
 
 </RelativeLayout>

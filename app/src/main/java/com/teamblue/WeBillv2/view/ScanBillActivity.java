@@ -3,6 +3,7 @@ package com.teamblue.WeBillv2.view;
 import static android.Manifest.permission.CAMERA;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -31,7 +32,9 @@ import com.teamblue.WeBillv2.R;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class ScanBillActivity extends AppCompatActivity {
+import pl.droidsonroids.gif.GifImageView;
+
+public class ScanBillActivity extends Activity {
     private static final String TAG = "BASE64";
     private ImageView captureIV;
     private EditText edtActivityNameScanBill,edtTotalAmountScanBill,edtDateScanBill,edtAddressScanBill;
@@ -45,7 +48,7 @@ public class ScanBillActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scan_bill);
 
         // Create View Objects
-        captureIV = (ImageView) findViewById(R.id.idIVCaptureImage);
+        captureIV = (GifImageView) findViewById(R.id.idIVCaptureImage);
         edtActivityNameScanBill = (EditText) findViewById(R.id.edtActivityNameScanBill);
         edtTotalAmountScanBill = (EditText) findViewById(R.id.edtTotalAmountScanBill);
         edtDateScanBill = (EditText) findViewById(R.id.edtDateScanBill);
@@ -120,6 +123,12 @@ public class ScanBillActivity extends AppCompatActivity {
             // set encoded text on textview
 //            resultTV.setText(Base64String);
             Log.d(TAG, Base64String);
+
+            /********* TODO: Hard Coded scanned result now. Replace once finished real API ******/
+            edtActivityNameScanBill.setText("Sushi(HardCode message)");
+            edtTotalAmountScanBill.setText("999");
+            edtDateScanBill.setText("1970/01/01");
+            edtAddressScanBill.setText("HardCode Address Here");
 
         }
     }
