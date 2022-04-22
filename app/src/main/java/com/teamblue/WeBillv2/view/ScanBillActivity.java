@@ -10,10 +10,12 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +34,8 @@ import java.io.IOException;
 public class ScanBillActivity extends AppCompatActivity {
     private static final String TAG = "BASE64";
     private ImageView captureIV;
-    private TextView resultTV;
-    private Button snapBtn,detectBtn;
+    private EditText edtActivityNameScanBill,edtTotalAmountScanBill,edtDateScanBill,edtAddressScanBill;
+    private Button btnEnterScanBill;
     private Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -42,12 +44,46 @@ public class ScanBillActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_bill);
 
-        //4.2 Create View Objects
+        // Create View Objects
         captureIV = (ImageView) findViewById(R.id.idIVCaptureImage);
-        resultTV = (TextView) findViewById(R.id.idTVDetectorText);
-        snapBtn = (Button) findViewById(R.id.idBtnSnap);
-        detectBtn = (Button) findViewById(R.id.idBtnDetect);
+        edtActivityNameScanBill = (EditText) findViewById(R.id.edtActivityNameScanBill);
+        edtTotalAmountScanBill = (EditText) findViewById(R.id.edtTotalAmountScanBill);
+        edtDateScanBill = (EditText) findViewById(R.id.edtDateScanBill);
+        edtAddressScanBill = (EditText) findViewById(R.id.edtAddressScanBill);
+        btnEnterScanBill = (Button) findViewById(R.id.btnEnterScanBill);
 
+        btnEnterScanBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Checking for no total amount empty error
+                if(TextUtils.isEmpty(edtActivityNameScanBill.getText().toString())) {
+                    edtActivityNameScanBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtTotalAmountScanBill.getText().toString())) {
+                    edtTotalAmountScanBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtDateScanBill.getText().toString())){
+                    edtDateScanBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtAddressScanBill.getText().toString())){
+                    edtAddressScanBill.setError("Must Not Be Empty!");
+                    return;
+                }else{
+                    Bundle bundle = new Bundle();
+                    bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameScanBill.getText().toString());
+                    bundle.putString("BILL_TOTAL_AMOUNT",edtTotalAmountScanBill.getText().toString());
+                    bundle.putString("BILL_DATE",edtDateScanBill.getText().toString());
+                    bundle.putString("BILL_ADDRESS",edtAddressScanBill.getText().toString());
+                    Intent gotoSplitBillActivity = new Intent(view.getContext(), SplitBillActivity.class);
+                    gotoSplitBillActivity.putExtras(bundle);
+                    startActivity(gotoSplitBillActivity);
+                }
+            }
+        });
+
+
+
+        /***************Handling Receipt Scanning Camera Here ************/
         //Asking Permission
         if (ContextCompat.checkSelfPermission(ScanBillActivity.this,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
@@ -56,29 +92,23 @@ public class ScanBillActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.CAMERA},REQUEST_IMAGE_CAPTURE);
 
         }
-
-
-        snapBtn.setOnClickListener(new View.OnClickListener() {
+        captureIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
             }
         });
-
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         ScanBillActivity.super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             //5.6 then we use bundle to retrieve information from Bitmap
-
-
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
-            captureIV.setImageBitmap(imageBitmap);
-            captureIV.setRotation(90);
-
+//            captureIV.setImageBitmap(imageBitmap);
+//            captureIV.setRotation(90);
             // initialize byte stream
             ByteArrayOutputStream stream=new ByteArrayOutputStream();
             // compress Bitmap
@@ -86,9 +116,9 @@ public class ScanBillActivity extends AppCompatActivity {
             // Initialize byte array
             byte[] bytes=stream.toByteArray();
             // get base64 encoded string
-            String Base64String= Base64.encodeToString(bytes,Base64.DEFAULT);
+            String Base64String= Base64.encodeToString(bytes,Base64.DEFAULT); // send the string to backend
             // set encoded text on textview
-            resultTV.setText(Base64String);
+//            resultTV.setText(Base64String);
             Log.d(TAG, Base64String);
 
         }

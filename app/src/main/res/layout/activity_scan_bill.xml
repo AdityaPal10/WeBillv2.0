@@ -5,52 +5,190 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/idIVCaptureImage"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+    <TextView
+        android:id="@+id/tvWelcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/calibri"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/scanner" />
+        android:text="AI Receipt Scanner"
+        android:textColor="#000000"
+        android:textSize="26sp" />
 
-    <EditText
-        android:id="@+id/idTVDetectorText"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@id/idIVCaptureImage"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:padding="4dp"
-        android:text="Your result will appear here"
-        android:textAlignment="center"
-        android:textColor="@color/quantum_black_100"
-        android:textSize="18sp"
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewEnterBill"
+        android:layout_below="@+id/tvWelcomeText"
+        android:layout_width="400dp"
+        android:layout_height="500dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="12dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvMAB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/calibri"
+                android:text="Your Result Will Be Here"
+                android:textColor="#000000"
+                android:textSize="30dp" />
+
+            <RelativeLayout
+                android:id="@+id/AddBillActivityNameLayout"
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/tvMAB"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp">
+
+                <ImageView
+                    android:id="@+id/imgBill"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/bill" />
+
+                <EditText
+                    android:id="@+id/edtActivityNameScanBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/imgBill"
+                    android:hint="Activity Name"
+                    android:inputType="text"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/AddBillTotalAmountLayout"
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/AddBillActivityNameLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/imgAmount"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/coin" />
+
+                <EditText
+                    android:id="@+id/edtTotalAmountScanBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/imgAmount"
+                    android:hint="Total Amount"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/AddBillDateLayout"
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/AddBillTotalAmountLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/imgDate"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/calendar" />
+
+                <EditText
+                    android:id="@+id/edtDateScanBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/imgDate"
+                    android:hint="Date"
+                    android:inputType="date"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/AddBillDateLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/imgAddress"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/pin" />
+
+                <EditText
+                    android:id="@+id/edtAddressScanBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/imgAddress"
+                    android:hint="Address"
+                    android:inputType="text"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnEnterScanBill"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="45dp"
+                android:background="@drawable/roundedbutton"
+                android:fontFamily="@font/calibri"
+                android:text="Next"
+                android:textAllCaps="false"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:cornerRadius="38dp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvHeyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cardViewEnterBill"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/calibri"
+        android:text="Hey WeBill"
+        android:textColor="#000000"
+        android:textSize="26sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/idBtnSnap"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_below="@id/idTVDetectorText"
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/idIVCaptureImage"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_below="@+id/tvHeyText"
         android:layout_marginTop="30dp"
-        android:text="Snap"
-        android:textAllCaps="false" />
-
-    <Button
-        android:id="@+id/idBtnDetect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_below="@id/idBtnSnap"
-        android:layout_marginTop="30dp"
-        android:text="Detect"
-        android:textAllCaps="false" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/oval_shadow"
+        android:elevation="10dp"
+        android:src="@drawable/ai_circle"/>
 
 
 </RelativeLayout>
