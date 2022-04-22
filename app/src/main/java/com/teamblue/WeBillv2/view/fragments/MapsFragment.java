@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
 import com.teamblue.WeBillv2.R;
@@ -40,6 +42,7 @@ public class MapsFragment extends Fragment {
 
     private int ZOOM = 13;  // ranges from 2 to 21; the higher the num, the more zoomed in
     private ClusterManager<LocationItem> clusterManager;
+    private LocationItem clickedClusterItem;
 
     // 4. the map callback
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -71,29 +74,37 @@ public class MapsFragment extends Fragment {
             googleMap.setOnCameraIdleListener(clusterManager);
             googleMap.setOnMarkerClickListener(clusterManager);
 
-            // read location data and add to map
-            // TODO: make a call to the backend to get a json file/object of locations
-//                List<LocationItem> locationItems = readItems(R.raw.locations);
-            mapsService.getExpenseLocations(getActivity().getApplicationContext(), new MapsController() {
-                @Override
-                public void getExpenseLocations(ArrayList<LocationModel> expLocationList) {
-                    List<LocationModel> locationData = expLocationList;
-                    List<LocationItem> locationItems = new ArrayList<>();
-                    if (!locationData.isEmpty()) {
-                        for (LocationModel location : locationData) {
-                            locationItems.add(new LocationItem(
-                                    location.getLatitude(), location.getLongitude(),
-                                    location.getLocation_name() + System.lineSeparator(),
-                                    "Total: " + location.getTotal_amount()
-                                            + System.lineSeparator()
-                                            + "Visits: " + location.getVisits()
-                            ));
+            googleMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
+            clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<LocationItem>() {
+                                                             @Override
+                                                             public boolean onClusterItemClick(LocationItem item) {
+                                                                 clickedClusterItem = item;
+                                                                 return false;
+                                                             }
+                                                         });
+
+                    // read location data and add to map
+                    mapsService.getExpenseLocations(getActivity().getApplicationContext(), new MapsController() {
+                        @Override
+                        public void getExpenseLocations(ArrayList<LocationModel> expLocationList) {
+                            List<LocationModel> locationData = expLocationList;
+                            List<LocationItem> locationItems = new ArrayList<>();
+                            if (!locationData.isEmpty()) {
+                                for (LocationModel location : locationData) {
+                                    locationItems.add(new LocationItem(
+                                            location.getLatitude(), location.getLongitude(),
+                                            location.getLocation_name() + System.lineSeparator(),
+                                            "Total: " + location.getTotal_amount()
+                                                    + System.lineSeparator()
+                                                    + "Visits: " + location.getVisits()
+                                    ));
+                                }
+                                clusterManager.addItems(locationItems);
+                                clusterManager.getMarkerCollection().setInfoWindowAdapter(new CustomInfoWindowAdapter());
+                                clusterManager.cluster();
+                            }
                         }
-                        clusterManager.addItems(locationItems);
-                        clusterManager.cluster();
-                    }
-                }
-            });
+                    });
         }
     };
 
@@ -120,23 +131,31 @@ public class MapsFragment extends Fragment {
         }
     }
 
+    public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
-    // TODO: revise function to read from json object (from backend, not from resources)
-    private List<LocationItem> readItems(@RawRes int resource) throws JSONException {
-        List<LocationItem> result = new ArrayList<>();
-        InputStream inputStream = getContext().getResources().openRawResource(resource);
-        String json = new Scanner(inputStream).useDelimiter("\\A").next();
-        JSONArray array = new JSONArray(json);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            double lat = object.getDouble("lat");
-            double lng = object.getDouble("lng");
-            String name = object.getString("name");
-            String snippet = null;
-            LocationItem newItem = new LocationItem(lat, lng, name, snippet);
-            result.add(newItem);
+        private final View customContentsView;
+
+        CustomInfoWindowAdapter() {
+            customContentsView = getLayoutInflater().inflate(R.layout.maps_info_window, null);
         }
-        return result;
+
+        @Nullable
+        @Override
+        public View getInfoContents(@NonNull Marker marker) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public View getInfoWindow(@NonNull Marker marker) {
+            TextView infoWindowTitle = (TextView) customContentsView.findViewById(R.id.infoWindowTitle);
+            TextView infoWindowSnippet = (TextView) customContentsView.findViewById(R.id.infoWindowSnippet);
+
+            infoWindowTitle.setText(clickedClusterItem.getTitle());
+            infoWindowSnippet.setText(clickedClusterItem.getSnippet());
+            return customContentsView;
+        }
     }
+
 
 }
