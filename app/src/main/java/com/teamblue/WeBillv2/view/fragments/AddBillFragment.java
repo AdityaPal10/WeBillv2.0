@@ -28,6 +28,8 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.view.MainActivity;
+import com.teamblue.WeBillv2.view.ScanBillActivity;
 import com.teamblue.WeBillv2.view.SplitBillActivity;
 
 import java.util.Arrays;
@@ -79,6 +81,8 @@ public class AddBillFragment extends Fragment {
         edtAddressAddBill = (EditText) view.findViewById(R.id.edtAddressAddBill);
         btnEnterAddBill = (Button) view.findViewById(R.id.btnEnterAddBill);
         btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
+
+
 
         // Initialize the Google Maps Places SDK and create PlacesClient instance
         // we need this for the autocomplete feature in the address field
@@ -136,7 +140,8 @@ public class AddBillFragment extends Fragment {
         btnScanBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /********TODO: Start Scan Bill Activity here (not fragment!)********/
+                Intent gotoScanBillActivity = new Intent(view.getContext(), ScanBillActivity.class);
+                startActivity(gotoScanBillActivity);
             }
         });
 

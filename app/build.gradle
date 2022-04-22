@@ -42,4 +42,7 @@ dependencies {
 
     // Stripe Android SDK
     implementation 'com.stripe:stripe-android:19.3.0'
+
+    // Custom Gif ImageView
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.20'
 }
