@@ -47,8 +47,8 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         });
     }
 
-    // TODO: Add Heroku/Retrofit client to handle API calls
-    // TODO: Add and update StripeService and PaymentSheetModel to reflect SetupIntent NOT PaymentIntent
+    // TODO: Add client to handle API calls
+    // NOTE: if this is extracted out into separate Java class, need to edit button's onClickListener
     private void initStripePaymentSheet() {
 //        StripeService stripeService = HerokuRetrofitClient.getRetrofitInstance().create(StripeService.class);
 //        Call<PaymentSheetModel> call = stripeService.stripePaymentSheet();
@@ -94,8 +94,9 @@ public class PaymentDetailsActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),TAG+"Got error: " + ((PaymentSheetResult.Failed) paymentSheetResult).getError(),Toast.LENGTH_LONG).show();
             Log.e(TAG, "Got error: ", ((PaymentSheetResult.Failed) paymentSheetResult).getError());
         } else if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
-            Toast.makeText(getApplicationContext(),TAG+" Completed",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Success!",Toast.LENGTH_LONG).show();
             Log.d(TAG,"Completed");
+            // TODO: intent to Friends/MenuView
         }
     }
 
