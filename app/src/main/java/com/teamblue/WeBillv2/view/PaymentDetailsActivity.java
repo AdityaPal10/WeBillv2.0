@@ -14,6 +14,7 @@ import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.controller.StripeController;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 
 import retrofit2.Call;
@@ -29,8 +30,7 @@ public class PaymentDetailsActivity extends AppCompatActivity {
     private TextView txtPaymentDetails;
     private Button btnPaymentDetails;
     PaymentSheet paymentSheet;
-    String setupIntentClientSecret;
-    PaymentSheet.CustomerConfiguration customerConfig;
+    StripeController stripeController = new StripeController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,48 +43,10 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
         btnPaymentDetails.setOnClickListener(view -> {
-            initStripePaymentSheet();
+            stripeController.initializePaymentSheet(getApplicationContext(), paymentSheet);
         });
     }
 
-    // TODO: Add client to handle API calls
-    // NOTE: if this is extracted out into separate Java class, need to edit button's onClickListener
-    private void initStripePaymentSheet() {
-//        StripeService stripeService = HerokuRetrofitClient.getRetrofitInstance().create(StripeService.class);
-//        Call<PaymentSheetModel> call = stripeService.stripePaymentSheet();
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onResponse(Call call, Response response) {
-//                if(response.code() == Constants.RESPONSE_OK) {
-//                    try {
-//                        PaymentSheetModel result = (PaymentSheetModel) response.body();
-//                        customerConfig = new PaymentSheet.CustomerConfiguration(
-//                            result.getString("customer"),
-//                            result.getString("ephemeralKey")
-//                        );
-//                        setupIntentClientSecret = result.getSetupIntent();
-//                        PaymentConfiguration.init(getApplicationContext(), result.getPublishableKey());
-//
-//                        presentStripePaymentSheet();
-//                    } catch (Exception e) { /* handle error */ }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call call, Throwable t) {
-//                Toast.makeText(getApplicationContext(),t.getMessage().toString(),Toast.LENGTH_LONG).show();
-//            }
-//        });
-    }
-
-    private void presentStripePaymentSheet() {
-        final PaymentSheet.Configuration config = new PaymentSheet.Configuration
-                .Builder("WeBill")
-                .customer(customerConfig)
-                .allowsDelayedPaymentMethods(true)
-                .build();
-        paymentSheet.presentWithSetupIntent(setupIntentClientSecret,config);
-    }
 
     void onPaymentSheetResult(final PaymentSheetResult paymentSheetResult) {
         if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {

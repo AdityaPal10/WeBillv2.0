@@ -4,6 +4,7 @@ public class PaymentSheetModel {
 
     private String setupIntent;
     private String customerID;
+    private String ephemeralKey;
     private String publishableKey;
 
     public String getSetupIntent() {
@@ -20,6 +21,14 @@ public class PaymentSheetModel {
 
     public void setCustomerID(String customerID) {
         this.customerID = customerID;
+    }
+
+    public String getEphemeralKey() {
+        return ephemeralKey;
+    }
+
+    public void setEphemeralKey(String ephemeralKey) {
+        this.ephemeralKey = ephemeralKey;
     }
 
     public String getPublishableKey() {
