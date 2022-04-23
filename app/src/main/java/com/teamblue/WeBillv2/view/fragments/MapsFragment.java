@@ -2,7 +2,6 @@ package com.teamblue.WeBillv2.view.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -35,14 +34,8 @@ import com.teamblue.WeBillv2.model.pojo.LocationItem;
 import com.teamblue.WeBillv2.model.pojo.LocationModel;
 import com.teamblue.WeBillv2.service.MapsService;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class MapsFragment extends Fragment {
 
@@ -114,23 +107,27 @@ public class MapsFragment extends Fragment {
         }
     };
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(getContext());
 
-        if (ContextCompat.checkSelfPermission(getContext(),
+        if (ContextCompat.checkSelfPermission(this.getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(getContext(),
+                && ContextCompat.checkSelfPermission(this.getContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     LOCATION_REQUEST_CODE);
         } else {
             getCurrentLocation();
         }
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         // 1. initialize the view
         return inflater.inflate(R.layout.fragment_maps, container, false);
     }
@@ -163,10 +160,7 @@ public class MapsFragment extends Fragment {
     private void getCurrentLocation() {
         fusedLocationProvider.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
-                double currLatitude = location.getLatitude();
-                double currLongitude = location.getLongitude();
-                initialLoc = new LatLng(currLatitude, currLongitude);
-                Toast.makeText(getContext(), currLatitude + " " + currLongitude, Toast.LENGTH_LONG).show();
+                initialLoc = new LatLng(location.getLatitude(), location.getLongitude());
             }
         });
     }
