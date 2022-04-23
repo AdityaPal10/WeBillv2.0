@@ -6,43 +6,32 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.model.api.FriendMethods;
-import com.teamblue.WeBillv2.model.api.FriendRequest;
-import com.teamblue.WeBillv2.model.api.LoginMethods;
+//import com.teamblue.WeBillv2.model.api.GroupMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.Friend;
+import com.teamblue.WeBillv2.model.pojo.Group;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
-import com.teamblue.WeBillv2.model.pojo.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FriendService {
-    private String TAG = "Friend";
-
-
-    /*
-    making network call to our backend api to add friend.
-    parameters :
-       context - to pass the activity where its being called, in this case its the MainActivity.class
-       username - our users username
-       friendUsername - the edit text widget where the user enters their friends username to add
-
-       Return type:
-       void - the function if successful will start an intent to the friends activity.
-     */
-    public void addFriend(Context context, String username, EditText friendUsername){
-        String friendName = friendUsername.getText().toString().trim();
+/*
+public class GroupService {
+    private String TAG = "Group";
+    public static void addGroup(Context context, String groupName){
 
         //1. create an instance of friend methods interface defined in our FriendMethods class
-        FriendMethods friendMethods = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
+        GroupMethods groupMethods = LoginRetrofitClient.getRetrofitInstance().create(GroupMethods.class);
         //2. create a call object which will make the REST API call to our backend by passing in username and friendName as paramaters
-        Call<LoginModel> call = friendMethods.addFriend(new FriendRequest(username,friendName));
+        Call<LoginModel> call = GroupMethods.addtoGroup(new Group(ArrayList<Friend>));
         Log.d(TAG,friendUsername.getText().toString().trim());
 
-        /*3. create a callback for our call object, once its finished the network call, it will use this callback to further
+        */
+/*3. create a callback for our call object, once its finished the network call, it will use this callback to further
            process whether the network call was successful or not.
-         */
+         *//*
+
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
@@ -68,19 +57,10 @@ public class FriendService {
                         Toast.makeText(context,"Error adding friend, please try again",Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Log.d(TAG,"Error adding friend,please try again");
-                    friendUsername.setText("");
+                    //Log.d(TAG,"Error adding friend,please try again");
+                    //friendUsername.setText("");
                     Toast.makeText(context,"Error adding friend,please try again",Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
-                Log.d(TAG,"Error adding friend,please try again");
-                friendUsername.setText("");
-                Toast.makeText(context,"Error adding friend,please try again",Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
 }
+*/

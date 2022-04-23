@@ -9,10 +9,7 @@ import retrofit2.http.POST;
 
 public interface FriendMethods {
 
-    @POST("isFriend")
-    Call<LoginModel> checkFriendship(@Body Friend friendModel);
-
-    @POST("addFriend")
-    Call<LoginModel> addFriend(@Body Friend friend);
+    @POST("friend/add")
+    Call<LoginModel> addFriend(@Body FriendRequest friend);
 
 }
