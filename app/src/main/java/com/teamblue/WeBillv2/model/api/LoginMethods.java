@@ -12,7 +12,7 @@ import retrofit2.http.POST;
 public interface LoginMethods {
 
 
-    @GET("/login/getUsers")
+    @GET("login/getUsers")
     Call<User> getUser();
 
     @POST("login/signin")

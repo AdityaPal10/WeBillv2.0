@@ -17,6 +17,9 @@ public class SignUpView extends AppCompatActivity {
     private EditText email;
     private EditText username;
     private EditText password;
+    private EditText phone;
+    private EditText address;
+    private EditText gender;
 
     private Button register;
     private LoginController loginController = new LoginController();
@@ -30,12 +33,15 @@ public class SignUpView extends AppCompatActivity {
         email = (EditText) findViewById(R.id.emailEditTextSignUp);
         username = (EditText) findViewById(R.id.usernameEditTextSignUp);
         password = (EditText) findViewById(R.id.passwordEditTextSignUp);
+        phone = (EditText)findViewById(R.id.phoneEditTextSignUp);
+        address = (EditText) findViewById(R.id.addressEditTextSignUp);
+        gender = (EditText) findViewById(R.id.genderEditTextSignUp);
         register = (Button) findViewById(R.id.registerButtonSignUp);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginController.signUp(getApplicationContext(),email,username,password);
+                loginController.signUp(getApplicationContext(),email,username,password,phone,address,gender);
             }
         });
 
