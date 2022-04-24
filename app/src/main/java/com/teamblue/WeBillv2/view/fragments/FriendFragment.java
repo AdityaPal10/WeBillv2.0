@@ -167,6 +167,8 @@ public class FriendFragment extends Fragment {
                     //case 1: when successfully added friend
                     Toast.makeText(context,"successfully added friend",Toast.LENGTH_LONG).show();
                     View viewNewFriendCard = getLayoutInflater().inflate(R.layout.cardview_new_friend, null);
+                    TextView tvFriendName= viewNewFriendCard.findViewById(R.id.tvFriendName);
+                    tvFriendName.setText(friendName);
                     containerFriendCards.addView(viewNewFriendCard);
                 }else{
                     switch (response.code()){
