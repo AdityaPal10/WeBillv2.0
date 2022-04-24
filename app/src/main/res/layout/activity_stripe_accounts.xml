@@ -8,25 +8,25 @@
     tools:context=".view.PaymentDetailsActivity">
 
     <TextView
-        android:id="@+id/txtPaymentDetails"
+        android:id="@+id/txtStripeAccounts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="84dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginBottom="86dp"
         android:fontFamily="@font/calibri"
         android:gravity="center"
         android:text="text"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnPaymentDetails"
-        app:layout_constraintEnd_toEndOf="@+id/btnPaymentDetails" />
+        app:layout_constraintBottom_toTopOf="@+id/btnStripeAccounts"
+        app:layout_constraintStart_toStartOf="@+id/btnStripeAccounts" />
 
     <Button
-        android:id="@+id/btnPaymentDetails"
+        android:id="@+id/btnStripeAccounts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="270dp"
+        android:layout_marginBottom="278dp"
         android:backgroundTint="#004AAD"
-        android:text="Add Card"
+        android:text="OK"
         android:textColor="#FFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

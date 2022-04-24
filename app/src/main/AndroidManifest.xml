@@ -9,15 +9,14 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_round"
         android:label="We Bill"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -34,33 +33,36 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".view.StripeAccountsActivity"
+            android:exported="false"/>
+        <activity
             android:name=".view.PaymentDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".view.SignUpView"
             android:parentActivityName=".view.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.MyAccountView"
             android:parentActivityName=".view.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.AddBillView"
             android:parentActivityName=".view.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.teamblue.WeBillv2.view.MenuView"
-            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:name=".view.MenuView"
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.teamblue.WeBillv2.view.SplitBillActivity"
-            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:name=".view.SplitBillActivity"
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.teamblue.WeBillv2.view.ScanBillActivity"
-            android:parentActivityName="com.teamblue.WeBillv2.view.MainActivity"
+            android:name=".view.ScanBillActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
