@@ -41,14 +41,6 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         txtPaymentDetails = (TextView) findViewById(R.id.txtPaymentDetails);
         btnPaymentDetails = (Button) findViewById(R.id.btnPaymentDetails);
 
-        // get data from intent
-        Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
-        String email = intent.getStringExtra("email");
-        String message = String.format("Hello %s! Thanks for signing up. " +
-                "Before you continue, please add a payment method.", username);
-        txtPaymentDetails.setText(message);
-
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
 //        btnPaymentDetails.setOnClickListener(view -> {

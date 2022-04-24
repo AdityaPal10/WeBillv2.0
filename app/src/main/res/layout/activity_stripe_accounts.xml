@@ -11,27 +11,27 @@
         android:id="@+id/txtStripeAccounts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
-        android:layout_marginBottom="86dp"
+        android:layout_marginTop="268dp"
         android:fontFamily="@font/calibri"
         android:gravity="center"
-        android:text="text"
+        android:text="Hello {user}!\nThanks for signing up.\nThere's just one more step."
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnStripeAccounts"
-        app:layout_constraintStart_toStartOf="@+id/btnStripeAccounts" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnStripeAccounts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="278dp"
+        android:layout_marginTop="48dp"
         android:backgroundTint="#004AAD"
         android:text="OK"
         android:textColor="#FFF"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtStripeAccounts" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
