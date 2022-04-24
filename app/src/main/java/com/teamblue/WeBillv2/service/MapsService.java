@@ -1,8 +1,6 @@
 package com.teamblue.WeBillv2.service;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,8 +8,6 @@ import com.teamblue.WeBillv2.controller.MapsController;
 import com.teamblue.WeBillv2.model.api.MapsMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.LocationModel;
-import com.teamblue.WeBillv2.model.pojo.LoginModel;
-import com.teamblue.WeBillv2.view.MenuView;
 
 import java.util.ArrayList;
 
@@ -29,7 +25,7 @@ public class MapsService {
 //        String username = sharedPreferences.getString(Constants.USERNAME_KEY,"");
         String username = "test";
 
-        MapsMethods mapsMethods = LoginRetrofitClient.getRetrofitInstance().create(MapsMethods.class);
+        MapsMethods mapsMethods = RetrofitClient.getRetrofitInstance().create(MapsMethods.class);
         Call<ArrayList<LocationModel>> call = mapsMethods.getExpenseLocation(username);
 
         call.enqueue(new Callback<ArrayList<LocationModel>>() {

@@ -14,8 +14,8 @@
         android:layout_marginTop="189dp"
         android:fontFamily="@font/calibri"
         android:gravity="center"
-        android:text="Thanks for signing up! Before you continue, please add a payment method."
-        android:textSize="28dp"
+        android:text=""
+        android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

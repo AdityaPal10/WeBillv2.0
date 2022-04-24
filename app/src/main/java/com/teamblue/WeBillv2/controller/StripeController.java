@@ -9,7 +9,7 @@ public class StripeController {
 
     StripeService stripeService = new StripeService();
 
-    public void initializePaymentSheet(Context context, PaymentSheet paymentSheet) {
-        stripeService.initStripePaymentSheet(context, paymentSheet);
-    }
+//    public void initializePaymentSheet(Context context, PaymentSheet paymentSheet) {
+//        stripeService.getPaymentSheet(context, paymentSheet);
+//    }
 }

@@ -7,6 +7,13 @@ public class PaymentSheetModel {
     private String ephemeralKey;
     private String publishableKey;
 
+    public PaymentSheetModel(String setupIntent, String customerID, String ephKey, String pubKey) {
+        this.setupIntent = setupIntent;
+        this.customerID = customerID;
+        this.ephemeralKey = ephKey;
+        this.publishableKey = pubKey;
+    }
+
     public String getSetupIntent() {
         return setupIntent;
     }

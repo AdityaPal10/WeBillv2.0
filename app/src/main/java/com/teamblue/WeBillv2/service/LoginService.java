@@ -15,7 +15,7 @@ import com.teamblue.WeBillv2.model.pojo.LoginModel;
 import com.teamblue.WeBillv2.model.pojo.SignUpUser;
 import com.teamblue.WeBillv2.model.pojo.User;
 import com.teamblue.WeBillv2.view.MenuView;
-import com.teamblue.WeBillv2.view.MainActivity;
+import com.teamblue.WeBillv2.view.PaymentDetailsActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +38,7 @@ public class LoginService extends AppCompatActivity {
      */
     public void authorizeLogin(Context context,EditText username, EditText password){
         //1. create an instance of login methods interface defined in our LoginMethods class
-        LoginMethods loginMethods = LoginRetrofitClient.getRetrofitInstance().create(LoginMethods.class);
+        LoginMethods loginMethods = RetrofitClient.getRetrofitInstance().create(LoginMethods.class);
         //2. create a call object which will make the REST API call to our backend by passing in email and password as paramaters
         Call<LoginModel> call = loginMethods.login(new User(username.getText().toString().trim(),password.getText().toString().trim()));
         Log.d(TAG,username.getText().toString().trim());
@@ -118,7 +118,7 @@ public class LoginService extends AppCompatActivity {
         Toast.makeText(context,"Sign up attempt",Toast.LENGTH_LONG).show();
 
         //1. create an instance of login methods interface defined in our LoginMethods class
-        LoginMethods loginMethods = LoginRetrofitClient.getRetrofitInstance().create(LoginMethods.class);
+        LoginMethods loginMethods = RetrofitClient.getRetrofitInstance().create(LoginMethods.class);
         //2. create a call object which will make the REST API call to our backend by passing in email,username and password as paramaters
         Call<LoginModel> call = loginMethods.signup(signUpUser);
         Log.d(TAG,signUpUser.getEmail().toString().trim());
@@ -147,7 +147,9 @@ public class LoginService extends AppCompatActivity {
                     //move to activity if successful login
                     if(signUpResponse.getStatus()==Constants.RESPONSE_OK){
                         //create intent to move to friends activity on successful sign in
-                        Intent intent = new Intent(context,MenuView.class);
+                        Intent intent = new Intent(context, PaymentDetailsActivity.class);
+                        intent.putExtra("username", signUpUser.getUsername().trim());
+                        intent.putExtra("email", signUpUser.getEmail().trim());
                         //since calling intent from another activity have to set this flag to true
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         //start activity for intent created

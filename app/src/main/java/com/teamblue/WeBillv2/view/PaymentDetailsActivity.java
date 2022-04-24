@@ -1,5 +1,6 @@
 package com.teamblue.WeBillv2.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +25,6 @@ import retrofit2.Response;
 public class PaymentDetailsActivity extends AppCompatActivity {
 
     // TODO: Finish coding Stripe Payment Sheet logic
-    // TODO: upon successful collection of user's card details... intent to Friends/MenuView
 
     private String TAG = "STRIPE";
     private TextView txtPaymentDetails;
@@ -37,14 +37,23 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_details);
 
+        // inflate the views
         txtPaymentDetails = (TextView) findViewById(R.id.txtPaymentDetails);
         btnPaymentDetails = (Button) findViewById(R.id.btnPaymentDetails);
 
+        // get data from intent
+        Intent intent = getIntent();
+        String username = intent.getStringExtra("username");
+        String email = intent.getStringExtra("email");
+        String message = String.format("Hello %s! Thanks for signing up. " +
+                "Before you continue, please add a payment method.", username);
+        txtPaymentDetails.setText(message);
+
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
-        btnPaymentDetails.setOnClickListener(view -> {
-            stripeController.initializePaymentSheet(getApplicationContext(), paymentSheet);
-        });
+//        btnPaymentDetails.setOnClickListener(view -> {
+//            stripeController.initializePaymentSheet(getApplicationContext(), paymentSheet);
+//        });
     }
 
 
@@ -58,7 +67,11 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         } else if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
             Toast.makeText(getApplicationContext(),"Success!",Toast.LENGTH_LONG).show();
             Log.d(TAG,"Completed");
-            // TODO: intent to Friends/MenuView
+
+            // After successfully getting card details, go to the Menu/Friend View
+            Intent intent = new Intent(this, MenuView.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
     }
 
