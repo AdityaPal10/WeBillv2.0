@@ -113,17 +113,15 @@ public class LoginService extends AppCompatActivity {
        Return type:
        void - the function if successful will start an intent to the friends activity, else will empty the fields and allow user to re-enter the details.
      */
-    public void registerUser(Context context,EditText email,EditText username,EditText password){
-        Log.d(TAG,email.getText().toString().trim());
+    public void registerUser(Context context,SignUpUser signUpUser){
+        Log.d(TAG,signUpUser.getUsername().toString().trim());
         Toast.makeText(context,"Sign up attempt",Toast.LENGTH_LONG).show();
 
         //1. create an instance of login methods interface defined in our LoginMethods class
         LoginMethods loginMethods = LoginRetrofitClient.getRetrofitInstance().create(LoginMethods.class);
         //2. create a call object which will make the REST API call to our backend by passing in email,username and password as paramaters
-        Call<LoginModel> call = loginMethods.signup(new SignUpUser(email.getText().toString().trim(),username.getText().toString().trim(),password.getText().toString().trim()));
-
-        Log.d(TAG,email.getText().toString().trim());
-        Log.d(TAG,username.getText().toString().trim());
+        Call<LoginModel> call = loginMethods.signup(signUpUser);
+        Log.d(TAG,signUpUser.getEmail().toString().trim());
 
         call.enqueue(new Callback<LoginModel>() {
             @Override
@@ -154,21 +152,16 @@ public class LoginService extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         //start activity for intent created
                         context.startActivity(intent);
+
                     }
 
                     else{
                         //on login fail- clear out the text boxes, to allow user to re-enter details
-                        email.setText("");
-                        password.setText("");
-                        username.setText("");
                         Toast.makeText(context,"sign up unsuccessful",Toast.LENGTH_LONG).show();
                     }
                 }else{
                     //network call was unsuccessful, allow users to re-enter their details
                     Log.d(TAG,"sign up unsuccessful");
-                    email.setText("");
-                    password.setText("");
-                    username.setText("");
                     Toast.makeText(context,"sign up unsuccessful",Toast.LENGTH_LONG).show();
                 }
             }
