@@ -15,7 +15,7 @@ public class FriendController {
 
     public void addFriend(Context context, String username,EditText friendUsername){
         Log.d(TAG,"attempting add friend");
-        friendService.addFriend(context,username,friendUsername);
+        friendService.addFriend(context,username,friendUsername.getText().toString().trim());
     }
 
 }
