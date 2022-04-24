@@ -2,7 +2,7 @@ package com.teamblue.WeBillv2.model.pojo;
 
 public class Constants {
 
-    public static final String API_URL = "http://ec2-54-89-217-208.compute-1.amazonaws.com:8080/";
+    public static final String API_URL = "http://webill.us-east-1.elasticbeanstalk.com/";
     public static final int RESPONSE_OK = 200;
     public static final int FRIEND_EXISTS = 401;
     public static final int NO_FRIEND_EXISTS = 402;
