@@ -6,17 +6,18 @@ import com.teamblue.WeBillv2.model.pojo.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface LoginMethods {
 
 
-    @POST("getUser")
-    Call<User> getUser(@Body User user);
+    @GET("/login/getUsers")
+    Call<User> getUser();
 
-    @POST("login")
+    @POST("login/signin")
     Call<LoginModel> login(@Body User user);
 
-    @POST("register")
+    @POST("login/register")
     Call<LoginModel> signup(@Body SignUpUser signUpUser);
 }
