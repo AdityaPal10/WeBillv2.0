@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.model.api.FriendMethods;
+import com.teamblue.WeBillv2.model.api.FriendRequest;
 import com.teamblue.WeBillv2.model.api.LoginMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.Friend;
@@ -36,7 +37,7 @@ public class FriendService {
         //1. create an instance of friend methods interface defined in our FriendMethods class
         FriendMethods friendMethods = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
         //2. create a call object which will make the REST API call to our backend by passing in username and friendName as paramaters
-        Call<LoginModel> call = friendMethods.addFriend(new Friend(username,friendName));
+        Call<LoginModel> call = friendMethods.addFriend(new FriendRequest(username,friendName));
         Log.d(TAG,friendUsername.getText().toString().trim());
 
         /*3. create a callback for our call object, once its finished the network call, it will use this callback to further

@@ -2,22 +2,31 @@ package com.teamblue.WeBillv2.view.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.clustering.ClusterManager;
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.controller.MapsController;
@@ -25,21 +34,19 @@ import com.teamblue.WeBillv2.model.pojo.LocationItem;
 import com.teamblue.WeBillv2.model.pojo.LocationModel;
 import com.teamblue.WeBillv2.service.MapsService;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class MapsFragment extends Fragment {
 
     private MapsService mapsService = new MapsService();
+    private FusedLocationProviderClient fusedLocationProvider;
+    private final int LOCATION_REQUEST_CODE = 7002;
+    private LatLng initialLoc = new LatLng(42.360081, -71.058884); // initially set to Boston
 
     private int ZOOM = 13;  // ranges from 2 to 21; the higher the num, the more zoomed in
     private ClusterManager<LocationItem> clusterManager;
+    private LocationItem clickedClusterItem;
 
     // 4. the map callback
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -48,21 +55,16 @@ public class MapsFragment extends Fragment {
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
          * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
             // 5. when the map is ready
 
-            // set the map coordinates to Boston
-            LatLng boston = new LatLng(42.360081, -71.058884);
+            // set the map coordinates, move cam to coordinates, and zoom in
+            // if permissions were granted, coordinates set to user's current location;
+            // otherwise, coordinates set to Boston
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);    // set to basic map
-
-            // move cam to map coordinates and zoom in
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(boston, ZOOM));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLoc, ZOOM));
 
             // initialize the cluster manager with the context and the map
             clusterManager = new ClusterManager<LocationItem>(getContext(), googleMap);
@@ -71,31 +73,55 @@ public class MapsFragment extends Fragment {
             googleMap.setOnCameraIdleListener(clusterManager);
             googleMap.setOnMarkerClickListener(clusterManager);
 
-            // read location data and add to map
-            // TODO: make a call to the backend to get a json file/object of locations
-//                List<LocationItem> locationItems = readItems(R.raw.locations);
-            mapsService.getExpenseLocations(getActivity().getApplicationContext(), new MapsController() {
-                @Override
-                public void getExpenseLocations(ArrayList<LocationModel> expLocationList) {
-                    List<LocationModel> locationData = expLocationList;
-                    List<LocationItem> locationItems = new ArrayList<>();
-                    if (!locationData.isEmpty()) {
-                        for (LocationModel location : locationData) {
-                            locationItems.add(new LocationItem(
-                                    location.getLatitude(), location.getLongitude(),
-                                    location.getLocation_name() + System.lineSeparator(),
-                                    "Total: " + location.getTotal_amount()
-                                            + System.lineSeparator()
-                                            + "Visits: " + location.getVisits()
-                            ));
+            googleMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
+            clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<LocationItem>() {
+                                                             @Override
+                                                             public boolean onClusterItemClick(LocationItem item) {
+                                                                 clickedClusterItem = item;
+                                                                 return false;
+                                                             }
+                                                         });
+
+                    // read location data and add to map
+                    mapsService.getExpenseLocations(getActivity().getApplicationContext(), new MapsController() {
+                        @Override
+                        public void getExpenseLocations(ArrayList<LocationModel> expLocationList) {
+                            List<LocationModel> locationData = expLocationList;
+                            List<LocationItem> locationItems = new ArrayList<>();
+                            if (!locationData.isEmpty()) {
+                                for (LocationModel location : locationData) {
+                                    locationItems.add(new LocationItem(
+                                            location.getLatitude(), location.getLongitude(),
+                                            location.getLocation_name() + System.lineSeparator(),
+                                            "Total: " + location.getTotal_amount()
+                                                    + System.lineSeparator()
+                                                    + "Visits: " + location.getVisits()
+                                    ));
+                                }
+                                clusterManager.addItems(locationItems);
+                                clusterManager.getMarkerCollection().setInfoWindowAdapter(new CustomInfoWindowAdapter());
+                                clusterManager.cluster();
+                            }
                         }
-                        clusterManager.addItems(locationItems);
-                        clusterManager.cluster();
-                    }
-                }
-            });
+                    });
         }
     };
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fusedLocationProvider = LocationServices.getFusedLocationProviderClient(getContext());
+
+        if (ContextCompat.checkSelfPermission(this.getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    LOCATION_REQUEST_CODE);
+        } else {
+            getCurrentLocation();
+        }
+    }
 
     @Nullable
     @Override
@@ -120,23 +146,50 @@ public class MapsFragment extends Fragment {
         }
     }
 
-
-    // TODO: revise function to read from json object (from backend, not from resources)
-    private List<LocationItem> readItems(@RawRes int resource) throws JSONException {
-        List<LocationItem> result = new ArrayList<>();
-        InputStream inputStream = getContext().getResources().openRawResource(resource);
-        String json = new Scanner(inputStream).useDelimiter("\\A").next();
-        JSONArray array = new JSONArray(json);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            double lat = object.getDouble("lat");
-            double lng = object.getDouble("lng");
-            String name = object.getString("name");
-            String snippet = null;
-            LocationItem newItem = new LocationItem(lat, lng, name, snippet);
-            result.add(newItem);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            // if the request for permission is cancelled, grantResults is empty
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            }
         }
-        return result;
     }
+
+    private void getCurrentLocation() {
+        fusedLocationProvider.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                initialLoc = new LatLng(location.getLatitude(), location.getLongitude());
+            }
+        });
+    }
+
+    public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+
+        private final View customContentsView;
+
+        CustomInfoWindowAdapter() {
+            customContentsView = getLayoutInflater().inflate(R.layout.maps_info_window, null);
+        }
+
+        @Nullable
+        @Override
+        public View getInfoContents(@NonNull Marker marker) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public View getInfoWindow(@NonNull Marker marker) {
+            TextView infoWindowTitle = (TextView) customContentsView.findViewById(R.id.infoWindowTitle);
+            TextView infoWindowSnippet = (TextView) customContentsView.findViewById(R.id.infoWindowSnippet);
+
+            infoWindowTitle.setText(clickedClusterItem.getTitle());
+            infoWindowSnippet.setText(clickedClusterItem.getSnippet());
+            return customContentsView;
+        }
+    }
+
 
 }
