@@ -1,11 +1,20 @@
 package com.teamblue.WeBillv2.model.pojo;
 
 public class LocationModel {
+    private int expense_id;
     private String location_name;
     private float latitude;
     private float longitude;
     private float total_amount;
     private int visits;
+
+    public int getExpense_id() {
+        return expense_id;
+    }
+
+    public void setExpense_id(int expense_id) {
+        this.expense_id = expense_id;
+    }
 
     public String getLocation_name() {
         return location_name;
