@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.stripe.android.PaymentConfiguration;
-import com.stripe.android.paymentsheet.PaymentSheet;
 import com.teamblue.WeBillv2.model.api.StripeMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
@@ -30,16 +28,19 @@ public class StripeService {
      */
     public void createAccount(Context context, User user) {
         Toast.makeText(context, "Just a moment", Toast.LENGTH_SHORT).show();
-        StripeMethods stripeMethods = RetrofitClient.getRetrofitInstance().create(StripeMethods.class);
+        StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<UserStripeAccount> call = stripeMethods.createStripeAccounts(user);
         call.enqueue(new Callback<UserStripeAccount>() {
             @Override
             public void onResponse(Call<UserStripeAccount> call, Response<UserStripeAccount> response) {
                 if(response.code() == Constants.RESPONSE_OK) {
+                    Toast.makeText(context, "successfully created wallet", Toast.LENGTH_SHORT).show();
                     // we don't need the response, but we can create an intent to PaymentDetails now
-                    Intent intent = new Intent(context, PaymentDetailsActivity.class);
-                    intent.putExtra("username", user.getUsername());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // since we're calling from another activity
+                    getPaymentSheet(context, user.getUsername());
+//                    Intent intent = new Intent(context, PaymentDetailsActivity.class);
+//                    intent.putExtra("username", user.getUsername());
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // since we're calling from another activity
+//                    context.startActivity(intent);
                 } else {
                     Toast.makeText(context, "Sorry, we've got an error.", Toast.LENGTH_LONG).show();
                 }
@@ -58,7 +59,7 @@ public class StripeService {
      * @param username the user's username (for which we are running this query)
      */
     public void getAccount(Context context, String username) {
-        StripeMethods stripeMethods = RetrofitClient.getRetrofitInstance().create(StripeMethods.class);
+        StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<UserStripeAccount> call = stripeMethods.getStripeAccounts(username);
         call.enqueue(new Callback<UserStripeAccount>() {
             @Override
@@ -79,30 +80,25 @@ public class StripeService {
      * makes a network call to our backend api, populates a Stripe payment sheet with metadata
      * necessary to save the user's payment method details to Stripe
      * @param context the activity from which we call this (PaymentDetailsActivity.class)
-     * @param paymentSheet Stripe payment sheet to configure with the necessary metadata
      * @param username the user's username, needed to fetch their details
      */
-    public void getPaymentSheet(Context context, PaymentSheet paymentSheet, String username) {
-        StripeMethods stripeMethods = RetrofitClient.getRetrofitInstance().create(StripeMethods.class);
+    public void getPaymentSheet(Context context, String username) {
+        Toast.makeText(context, "Another moment please", Toast.LENGTH_SHORT).show();
+        StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<PaymentSheetModel> call = stripeMethods.stripePaymentSheet(username);
         call.enqueue(new Callback<PaymentSheetModel>() {
             @Override
             public void onResponse(Call call, Response response) {
                 if(response.code() == Constants.RESPONSE_OK) {
-                    try {
-                        PaymentSheetModel result = (PaymentSheetModel) response.body();
-                        PaymentSheet.CustomerConfiguration customerConfig = new PaymentSheet.CustomerConfiguration(
-                            result.getCustomerID(), result.getEphemeralKey());
-                        String setupIntentClientSecret = result.getSetupIntent();
-                        PaymentConfiguration.init(context, result.getPublishableKey());
-
-                        final PaymentSheet.Configuration config = new PaymentSheet.Configuration
-                                .Builder("WeBill")
-                                .customer(customerConfig)
-                                .allowsDelayedPaymentMethods(true)
-                                .build();
-                        paymentSheet.presentWithSetupIntent(setupIntentClientSecret,config);
-                    } catch (Exception e) { /* handle error */ }
+                    Toast.makeText(context, "PaymentSheet Response OK", Toast.LENGTH_SHORT).show();
+                    PaymentSheetModel result = (PaymentSheetModel) response.body();
+                    Intent intent = new Intent(context, PaymentDetailsActivity.class);
+                    intent.putExtra("setupIntent", result.getSetupIntent());
+                    intent.putExtra("customerId", result.getCustomerID());
+                    intent.putExtra("ephKey", result.getEphemeralKey());
+                    intent.putExtra("pubKey", result.getPublishableKey());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                 }
             }
             @Override
@@ -113,7 +109,7 @@ public class StripeService {
     }
 
     public void payFriend(Context context, PayFriendModel payFriendModel) {
-        StripeMethods stripeMethods = RetrofitClient.getRetrofitInstance().create(StripeMethods.class);
+        StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<LoginModel> call = stripeMethods.payFriendTransaction(payFriendModel);
         call.enqueue(new Callback<LoginModel>() {
             @Override

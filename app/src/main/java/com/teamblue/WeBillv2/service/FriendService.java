@@ -1,23 +1,14 @@
 package com.teamblue.WeBillv2.service;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.model.api.FriendBalanceMethods;
-import com.teamblue.WeBillv2.model.api.FriendBalanceRequest;
 import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.api.FriendRequest;
-import com.teamblue.WeBillv2.model.api.LoginMethods;
-import com.teamblue.WeBillv2.model.api.MapsMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
-import com.teamblue.WeBillv2.model.pojo.Friend;
 import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
-import com.teamblue.WeBillv2.model.pojo.LocationModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
 
 import java.util.ArrayList;
@@ -45,7 +36,7 @@ public class FriendService {
         String friendName = friendUsername.toString().trim();
 
         //1. create an instance of friend methods interface defined in our FriendMethods class
-        FriendMethods friendMethods = RetrofitClient.getRetrofitInstance().create(FriendMethods.class);
+        FriendMethods friendMethods = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
         //2. create a call object which will make the REST API call to our backend by passing in username and friendName as paramaters
         Call<LoginModel> call = friendMethods.addFriend(new FriendRequest(username, friendName));
         Log.d(TAG, friendUsername.toString().trim());

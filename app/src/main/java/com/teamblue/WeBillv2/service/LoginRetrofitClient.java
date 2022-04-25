@@ -5,7 +5,7 @@ import com.teamblue.WeBillv2.model.pojo.Constants;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
+public class LoginRetrofitClient {
 
     private static Retrofit retrofit;
     private static String BASE_URL = Constants.API_URL;

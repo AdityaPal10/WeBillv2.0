@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,12 +14,6 @@ import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
 import com.teamblue.WeBillv2.R;
-import com.teamblue.WeBillv2.controller.StripeController;
-import com.teamblue.WeBillv2.model.pojo.Constants;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PaymentDetailsActivity extends AppCompatActivity {
 
@@ -29,8 +22,14 @@ public class PaymentDetailsActivity extends AppCompatActivity {
     private String TAG = "STRIPE";
     private TextView txtPaymentDetails;
     private Button btnPaymentDetails;
+
+    // needed to setup payment sheet
+    private String setupIntentClientSecret;
+    private String customerID;
+    private String ephKey;
+    private String pubKey;
     PaymentSheet paymentSheet;
-    StripeController stripeController = new StripeController();
+    PaymentSheet.CustomerConfiguration customerConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +40,36 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         txtPaymentDetails = (TextView) findViewById(R.id.txtPaymentDetails);
         btnPaymentDetails = (Button) findViewById(R.id.btnPaymentDetails);
 
+        Intent intent = getIntent();
+        setupIntentClientSecret = intent.getStringExtra("setupIntent");
+        customerID = intent.getStringExtra("customerID");
+        ephKey = intent.getStringExtra("ephKey");
+        pubKey = intent.getStringExtra("pubKey");
+
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
-//        btnPaymentDetails.setOnClickListener(view -> {
-//            stripeController.initializePaymentSheet(getApplicationContext(), paymentSheet);
-//        });
+        btnPaymentDetails.setOnClickListener(view -> {
+            Toast.makeText(getApplicationContext(), setupIntentClientSecret, Toast.LENGTH_SHORT).show();
+            initPaymentSheet();
+        });
     }
 
+    private void initPaymentSheet() {
+        try {
+            customerConfig = new PaymentSheet.CustomerConfiguration(customerID, ephKey);
+            PaymentConfiguration.init(getApplicationContext(), pubKey);
+            presentPaymentSheet();
+        } catch (Exception e) { /* handle error */ }
+    }
+
+    private void presentPaymentSheet() {
+        final PaymentSheet.Configuration config = new PaymentSheet.Configuration
+                .Builder("WeBill")
+                .customer(customerConfig)
+                .allowsDelayedPaymentMethods(true)
+                .build();
+        paymentSheet.presentWithSetupIntent(setupIntentClientSecret,config);
+    }
 
     void onPaymentSheetResult(final PaymentSheetResult paymentSheetResult) {
         if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {

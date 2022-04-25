@@ -29,7 +29,6 @@ public class StripeAccountsActivity extends AppCompatActivity {
         // get data from intent
         Intent intent = getIntent();
         String username = intent.getStringExtra("username");
-        String email = intent.getStringExtra("email");
         String message = txtStripeAccounts.getText().toString().replace("{user}", username);
         txtStripeAccounts.setText(message);
 

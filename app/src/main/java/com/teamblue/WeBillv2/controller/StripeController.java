@@ -1,5 +1,6 @@
 package com.teamblue.WeBillv2.controller;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.stripe.android.paymentsheet.PaymentSheet;
@@ -19,7 +20,7 @@ public class StripeController {
         stripeService.getAccount(context, username);
     }
 
-    public void initPaymentSheet(Context context, PaymentSheet paymentSheet, String username) {
-        stripeService.getPaymentSheet(context, paymentSheet, username);
+    public void initPaymentSheet(Context context, String username) {
+        stripeService.getPaymentSheet(context, username);
     }
 }
