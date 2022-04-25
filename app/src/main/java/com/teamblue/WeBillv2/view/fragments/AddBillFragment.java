@@ -58,6 +58,7 @@ public class AddBillFragment extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap imageBitmap;
     private static final String TAG = "BASE64";
+    private String Base64String;
 
     public AddBillFragment() {
         // Required empty public constructor
@@ -93,7 +94,7 @@ public class AddBillFragment extends Fragment {
             // Initialize byte array
             byte[] bytes=stream.toByteArray();
             // get base64 encoded string
-            String Base64String= Base64.encodeToString(bytes,Base64.DEFAULT); // send the string to backend
+            Base64String= Base64.encodeToString(bytes,Base64.DEFAULT); // send the string to backend
             // set encoded text on textview
 //            resultTV.setText(Base64String);
             Log.d(TAG, Base64String);
