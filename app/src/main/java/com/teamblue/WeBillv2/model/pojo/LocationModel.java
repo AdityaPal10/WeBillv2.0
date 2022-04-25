@@ -3,10 +3,22 @@ package com.teamblue.WeBillv2.model.pojo;
 public class LocationModel {
     private int expense_id;
     private String location_name;
-    private float latitude;
-    private float longitude;
-    private float total_amount;
+    private double latitude;
+    private double longitude;
+    private double total_amount;
     private int visits;
+
+    public LocationModel() {
+    }
+
+    public LocationModel(int expense_id, String location_name, double latitude, double longitude, double total_amount, int visits) {
+        this.expense_id = expense_id;
+        this.location_name = location_name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.total_amount = total_amount;
+        this.visits = visits;
+    }
 
     public int getExpense_id() {
         return expense_id;
@@ -24,24 +36,28 @@ public class LocationModel {
         this.location_name = location_name;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public float getTotal_amount() {
+    public double getTotal_amount() {
         return total_amount;
+    }
+
+    public void setTotal_amount(double total_amount) {
+        this.total_amount = total_amount;
     }
 
     public void setTotal_amount(float total_amount) {
@@ -54,5 +70,17 @@ public class LocationModel {
 
     public void setVisits(int visits) {
         this.visits = visits;
+    }
+
+    @Override
+    public String toString() {
+        return "LocationModel{" +
+                "expense_id=" + expense_id +
+                ", location_name='" + location_name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", total_amount=" + total_amount +
+                ", visits=" + visits +
+                '}';
     }
 }
