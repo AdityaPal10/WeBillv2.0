@@ -2,12 +2,14 @@ package com.teamblue.WeBillv2.view.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.api.FriendMethods;
+import com.teamblue.WeBillv2.model.api.FriendRequest;
+import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.LoginModel;
+import com.teamblue.WeBillv2.service.FriendService;
+import com.teamblue.WeBillv2.service.LoginRetrofitClient;
+import com.teamblue.WeBillv2.service.LoginService;
+
+import java.text.BreakIterator;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -31,6 +46,7 @@ public class FriendFragment extends Fragment {
 
     AlertDialog dialogAddNewFriend;
     LinearLayout containerFriendCards;
+    private String TAG = "Friend";
 
     Context context;
 
@@ -47,6 +63,8 @@ public class FriendFragment extends Fragment {
 
         btnAddFriends = view.findViewById(R.id.btnAddFriends);
         containerFriendCards = view.findViewById(R.id.containerFriendCards);
+
+        context = getActivity().getApplicationContext();
 
         /*********Call Your Add Friend Dialog here********/
         buildAddNewFriendDialog();
@@ -97,7 +115,13 @@ public class FriendFragment extends Fragment {
         View viewNewFriendCard = getLayoutInflater().inflate(R.layout.cardview_new_friend, null); // inflate your new friend card view
         TextView tvFriendName = viewNewFriendCard.findViewById(R.id.tvFriendName);
         tvFriendName.setText(Username);
-
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+       // SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        //int highScore = sharedPref.getInt(getString(R.string.saved_high_score_key), defaultValue);
+        String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
+        //FriendService friendService=new FriendService();
+        //friendService.addFriend(context,loggedInUsername ,Username);
+        add(context,loggedInUsername,Username);
         /*******Right Now I just consider Initial Status of a friend card as Balance:0.00 , @+id/btnFriendStatus background as @drawable/credit_card********/
 
         /*******TODO: Add Friends Balance Status Here
@@ -117,76 +141,60 @@ public class FriendFragment extends Fragment {
         /*******Original example is in z_demo_initial_friend_page.xml ********/
 
 
-        containerFriendCards.addView(viewNewFriendCard);
+       // containerFriendCards.addView(viewNewFriendCard);
     }
 
+    public void add(Context context, String username, String friendName){
 
-    /*******Original code********/
-//    public class CustomAdapter extends BaseAdapter {
-//
-//        ArrayList<Integer> friendAvatar;
-//        ArrayList<String> friendNames;
-//        ArrayList<Integer> paymentDirection;
-//        ArrayList<Double> paymentAmount;
-//        ArrayList<Integer> buttonAction;
-//
-//        /*
-//            1. make network call using retrofit
-//            2. from response received populate lists
-//            3. set context=acontext
-//             */
-//        public CustomAdapter(Context acontext){
-//            context = acontext;
-//        }
-//
-//
-//        @Override
-//        public int getCount() {
-//            return friendNames.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int position) {
-//
-//            return friendNames.get(position);
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//
-//        @Override
-//        public View getView(int position, View view, ViewGroup viewGroup) {
-//
-//            View row;
-//            if (view==null){
-//                LayoutInflater inflater=(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                row = inflater.inflate(R.layout.friends_ledger_row, viewGroup, false);
-//            }
-//            else{
-//                row=view;
-//            }
-//            Button bttnLedger=(Button) row.findViewById(R.id.bttnLedger);
-//            TextView ledgerName=(TextView) row.findViewById(R.id.friendNameLedger);
-//            TextView ledgerAmount=(TextView) row.findViewById(R.id.amountLedger);
-//            TextView ledgerDirection=(TextView) row.findViewById(R.id.paymentDirectionLedger);
-//            ImageView imageView = (ImageView)row.findViewById(R.id.imageViewLedger);
-//
-//            ledgerName.setText(friendNames.get(position));
-//            ledgerAmount.setText(String.valueOf(paymentAmount.get(position)));
-//            ledgerDirection.setText(paymentDirection.get(position)==0?"Owes You:":"You Owe:");
-//            bttnLedger.setText(paymentDirection.get(position)==0?"Remind":"Pay");
-//            //imageView.setImageDrawable(R.);
-//
-//            bttnLedger.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Toast.makeText(getContext(), "Amount paid:", Toast.LENGTH_LONG).show();
-//                }
-//            });
-//
-//            return row;
-//        }
-//    }
+        //1. create an instance of friend methods interface defined in our FriendMethods class
+        FriendMethods friendMethods = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
+        //2. create a call object which will make the REST API call to our backend by passing in username and friendName as paramaters
+        Call<LoginModel> call = friendMethods.addFriend(new FriendRequest(username,friendName));
+        Log.d(TAG,friendName.toString().trim());
+
+        /*3. create a callback for our call object, once its finished the network call, it will use this callback to further
+           process whether the network call was successful or not.
+         */
+        call.enqueue(new Callback<LoginModel>() {
+            @Override
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+                Log.d(TAG,String.valueOf(response.code()));
+                System.out.println(response.code());
+                //getting response body if call was successful
+                if(response.code()== Constants.RESPONSE_OK){
+                    LoginModel apiResponse = (LoginModel) response.body();
+                    System.out.println(apiResponse.getStatus());
+                    //case 1: when successfully added friend
+                    Toast.makeText(context,"successfully added friend",Toast.LENGTH_LONG).show();
+                    View viewNewFriendCard = getLayoutInflater().inflate(R.layout.cardview_new_friend, null);
+                    TextView tvFriendName= viewNewFriendCard.findViewById(R.id.tvFriendName);
+                    tvFriendName.setText(friendName);
+                    containerFriendCards.addView(viewNewFriendCard);
+                }else{
+                    switch (response.code()){
+                        case Constants.FRIEND_EXISTS:
+                            Toast.makeText(context,"Friend already exists",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.NO_FRIEND_EXISTS:
+                            Toast.makeText(context,"Friend doesn't have an accout",Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Toast.makeText(context,"Error adding friend, please try again",Toast.LENGTH_LONG).show();
+                    }
+                    Log.d(TAG,"Error adding friend,please try again");
+                    //friendUsername.setText("");
+                    //Toast.makeText(context,"Error adding friend,please try again",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginModel> call, Throwable t) {
+                Log.d(TAG,"Error adding friend,please try again");
+                //friendUsername.setText("");
+                Toast.makeText(context,"Error adding friend,please try again",Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
 }
