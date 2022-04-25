@@ -2,16 +2,25 @@ package com.teamblue.WeBillv2.view.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +41,7 @@ import com.teamblue.WeBillv2.view.MainActivity;
 import com.teamblue.WeBillv2.view.ScanBillActivity;
 import com.teamblue.WeBillv2.view.SplitBillActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +55,9 @@ public class AddBillFragment extends Fragment {
     private static int AUTOCOMPLETE_REQUEST_CODE = 7001;
     private EditText edtActivityNameAddBill,edtTotalAmountAddBill,edtDateAddBill,edtAddressAddBill;
     private Button btnEnterAddBill,btnScanBill;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Bitmap imageBitmap;
+    private static final String TAG = "BASE64";
 
     public AddBillFragment() {
         // Required empty public constructor
@@ -64,6 +77,32 @@ public class AddBillFragment extends Fragment {
                 // The user canceled the operation
             }
             return;
+        }
+
+        /***************Handling Receipt Scanning Camera Here ************/
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            //5.6 then we use bundle to retrieve information from Bitmap
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+//            captureIV.setImageBitmap(imageBitmap);
+//            captureIV.setRotation(90);
+            // initialize byte stream
+            ByteArrayOutputStream stream=new ByteArrayOutputStream();
+            // compress Bitmap
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            // Initialize byte array
+            byte[] bytes=stream.toByteArray();
+            // get base64 encoded string
+            String Base64String= Base64.encodeToString(bytes,Base64.DEFAULT); // send the string to backend
+            // set encoded text on textview
+//            resultTV.setText(Base64String);
+            Log.d(TAG, Base64String);
+
+            /********* TODO: Hard Coded scanned result now. Replace once finished real API ******/
+            edtActivityNameAddBill.setText("Sushi(HardCode message)");
+            edtTotalAmountAddBill.setText("999");
+            edtDateAddBill.setText("1970/01/01");
+            edtAddressAddBill.setText("HardCode Address Here");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -137,35 +176,30 @@ public class AddBillFragment extends Fragment {
             }
         });
 
+
+        /***************Handling Receipt Scanning Camera Here ************/
+        //Asking Permission
+        if (ContextCompat.checkSelfPermission(view.getContext(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions((Activity) view.getContext(),
+                    new String[]{Manifest.permission.CAMERA},REQUEST_IMAGE_CAPTURE);
+
+        }
+
         btnScanBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent gotoScanBillActivity = new Intent(view.getContext(), ScanBillActivity.class);
-                startActivity(gotoScanBillActivity);
+//                Intent gotoScanBillActivity = new Intent(view.getContext(), ScanBillActivity.class);
+//                startActivity(gotoScanBillActivity);
+
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
             }
         });
 
-
-
-//        edtTotalAmountAddBill.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if (charSequence.toString().equals("")){
-//                    edtTotalAmountAddBill.setText("0");
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//            }
-//        });
-
-
         return view;
     }
+
+
 }
