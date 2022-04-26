@@ -10,4 +10,6 @@ public class Constants {
     public static final int NO_FRIEND_BALANCE_EXISTS=404;
     public static final String PREFERENCES_FILE_NAME = "WEBILL_PREFERENCES";
     public static final String USERNAME_KEY = "Username";
+    public static final String BALANCE_TO_PAY = "balance_to_pay";
+    public static final String BALANCE_TO_TAKE = "balance_to_take";
 }

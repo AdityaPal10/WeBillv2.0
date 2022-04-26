@@ -4,22 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.teamblue.WeBillv2.R;
-import com.teamblue.WeBillv2.model.api.FriendBalanceMethods;
-import com.teamblue.WeBillv2.model.api.FriendBalanceRequest;
 import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.api.FriendRequest;
-import com.teamblue.WeBillv2.model.api.LoginMethods;
-import com.teamblue.WeBillv2.model.api.MapsMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
-import com.teamblue.WeBillv2.model.pojo.Friend;
 import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
-import com.teamblue.WeBillv2.model.pojo.LocationModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
-import com.teamblue.WeBillv2.model.pojo.User;
 
 import java.util.ArrayList;
 
@@ -31,7 +22,7 @@ public class FriendService {
     private String TAG = "Friend";
     ArrayList<FriendBalanceModel> friendBalanceList= new ArrayList<>();
 
-
+    Context context;
     /*
     making network call to our backend api to add friend.
     parameters :
@@ -93,33 +84,55 @@ public class FriendService {
 
     }
 
-    public void getBalance(Context context, String username) {
+    public void getBalance(View view, String username, TextView tvToPay,TextView tvToTakeBack) {
+        Context context = view.getContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        FriendMethods friendMethodBalance = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
-        //create a call object which will make the REST API call to our backend by passing in username as parameter
-        FriendBalanceMethods friendBalanceMethods = LoginRetrofitClient.getRetrofitInstance().create(FriendBalanceMethods.class);
-        Call<ArrayList<FriendBalanceModel>> call = friendBalanceMethods.getFriendBalanceInfo(username);
-        call.enqueue(new Callback<ArrayList<FriendBalanceModel>>() {
+        FriendMethods friendMethods = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
+        Call<Object> call = friendMethods.getUserBalance(username);
+        call.enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<ArrayList<FriendBalanceModel>> call, Response<ArrayList<FriendBalanceModel>> response) {
-                Log.d(TAG, String.valueOf(response.code()));
-                Log.d(TAG, response.toString());
-                //getting response body if call was successful
-                if (response.code() == Constants.RESPONSE_OK) {
-                    friendBalanceList = response.body();
-                } else {
-                    Log.d(TAG, "user has no friends");
-                    Toast.makeText(context, "user has no friends", Toast.LENGTH_LONG).show();
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                Log.d(TAG,String.valueOf(response.code()));
+                Log.d(TAG,response.toString());
+                editor.putBoolean("FriendCardFinished",true);
+                //getting response body if successful
+                if(response.code()==Constants.RESPONSE_OK){
+                    //set response to shared preferences
+                    Object responseObject = response.body();
+
+                    //get amounts owed from response object
+                    Log.d("Friend",responseObject.toString());
+                    String objectStr = responseObject.toString();
+                    String[] entries = objectStr.split(",");
+
+                    double amountOwed = Double.parseDouble(entries[0].split("=")[1]);
+                    String amountToPayStr = entries[1].split("=")[1];
+                    double amountToPay = Double.parseDouble(amountToPayStr.substring(0,amountToPayStr.length()-1));
+
+
+                    editor.putString(Constants.BALANCE_TO_TAKE,String.valueOf(amountOwed));
+                    editor.putString(Constants.BALANCE_TO_PAY,String.valueOf(amountToPay));
+                    editor.apply();
+
                 }
+
+                tvToPay.setText(sharedPreferences.getString(Constants.BALANCE_TO_PAY,"0.0"));
+                tvToTakeBack.setText(sharedPreferences.getString(Constants.BALANCE_TO_TAKE,"0.0"));
             }
 
-                @Override
-                public void onFailure (Call < ArrayList < FriendBalanceModel >> call, Throwable t){
-                    Log.d(TAG, "network failure ");
-                    Toast.makeText(context, t.getMessage().toString(), Toast.LENGTH_LONG).show();
-                }
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                editor.putBoolean("FriendCardFinished",true);
+                editor.putString(Constants.BALANCE_TO_PAY,"0.0");
+                editor.putString(Constants.BALANCE_TO_TAKE,"0.0");
+                editor.apply();
 
+                tvToPay.setText(sharedPreferences.getString(Constants.BALANCE_TO_PAY,"0.0"));
+                tvToTakeBack.setText(sharedPreferences.getString(Constants.BALANCE_TO_TAKE,"0.0"));
+            }
         });
     }
 
-    }
+}
