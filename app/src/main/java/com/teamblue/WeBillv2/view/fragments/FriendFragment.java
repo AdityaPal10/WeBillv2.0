@@ -24,6 +24,7 @@ import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.api.FriendRequest;
 import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
 import com.teamblue.WeBillv2.service.FriendService;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
@@ -43,6 +44,7 @@ import retrofit2.Response;
 public class FriendFragment extends Fragment {
 
     private Button btnAddFriends;
+    private Button btnUpdateBalance;
 
     AlertDialog dialogAddNewFriend;
     LinearLayout containerFriendCards;
@@ -63,10 +65,38 @@ public class FriendFragment extends Fragment {
 
         btnAddFriends = view.findViewById(R.id.btnAddFriends);
         containerFriendCards = view.findViewById(R.id.containerFriendCards);
-
+        btnUpdateBalance = view.findViewById(R.id.btnUpdateBalance);
         context = getActivity().getApplicationContext();
+        btnUpdateBalance.setOnClickListener(new View.OnClickListener() {
+                                             @Override
+                                             public void onClick(View view) {
 
-        /*********Call Your Add Friend Dialog here********/
+                                                 TextView tvBalance = containerFriendCards.findViewById(R.id.tvFriendBalance);
+                                                 double balance;
+                                                 SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+
+                                                 FriendService friendService = new FriendService();
+                                                 String currentUser = sharedPreferences.getString(Constants.USERNAME_KEY, "");
+                                                 ArrayList<FriendBalanceModel> balanceList = friendService.getBalance(context, currentUser);
+                                                 int i;
+                                                 for (i = 0; i < balanceList.size(); i++) {
+                                                     FriendBalanceModel friendUser = balanceList.get(i);
+                                                     double amountOwed = friendUser.getAmountOwed();
+                                                     double amountToPay = friendUser.getAmountToPay();
+                                                     balance = amountOwed - amountToPay;
+                                                     String balanceStr = new Double(balance).toString();
+                                                     tvBalance.setText(balanceStr);
+                                                     if (balance < 0) {
+                                                         tvBalance.setTextColor(getResources().getColor(R.color.quantum_googred700));
+                                                     } else {
+                                                         tvBalance.setTextColor(getResources().getColor(R.color.quantum_googgreen700));
+                                                     }
+                                                 }
+
+                                             }} );
+
+
+                /*********Call Your Add Friend Dialog here********/
         buildAddNewFriendDialog();
         btnAddFriends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +137,9 @@ public class FriendFragment extends Fragment {
                 });
         dialogAddNewFriend = builder.create(); // Once setting up the Dialog, build this to dialogAddNewFriend
     }
+
+
+
 
 
     /*********Build A single Friend Card Here everytime you add a new friend,
@@ -152,6 +185,7 @@ public class FriendFragment extends Fragment {
         Call<LoginModel> call = friendMethods.addFriend(new FriendRequest(username,friendName));
         Log.d(TAG,friendName.toString().trim());
 
+
         /*3. create a callback for our call object, once its finished the network call, it will use this callback to further
            process whether the network call was successful or not.
          */
@@ -170,6 +204,7 @@ public class FriendFragment extends Fragment {
                     TextView tvFriendName= viewNewFriendCard.findViewById(R.id.tvFriendName);
                     tvFriendName.setText(friendName);
                     containerFriendCards.addView(viewNewFriendCard);
+
                 }else{
                     switch (response.code()){
                         case Constants.FRIEND_EXISTS:

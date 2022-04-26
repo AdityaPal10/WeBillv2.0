@@ -93,7 +93,7 @@ public class FriendService {
 
     }
 
-    public void getBalance(Context context, String username) {
+    public ArrayList<FriendBalanceModel> getBalance(Context context, String username) {
 
         FriendMethods friendMethodBalance = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
         //create a call object which will make the REST API call to our backend by passing in username as parameter
@@ -107,11 +107,14 @@ public class FriendService {
                 //getting response body if call was successful
                 if (response.code() == Constants.RESPONSE_OK) {
                     friendBalanceList = response.body();
+
                 } else {
                     Log.d(TAG, "user has no friends");
                     Toast.makeText(context, "user has no friends", Toast.LENGTH_LONG).show();
                 }
+
             }
+
 
                 @Override
                 public void onFailure (Call < ArrayList < FriendBalanceModel >> call, Throwable t){
@@ -120,6 +123,8 @@ public class FriendService {
                 }
 
         });
+        return friendBalanceList;
     }
+
 
     }
