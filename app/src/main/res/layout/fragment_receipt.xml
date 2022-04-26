@@ -26,39 +26,36 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="40dp"
-            android:layout_marginRight="35dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="34dp"
             android:background="@drawable/filter"
             android:fontFamily="@font/calibri"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnAddCard"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="40dp"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/calibri"
-            android:text="+"
-            android:textStyle="bold" />
-
-
 
     </RelativeLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/fragmentReceiptTop"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/receiptContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/billsListView"
+                style="@android:style/Widget.Holo.Light.ListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@drawable/divider" />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </RelativeLayout>
