@@ -15,7 +15,7 @@ import com.teamblue.WeBillv2.model.pojo.LoginModel;
 import com.teamblue.WeBillv2.model.pojo.SignUpUser;
 import com.teamblue.WeBillv2.model.pojo.User;
 import com.teamblue.WeBillv2.view.MenuView;
-import com.teamblue.WeBillv2.view.MainActivity;
+import com.teamblue.WeBillv2.view.StripeAccountsActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -147,7 +147,8 @@ public class LoginService extends AppCompatActivity {
                     //move to activity if successful login
                     if(signUpResponse.getStatus()==Constants.RESPONSE_OK){
                         //create intent to move to friends activity on successful sign in
-                        Intent intent = new Intent(context,MenuView.class);
+                        Intent intent = new Intent(context, StripeAccountsActivity.class);
+                        intent.putExtra("username", signUpUser.getUsername().trim());
                         //since calling intent from another activity have to set this flag to true
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         //start activity for intent created
