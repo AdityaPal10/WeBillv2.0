@@ -68,15 +68,6 @@
                 android:textSize="25dp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnFriendStatus"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="30dp"
-                android:background="@drawable/credit_card" />
-
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

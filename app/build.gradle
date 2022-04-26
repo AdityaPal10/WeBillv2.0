@@ -48,4 +48,6 @@ dependencies {
 
     // Custom Gif ImageView
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.20'
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.1'
 }
