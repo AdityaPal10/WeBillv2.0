@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.stripe.android.paymentsheet.PaymentSheet;
+import com.teamblue.WeBillv2.model.pojo.PayFriendModel;
 import com.teamblue.WeBillv2.model.pojo.User;
 import com.teamblue.WeBillv2.service.StripeService;
 
@@ -20,7 +21,13 @@ public class StripeController {
         stripeService.getAccount(context, username);
     }
 
-    public void initPaymentSheet(Context context, String username) {
-        stripeService.getPaymentSheet(context, username);
+    public void initPaymentSheet(Context context, String username, String cusID) {
+        stripeService.getPaymentSheet(context, username, cusID);
+    }
+
+    public void stripeTransaction(Context context) {
+        //TODO finish stripeTransaction function in StripeController
+        PayFriendModel payFriendModel = new PayFriendModel("a", "b", 10);
+        stripeService.payFriend(context, payFriendModel);
     }
 }

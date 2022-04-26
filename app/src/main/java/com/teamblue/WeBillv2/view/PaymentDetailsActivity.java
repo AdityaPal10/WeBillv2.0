@@ -49,27 +49,25 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
         btnPaymentDetails.setOnClickListener(view -> {
-            Toast.makeText(getApplicationContext(), setupIntentClientSecret, Toast.LENGTH_SHORT).show();
             initPaymentSheet();
         });
     }
 
     private void initPaymentSheet() {
         try {
-            customerConfig = new PaymentSheet.CustomerConfiguration(customerID, ephKey);
+            //customerConfig = new PaymentSheet.CustomerConfiguration(customerID, ephKey);
             PaymentConfiguration.init(getApplicationContext(), pubKey);
-            presentPaymentSheet();
-        } catch (Exception e) { /* handle error */ }
+            final PaymentSheet.Configuration config = new PaymentSheet.Configuration
+                    .Builder("WeBill")
+                    //.customer(customerConfig)
+                    .allowsDelayedPaymentMethods(true)
+                    .build();
+            paymentSheet.presentWithSetupIntent(setupIntentClientSecret, config);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
-    private void presentPaymentSheet() {
-        final PaymentSheet.Configuration config = new PaymentSheet.Configuration
-                .Builder("WeBill")
-                .customer(customerConfig)
-                .allowsDelayedPaymentMethods(true)
-                .build();
-        paymentSheet.presentWithSetupIntent(setupIntentClientSecret,config);
-    }
 
     void onPaymentSheetResult(final PaymentSheetResult paymentSheetResult) {
         if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {

@@ -2,6 +2,7 @@ package com.teamblue.WeBillv2.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.model.api.StripeMethods;
@@ -34,9 +35,10 @@ public class StripeService {
             @Override
             public void onResponse(Call<UserStripeAccount> call, Response<UserStripeAccount> response) {
                 if(response.code() == Constants.RESPONSE_OK) {
-                    Toast.makeText(context, "successfully created wallet", Toast.LENGTH_SHORT).show();
-                    // we don't need the response, but we can create an intent to PaymentDetails now
-                    getPaymentSheet(context, user.getUsername());
+                    // Toast.makeText(context, "successfully created wallet", Toast.LENGTH_SHORT).show();
+                    UserStripeAccount result = (UserStripeAccount) response.body();
+                    // Toast.makeText(context, result.getAccountId() + "\n" + result.getAccountId(), Toast.LENGTH_LONG).show();
+                    getPaymentSheet(context, user.getUsername(), result.getCustomerId());
 //                    Intent intent = new Intent(context, PaymentDetailsActivity.class);
 //                    intent.putExtra("username", user.getUsername());
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // since we're calling from another activity
@@ -82,7 +84,7 @@ public class StripeService {
      * @param context the activity from which we call this (PaymentDetailsActivity.class)
      * @param username the user's username, needed to fetch their details
      */
-    public void getPaymentSheet(Context context, String username) {
+    public void getPaymentSheet(Context context, String username, String cusID) {
         Toast.makeText(context, "Another moment please", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<PaymentSheetModel> call = stripeMethods.stripePaymentSheet(username);
@@ -94,7 +96,7 @@ public class StripeService {
                     PaymentSheetModel result = (PaymentSheetModel) response.body();
                     Intent intent = new Intent(context, PaymentDetailsActivity.class);
                     intent.putExtra("setupIntent", result.getSetupIntent());
-                    intent.putExtra("customerId", result.getCustomerID());
+                    intent.putExtra("customerId", cusID);
                     intent.putExtra("ephKey", result.getEphemeralKey());
                     intent.putExtra("pubKey", result.getPublishableKey());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -114,12 +116,15 @@ public class StripeService {
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                // TODO handle OK response
+                if (response.code() == Constants.RESPONSE_OK) {
+                    LoginModel payResponse = (LoginModel) response.body();
+                    Toast.makeText(context, "Payment " + payResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
-                // TODO handle fail response
+                Toast.makeText(context, "Payment failed. Try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
