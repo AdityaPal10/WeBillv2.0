@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +31,7 @@ import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.model.api.BillMethods;
 import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.pojo.BillModel;
+import com.teamblue.WeBillv2.model.pojo.BillsByLoc;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
@@ -54,6 +58,9 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
     private Dialog addReceiptDialog;
     private Dialog receiptDetailsDialog;
 
+    double clickedItemLat = Double.NaN;
+    double clickedItemLng = Double.NaN;
+
     private String TAG = "Bills";
 
     LinearLayout receiptContainer;
@@ -63,6 +70,19 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getParentFragmentManager().setFragmentResultListener("mapsRequestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                clickedItemLat = bundle.getDouble("clickedItemLat");
+                clickedItemLng = bundle.getDouble("clickedItemLng");
+                // Do something with the result
+            }
+        });
+    }
 
 
     @Override
@@ -70,6 +90,16 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_receipt, container, false);
+
+        getParentFragmentManager().setFragmentResultListener("mapsRequestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                clickedItemLat = bundle.getDouble("clickedItemLat");
+                clickedItemLng = bundle.getDouble("clickedItemLng");
+                // Do something with the result
+            }
+        });
 
         //1 handling filter button and its pop up window
         filterDialog = new Dialog(this.getContext());
@@ -127,8 +157,14 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
     public void getBillsForUser(Context context,String username){
         //1. create an instance of friend methods interface defined in our FriendMethods class
         BillMethods billMethods = LoginRetrofitClient.getRetrofitInstance().create(BillMethods.class);
-        //2. create a call object which will make the REST API call to our backend by passing in username as paramaters
-        Call<List<BillModel>> call = billMethods.getBillsForUser(username);
+        //2. create a call object which will make the REST API call to our backend by passing in username as parameters
+        Call<List<BillModel>> call;
+        if(!(Double.isNaN(clickedItemLat) && Double.isNaN(clickedItemLat))){
+            call = billMethods.getBillsForUserByLoc(new BillsByLoc(username,clickedItemLat,clickedItemLat,""));
+        }
+        else{
+            call = billMethods.getBillsForUser(username);
+        }
 
         call.enqueue(new Callback<List<BillModel>>() {
             @Override

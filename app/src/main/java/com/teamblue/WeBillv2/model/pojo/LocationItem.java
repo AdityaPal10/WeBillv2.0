@@ -15,11 +15,15 @@ public class LocationItem implements ClusterItem {
     private final LatLng position;  // lat,lng coordinates of the location
     private final String title;     // name of the location i.e. business name
     private final String snippet;   // description of the location
+    private double latitude;
+    private double longitude;
 
     public LocationItem(double lat, double lng, String title, String snippet) {
         position = new LatLng(lat, lng);
         this.title = title;
         this.snippet = snippet;
+        this.latitude = lat;
+        this.longitude = lng;
     }
 
     @NonNull
@@ -38,5 +42,21 @@ public class LocationItem implements ClusterItem {
     @Override
     public String getSnippet() {
         return snippet;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -19,6 +19,8 @@ import com.teamblue.WeBillv2.view.fragments.SpendingActivityFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 public class MenuView extends AppCompatActivity {
@@ -78,5 +80,34 @@ public class MenuView extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void fragmentSwitcher(int fragmentTo) {
+        Fragment fragment = null;
+        switch (fragmentTo) {
+            case R.id.friends:
+                fragment = new FriendFragment();
+                break;
+            case R.id.addbills:
+                fragment = new AddBillFragment();
+                break;
+            case R.id.account:
+                fragment = new AccountFragment();
+                break;
+            case R.id.receipt:
+                fragment = new ReceiptFragment();
+                break;
+            case R.id.spendingactivity:
+                fragment = new MapsFragment();
+                break;
+        }
+
+        if (fragment != null) {
+            fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+                    .commit();
+        } else {
+            Log.e(TAG, "Error in creating Fragment");
+        }
     }
 }
