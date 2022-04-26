@@ -62,7 +62,7 @@ public class PaymentDetailsActivity extends AppCompatActivity {
                     .build();
             paymentSheet.presentWithSetupIntent(setupIntentClientSecret, config);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Sorry, try again.", Toast.LENGTH_LONG).show();
         }
     }
 
