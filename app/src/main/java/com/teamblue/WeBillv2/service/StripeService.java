@@ -2,6 +2,7 @@ package com.teamblue.WeBillv2.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class StripeService {
      * @param user a User object that holds the user's username
      */
     public void createAccount(Context context, User user) {
+        Toast.makeText(context, "Just a moment please", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<UserStripeAccount> call = stripeMethods.createStripeAccounts(user);
         call.enqueue(new Callback<UserStripeAccount>() {
@@ -36,7 +38,6 @@ public class StripeService {
                     Toast.makeText(context, "successfully created wallet", Toast.LENGTH_SHORT).show();
                     UserStripeAccount result = (UserStripeAccount) response.body();
                     String customerID = result.getCustomer_id();
-                    Toast.makeText(context, "create account resp: " + customerID, Toast.LENGTH_LONG).show();
                     // successful response, so now we pass this info to populate a payment sheet
                     getPaymentSheet(context, user.getUsername(), customerID);
                 }
@@ -53,8 +54,10 @@ public class StripeService {
      * makes network call to our backend, fetches the user's Stripe account_id and customer_id
      * @param context the activity from which this function is called
      * @param username the user's username (for which we are running this query)
+     * @param mode either "account" or "customer" to signify which value is saved in preferences
      */
-    public void getAccount(Context context, String username) {
+    public void getAccount(Context context, String username, String mode) {
+        Toast.makeText(context, "Processing...", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<UserStripeAccount> call = stripeMethods.getStripeAccounts(username);
         call.enqueue(new Callback<UserStripeAccount>() {
@@ -62,12 +65,22 @@ public class StripeService {
             public void onResponse(Call<UserStripeAccount> call, Response<UserStripeAccount> response) {
                 if (response.code() == Constants.RESPONSE_OK) {
                     UserStripeAccount result = response.body();
+                    SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if (mode.equals("account")) {
+                        editor.putString(username, result.getAccount_id());
+                    } else if (mode.equals("customer")) {
+                        editor.putString(username, result.getCustomer_id());
+                    }
+                    editor.apply();
+                } else {
+                    Toast.makeText(context, "Could not find " + username, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<UserStripeAccount> call, Throwable t) {
-                // TODO handle fail response
+                Toast.makeText(context, "Could not find " + username, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -79,8 +92,7 @@ public class StripeService {
      * @param username the user's username, needed to fetch their details
      */
     public void getPaymentSheet(Context context, String username, String cusID) {
-        //Toast.makeText(context, "Another moment please", Toast.LENGTH_SHORT).show();
-        Toast.makeText(context, "in payment sheet: " + cusID, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Another moment please", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<PaymentSheetModel> call = stripeMethods.stripePaymentSheet(username);
         call.enqueue(new Callback<PaymentSheetModel>() {

@@ -49,7 +49,6 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
         btnPaymentDetails.setOnClickListener(view -> {
-            Toast.makeText(getApplicationContext(), customerId + "\n" + ephKey, Toast.LENGTH_LONG).show();
             initPaymentSheet();
         });
     }
