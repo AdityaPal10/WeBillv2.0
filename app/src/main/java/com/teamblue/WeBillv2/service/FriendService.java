@@ -77,7 +77,6 @@ public class FriendService {
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
                 Log.d(TAG, "Error adding friend,please try again");
-                //friendUsername.setText("");
                 Toast.makeText(context, "Error adding friend,please try again", Toast.LENGTH_LONG).show();
             }
         });

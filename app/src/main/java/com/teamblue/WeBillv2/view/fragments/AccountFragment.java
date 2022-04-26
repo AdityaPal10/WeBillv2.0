@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.view.MainActivity;
 
 
@@ -210,7 +211,7 @@ public class AccountFragment extends Fragment {
 
     public void saveData(){
         //create a shared preferences object, on private mode means no other app can modify the data
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("IMGID",ImgId);
         editor.putString("USERNAME",savedUsername);
@@ -219,9 +220,9 @@ public class AccountFragment extends Fragment {
     }
 
     public void loadData(){
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPrefs",Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
         savedImg = sharedPreferences.getInt("IMGID",R.drawable.girl);
-        savedUsername = sharedPreferences.getString("USERNAME","NoUsername");
+        savedUsername = sharedPreferences.getString(Constants.USERNAME_KEY,"Guest");
         tvAccountPageUsername.setText(savedUsername);
         btnProfilePic.setBackgroundResource(savedImg);
         ImgId = savedImg;
