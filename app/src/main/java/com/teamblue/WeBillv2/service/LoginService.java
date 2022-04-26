@@ -141,7 +141,7 @@ public class LoginService extends AppCompatActivity {
                     //set it to preferences
                     SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(Constants.USERNAME_KEY,USERNAME);
+                    editor.putString(Constants.USERNAME_KEY, signUpUser.getUsername());
                     editor.apply();
 
                     //move to activity if successful login
