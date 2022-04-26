@@ -25,7 +25,7 @@ public class PaymentDetailsActivity extends AppCompatActivity {
 
     // needed to setup payment sheet
     private String setupIntentClientSecret;
-    private String customerID;
+    private String customerId;
     private String ephKey;
     private String pubKey;
     PaymentSheet paymentSheet;
@@ -42,24 +42,25 @@ public class PaymentDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         setupIntentClientSecret = intent.getStringExtra("setupIntent");
-        customerID = intent.getStringExtra("customerID");
+        customerId = intent.getStringExtra("customerId");
         ephKey = intent.getStringExtra("ephKey");
         pubKey = intent.getStringExtra("pubKey");
 
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
         btnPaymentDetails.setOnClickListener(view -> {
+            Toast.makeText(getApplicationContext(), customerId + "\n" + ephKey, Toast.LENGTH_LONG).show();
             initPaymentSheet();
         });
     }
 
     private void initPaymentSheet() {
         try {
-            //customerConfig = new PaymentSheet.CustomerConfiguration(customerID, ephKey);
+            customerConfig = new PaymentSheet.CustomerConfiguration(customerId, ephKey);
             PaymentConfiguration.init(getApplicationContext(), pubKey);
             final PaymentSheet.Configuration config = new PaymentSheet.Configuration
                     .Builder("WeBill")
-                    //.customer(customerConfig)
+                    .customer(customerConfig)
                     .allowsDelayedPaymentMethods(true)
                     .build();
             paymentSheet.presentWithSetupIntent(setupIntentClientSecret, config);

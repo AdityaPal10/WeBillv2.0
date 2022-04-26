@@ -3,13 +3,13 @@ package com.teamblue.WeBillv2.model.pojo;
 public class UserStripeAccount {
 
     private String username;
-    private String accountId;
-    private String customerId;
+    private String account_id;
+    private String customer_id;
 
-    public UserStripeAccount(String username, String accountId, String customerId) {
+    public UserStripeAccount(String username, String account_id, String customer_id) {
         this.username = username;
-        this.accountId = accountId;
-        this.customerId = customerId;
+        this.account_id = account_id;
+        this.customer_id = customer_id;
     }
 
     public String getUsername() {
@@ -20,19 +20,19 @@ public class UserStripeAccount {
         this.username = username;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public String getAccount_id() {
+        return account_id;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setAccount_id(String account_id) {
+        this.account_id = account_id;
     }
 
-    public String getCustomerId(){
-        return customerId;
+    public String getCustomer_id() {
+        return customer_id;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
     }
 }

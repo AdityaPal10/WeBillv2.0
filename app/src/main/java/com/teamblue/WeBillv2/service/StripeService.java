@@ -23,34 +23,28 @@ public class StripeService {
     /**
      * makes a network call to our backend api (which in turn calls Stripe) to create a Stripe
      * Account and Customer object for our user
-     * If the call is successful, starts an intent to the PaymentDetailsActivity
-     * @param context the activity where this function was called (StripeAccountsActivity.class)
+     * @param context the activity from which this is called (StripeAccountsActivity.class)
      * @param user a User object that holds the user's username
      */
     public void createAccount(Context context, User user) {
-        Toast.makeText(context, "Just a moment", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<UserStripeAccount> call = stripeMethods.createStripeAccounts(user);
         call.enqueue(new Callback<UserStripeAccount>() {
             @Override
             public void onResponse(Call<UserStripeAccount> call, Response<UserStripeAccount> response) {
-                if(response.code() == Constants.RESPONSE_OK) {
-                    // Toast.makeText(context, "successfully created wallet", Toast.LENGTH_SHORT).show();
+                if (response.code() == Constants.RESPONSE_OK) {
+                    Toast.makeText(context, "successfully created wallet", Toast.LENGTH_SHORT).show();
                     UserStripeAccount result = (UserStripeAccount) response.body();
-                    // Toast.makeText(context, result.getAccountId() + "\n" + result.getAccountId(), Toast.LENGTH_LONG).show();
-                    getPaymentSheet(context, user.getUsername(), result.getCustomerId());
-//                    Intent intent = new Intent(context, PaymentDetailsActivity.class);
-//                    intent.putExtra("username", user.getUsername());
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // since we're calling from another activity
-//                    context.startActivity(intent);
-                } else {
-                    Toast.makeText(context, "Sorry, we've got an error.", Toast.LENGTH_LONG).show();
+                    String customerID = result.getCustomer_id();
+                    Toast.makeText(context, "create account resp: " + customerID, Toast.LENGTH_LONG).show();
+                    // successful response, so now we pass this info to populate a payment sheet
+                    getPaymentSheet(context, user.getUsername(), customerID);
                 }
             }
 
             @Override
             public void onFailure(Call<UserStripeAccount> call, Throwable t) {
-                Toast.makeText(context, "Sorry, please try again.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Sorry, we've got an error.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -85,7 +79,8 @@ public class StripeService {
      * @param username the user's username, needed to fetch their details
      */
     public void getPaymentSheet(Context context, String username, String cusID) {
-        Toast.makeText(context, "Another moment please", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Another moment please", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "in payment sheet: " + cusID, Toast.LENGTH_LONG).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<PaymentSheetModel> call = stripeMethods.stripePaymentSheet(username);
         call.enqueue(new Callback<PaymentSheetModel>() {
