@@ -17,8 +17,6 @@ import com.teamblue.WeBillv2.R;
 
 public class PaymentDetailsActivity extends AppCompatActivity {
 
-    // TODO: Finish coding Stripe Payment Sheet logic
-
     private String TAG = "STRIPE";
     private TextView txtPaymentDetails;
     private Button btnPaymentDetails;

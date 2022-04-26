@@ -99,7 +99,6 @@ public class StripeService {
             @Override
             public void onResponse(Call call, Response response) {
                 if(response.code() == Constants.RESPONSE_OK) {
-                    Toast.makeText(context, "PaymentSheet Response OK", Toast.LENGTH_SHORT).show();
                     PaymentSheetModel result = (PaymentSheetModel) response.body();
                     Intent intent = new Intent(context, PaymentDetailsActivity.class);
                     intent.putExtra("setupIntent", result.getSetupIntent());
