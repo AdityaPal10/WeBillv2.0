@@ -95,7 +95,7 @@ public class SplitBillActivity extends AppCompatActivity {
                     bundle.putString("BILL_TOTAL_AMOUNT",tvTotalAmountSplitBill.getText().toString());
                     //Right now I just go to ScanBillActivity Again, I wanted to goto AddBillFragment but I don't know how......
                     //It's fine if we are not able to do this, just let the user do their stuffs once finished one bill......
-                    Intent gotoScanBillActivity = new Intent(view.getContext(), ScanBillActivity.class);
+                    Intent gotoScanBillActivity = new Intent(view.getContext(), MenuView.class);
                     gotoScanBillActivity.putExtras(bundle);
                     startActivity(gotoScanBillActivity);
                 }
