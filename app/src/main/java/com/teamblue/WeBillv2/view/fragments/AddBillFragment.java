@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -27,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.libraries.places.api.Places;
@@ -37,6 +39,15 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.api.BillMethods;
+import com.teamblue.WeBillv2.model.api.FriendMethods;
+import com.teamblue.WeBillv2.model.api.FriendRequest;
+import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.ImageSaver;
+import com.teamblue.WeBillv2.model.pojo.LoginModel;
+import com.teamblue.WeBillv2.model.pojo.OCRBill;
+import com.teamblue.WeBillv2.model.pojo.VeryfiOcrResponse;
+import com.teamblue.WeBillv2.service.LoginRetrofitClient;
 import com.teamblue.WeBillv2.view.MainActivity;
 import com.teamblue.WeBillv2.view.ScanBillActivity;
 import com.teamblue.WeBillv2.view.SplitBillActivity;
@@ -44,6 +55,10 @@ import com.teamblue.WeBillv2.view.SplitBillActivity;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -59,6 +74,7 @@ public class AddBillFragment extends Fragment {
     private Bitmap imageBitmap;
     private static final String TAG = "BASE64";
     private String Base64String;
+    ViewGroup container;
 
     public AddBillFragment() {
         // Required empty public constructor
@@ -85,12 +101,15 @@ public class AddBillFragment extends Fragment {
             //5.6 then we use bundle to retrieve information from Bitmap
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
+            //save image to local storage
+            new ImageSaver(getContext()).setFileName("billScan.jpg").setDirectoryName("imagesDir").save(imageBitmap);
+
 //            captureIV.setImageBitmap(imageBitmap);
 //            captureIV.setRotation(90);
             // initialize byte stream
             ByteArrayOutputStream stream=new ByteArrayOutputStream();
             // compress Bitmap
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            imageBitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
             // Initialize byte array
             byte[] bytes=stream.toByteArray();
             // get base64 encoded string
@@ -100,12 +119,81 @@ public class AddBillFragment extends Fragment {
             Log.d(TAG, Base64String);
 
             /********* TODO: Hard Coded scanned result now. Replace once finished real API ******/
-            edtActivityNameAddBill.setText("Sushi(HardCode message)");
-            edtTotalAmountAddBill.setText("999");
-            edtDateAddBill.setText("1970/01/01");
-            edtAddressAddBill.setText("HardCode Address Here");
+//            edtActivityNameAddBill.setText("Sushi(HardCode message)");
+//            edtTotalAmountAddBill.setText("999");
+//            edtDateAddBill.setText("1970/01/01");
+//            edtAddressAddBill.setText("HardCode Address Here");
+            scanBillFromApi(getLayoutInflater(),container,Base64String);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void scanBillFromApi(LayoutInflater inflater, ViewGroup container, String base64String){
+        //1. create an instance of bill methods interface defined in our BillMethods class
+        BillMethods billMethods = LoginRetrofitClient.getRetrofitInstance().create(BillMethods.class);
+        String billName = "img-"+Base64String.substring(0,5)+".png";
+        Bitmap bitmap = new ImageSaver(getContext()).setFileName("billScan.jpg").setDirectoryName("imagesDir").load();
+        Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+        ByteArrayOutputStream stream=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
+        byte[] bytes=stream.toByteArray();
+        Base64String= Base64.encodeToString(bytes,Base64.DEFAULT);
+
+        //2. create a call object which will make the REST API call to our backend by passing in username and friendName as paramaters
+        Call<VeryfiOcrResponse> call = billMethods.scanBillForImage(new OCRBill(Base64String,billName));
+        Log.d(TAG,billName.trim());
+
+        /*3. create a callback for our call object, once its finished the network call, it will use this callback to further
+           process whether the network call was successful or not.
+         */
+        call.enqueue(new Callback<VeryfiOcrResponse>() {
+            @Override
+            public void onResponse(Call<VeryfiOcrResponse> call, Response<VeryfiOcrResponse> response) {
+                Log.d(TAG,String.valueOf(response.code()));
+                System.out.println(response.code());
+                Log.d(TAG,response.body().toString());
+                //getting response body if call was successful
+                if(response.code()== Constants.RESPONSE_OK){
+                    VeryfiOcrResponse veryfiOcrResponse = (VeryfiOcrResponse) response.body();
+                    // add data to card
+                    //1. get handle of add bill card
+                    View newBill = inflater.inflate(R.layout.fragment_add_bill, container, false);
+
+//                    Toast.makeText(context,"successfully added friend",Toast.LENGTH_LONG).show();
+//                    View viewNewFriendCard = getLayoutInflater().inflate(R.layout.cardview_new_friend, null);
+//                    TextView tvFriendName= viewNewFriendCard.findViewById(R.id.tvFriendName);
+//                    tvFriendName.setText(friendName);
+
+                    //2. get text view of that bill card
+                    edtActivityNameAddBill = (EditText) newBill.findViewById(R.id.edtActivityNameAddBill);
+                    edtTotalAmountAddBill = (EditText) newBill.findViewById(R.id.edtTotalAmountAddBill);
+                    edtDateAddBill = (EditText) newBill.findViewById(R.id.edtDateAddBill);
+                    edtAddressAddBill = (EditText) newBill.findViewById(R.id.edtAddressAddBill);
+                    btnEnterAddBill = (Button) newBill.findViewById(R.id.btnEnterAddBill);
+                    btnScanBill = (Button) newBill.findViewById(R.id.btnScanBill);
+
+                    //3. populate the fields of the bill
+                    edtActivityNameAddBill.setText(veryfiOcrResponse.getVendor().getName());
+                    edtTotalAmountAddBill.setText(String.valueOf(veryfiOcrResponse.getTotal()));
+                    edtDateAddBill.setText(veryfiOcrResponse.getDate());
+                    edtAddressAddBill.setText(veryfiOcrResponse.getVendor().getAddress());
+
+                    container.removeAllViews();
+                    container.addView(newBill);
+                }
+                else{
+                    Toast.makeText(getContext(),"could not process bill",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VeryfiOcrResponse> call, Throwable t) {
+                Log.d(TAG,"Error processing bill");
+                //friendUsername.setText("");
+                Toast.makeText(getContext(),"Error processing bill",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     @Override
@@ -114,7 +202,7 @@ public class AddBillFragment extends Fragment {
         // Inflate the layout for this fragment
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);//prevent keyboard pushing my view
         View view = inflater.inflate(R.layout.fragment_add_bill, container, false);
-
+        this.container = container;
         edtActivityNameAddBill = (EditText) view.findViewById(R.id.edtActivityNameAddBill);
         edtTotalAmountAddBill = (EditText) view.findViewById(R.id.edtTotalAmountAddBill);
         edtDateAddBill = (EditText) view.findViewById(R.id.edtDateAddBill);
