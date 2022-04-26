@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -28,6 +30,8 @@ import com.teamblue.WeBillv2.model.pojo.LoginModel;
 import com.teamblue.WeBillv2.service.FriendService;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
 import com.teamblue.WeBillv2.service.LoginService;
+
+import org.w3c.dom.Text;
 
 import java.text.BreakIterator;
 import java.util.ArrayList;
@@ -60,11 +64,22 @@ public class FriendFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        TextView tvToPay = view.findViewById(R.id.tvMyToPayNumber);
+        TextView tvToTakeBack = view.findViewById(R.id.tvToTakeBackNumber);
 
         btnAddFriends = view.findViewById(R.id.btnAddFriends);
         containerFriendCards = view.findViewById(R.id.containerFriendCards);
 
         context = getActivity().getApplicationContext();
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("FriendCardFinished",false);
+
+        String username = sharedPreferences.getString(Constants.USERNAME_KEY,"");
+
+        FriendService friendService = new FriendService();
+        friendService.getBalance(view,username,tvToPay,tvToTakeBack);
 
         /*********Call Your Add Friend Dialog here********/
         buildAddNewFriendDialog();
