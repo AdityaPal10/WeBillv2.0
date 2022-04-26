@@ -185,9 +185,11 @@ public class FriendFragment extends Fragment {
                             tvStatus.setText("To pay : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.takeBackRed));
                             tvBalance.setTextColor(getResources().getColor(R.color.takeBackRed));
-                        }else{
+                        }else if(balance>0){
                             tvStatus.setText("To take back : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.quantum_googgreen));
+                        }else{
+                            continue;
                         }
                         tvFriendName.setText(friendBalanceModel.getFriend_username());
                         tvBalance.setText(String.valueOf(Math.abs(balance)));
