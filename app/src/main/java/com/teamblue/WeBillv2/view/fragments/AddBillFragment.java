@@ -120,10 +120,8 @@ public class AddBillFragment extends Fragment {
 
 //            Bundle extras = data.getExtras();
 //            imageBitmap = (Bitmap) extras.get("data");
-            Bundle extras = data.getExtras();
-            imageBitmap = (Bitmap) extras.get("data");
             //save image to local storage
-            new ImageSaver(getContext()).setFileName("billScan.jpg").setDirectoryName("imagesDir").save(imageBitmap);
+//            new ImageSaver(getContext()).setFileName("billScan.jpg").setDirectoryName("imagesDir").save(imageBitmap);
 
 //            captureIV.setImageBitmap(imageBitmap);
 //            captureIV.setRotation(90);
@@ -164,7 +162,7 @@ public class AddBillFragment extends Fragment {
         ByteArrayOutputStream stream=new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
         byte[] bytes=stream.toByteArray();
-        Base64String= Base64.encodeToString(bytes,Base64.DEFAULT);
+//        Base64String= Base64.encodeToString(bytes,Base64.DEFAULT);
 
         //2. create a call object which will make the REST API call to our backend by passing in username and friendName as paramaters
         Call<VeryfiOcrResponse> call = billMethods.scanBillForImage(new OCRBill(Base64String,billName));
