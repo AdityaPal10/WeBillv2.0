@@ -6,6 +6,8 @@
     android:background="#FFFFFF"
     tools:context=".view.fragments.AddBillFragment">
 
+
+
     <TextView
         android:id="@+id/tvAddBillText"
         android:layout_width="wrap_content"
@@ -24,9 +26,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true">
+
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewEnterBill"
                 android:layout_width="400dp"
@@ -39,6 +47,11 @@
                 app:cardMaxElevation="12dp"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true">
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/testPicture"-->
+<!--                    android:layout_width="400dp"-->
+<!--                    android:layout_height="500dp" />-->
 
                 <RelativeLayout
                     android:layout_width="match_parent"
