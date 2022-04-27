@@ -3,11 +3,13 @@ package com.teamblue.WeBillv2.view.fragments;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +18,29 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.api.BillMethods;
+import com.teamblue.WeBillv2.model.api.FriendMethods;
+import com.teamblue.WeBillv2.model.pojo.BillModel;
+import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
+import com.teamblue.WeBillv2.service.LoginRetrofitClient;
+import com.teamblue.WeBillv2.view.MyBillsListView;
 
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -33,11 +48,13 @@ import java.lang.reflect.Array;
  */
 public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    private Button btnFilterMonth,btnAddCard;
+    private Button btnFilterMonth;
     private Spinner spinnerMonths;
     private Dialog filterDialog;
     private Dialog addReceiptDialog;
     private Dialog receiptDetailsDialog;
+
+    private String TAG = "Bills";
 
     LinearLayout receiptContainer;
 
@@ -76,16 +93,20 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
         spinnerMonths.setOnItemSelectedListener(this);
 
         //3 handling the receiptContainer
-        btnAddCard = (Button) view.findViewById(R.id.btnAddCard);
+        //btnAddCard = (Button) view.findViewById(R.id.btnAddCard);
         receiptContainer = (LinearLayout) view.findViewById(R.id.receiptContainer);
 
         buildDialog();// building the layout for pop-up window and wait for call
-        btnAddCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addReceiptDialog.show();
-            }
-        });
+//        btnAddCard.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                addReceiptDialog.show();
+//            }
+//        });
+
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+
+        getBillsForUser(getContext(),sharedPref.getString(Constants.USERNAME_KEY,""));
 
         return view;
     }
@@ -100,6 +121,65 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    //make network call to receive bills belonging to user
+    public void getBillsForUser(Context context,String username){
+        //1. create an instance of friend methods interface defined in our FriendMethods class
+        BillMethods billMethods = LoginRetrofitClient.getRetrofitInstance().create(BillMethods.class);
+        //2. create a call object which will make the REST API call to our backend by passing in username as paramaters
+        Call<List<BillModel>> call = billMethods.getBillsForUser(username);
+
+        call.enqueue(new Callback<List<BillModel>>() {
+            @Override
+            public void onResponse(Call<List<BillModel>> call, Response<List<BillModel>> response) {
+                Log.d(TAG,"response code :"+response.code());
+
+                if(response.code()== Constants.RESPONSE_OK){
+                    List<BillModel> bills = response.body();
+                    System.out.println(bills.toString());
+
+                    //build data adapter
+                    Integer[] billIds = new Integer[bills.size()];
+                    String[] billAmounts = new String[bills.size()];
+                    String[] billNames = new String[bills.size()];
+                    String[] billDates = new String[bills.size()];
+                    String[] latitudes = new String[bills.size()];
+                    String[] longitudes = new String[bills.size()];
+                    String[] paidBy = new String[bills.size()];
+                    int index = 0;
+                    for(index=0;index< bills.size();index++) {
+                        //add each bill model to list adapter
+                        BillModel bill = bills.get(index);
+                        billIds[index] = bill.getBillId();
+                        billNames[index] = bill.getBillName();
+                        billDates[index] = bill.getDate();
+                        billAmounts[index] = String.valueOf(bill.getTotalAmount());
+                        latitudes[index] = bill.getLatitude();
+                        longitudes[index] = bill.getLongitude();
+                        paidBy[index] = bill.getPaidBy();
+                    }
+
+                    //set data to list view adapter
+                    MyBillsListView myBillsListView = new MyBillsListView(getActivity(),billIds,billAmounts,billNames,billDates,latitudes,longitudes,paidBy);
+                    ListView listView = (ListView)receiptContainer.findViewById(R.id.billsListView);
+                    listView.setAdapter(myBillsListView);
+
+
+
+                    //add new card to existing container
+                    receiptContainer.removeAllViews();
+                    receiptContainer.addView(listView);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BillModel>> call, Throwable t) {
+                //error getting cards
+                Log.d(TAG,t.getMessage());
+                Toast.makeText(getContext(),"error fetching data",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     //3.1 handling the addReceiptDialog function

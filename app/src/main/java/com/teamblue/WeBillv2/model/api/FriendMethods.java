@@ -1,7 +1,10 @@
 package com.teamblue.WeBillv2.model.api;
 
 import com.teamblue.WeBillv2.model.pojo.Friend;
+import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,5 +19,8 @@ public interface FriendMethods {
 
     @GET("friend/getBalance")
     Call<Object> getUserBalance(@Query("username")String username);
+
+    @GET("friend/getFriendsBreakdown")
+    Call<List<FriendBalanceModel>> getFriendsBreakdown(@Query("username")String username);
 
 }

@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -15,26 +13,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.api.FriendRequest;
 import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
 import com.teamblue.WeBillv2.service.FriendService;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
-import com.teamblue.WeBillv2.service.LoginService;
 
-import org.w3c.dom.Text;
-
-import java.text.BreakIterator;
-import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,8 +72,12 @@ public class FriendFragment extends Fragment {
 
         String username = sharedPreferences.getString(Constants.USERNAME_KEY,"");
 
+        //make network call to fetch overall balance of logged in user
         FriendService friendService = new FriendService();
         friendService.getBalance(view,username,tvToPay,tvToTakeBack);
+
+        //make network call to populate friends status/breakdown
+        getFriendBalances(context,username);
 
         /*********Call Your Add Friend Dialog here********/
         buildAddNewFriendDialog();
@@ -157,6 +155,58 @@ public class FriendFragment extends Fragment {
 
 
        // containerFriendCards.addView(viewNewFriendCard);
+    }
+
+    public void getFriendBalances(Context context,String username){
+        //1. create an instance of friend methods interface defined in our FriendMethods class
+        FriendMethods friendMethods = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
+        //2. create a call object which will make the REST API call to our backend by passing in username as paramaters
+        Call<List<FriendBalanceModel>> call = friendMethods.getFriendsBreakdown(username);
+
+        call.enqueue(new Callback<List<FriendBalanceModel>>() {
+            @Override
+            public void onResponse(Call<List<FriendBalanceModel>> call, Response<List<FriendBalanceModel>> response) {
+                Log.d(TAG,"response code :"+response.code());
+
+                if(response.code()==Constants.RESPONSE_OK){
+                    List<FriendBalanceModel> friendBalanceModels = response.body();
+                    System.out.println(friendBalanceModels.toString());
+
+                    for(FriendBalanceModel friendBalanceModel : friendBalanceModels){
+                        //add each friend balance model to cards
+
+                        //1. get view to card fragment
+                        View newCard = getLayoutInflater().inflate(R.layout.cardview_new_friend,null);
+                        TextView tvFriendName = newCard.findViewById(R.id.tvFriendName);
+                        TextView tvBalance = newCard.findViewById(R.id.tvFriendBalance);
+                        TextView tvStatus = newCard.findViewById(R.id.tvFriendStatus);
+                        double balance = friendBalanceModel.getAmountOwed()-friendBalanceModel.getAmountToPay();
+                        if(balance<0){
+                            tvStatus.setText("To pay : $");
+                            tvStatus.setTextColor(getResources().getColor(R.color.takeBackRed));
+                            tvBalance.setTextColor(getResources().getColor(R.color.takeBackRed));
+                        }else if(balance>0){
+                            tvStatus.setText("To take back : $");
+                            tvStatus.setTextColor(getResources().getColor(R.color.quantum_googgreen));
+                        }else{
+                            continue;
+                        }
+                        tvFriendName.setText(friendBalanceModel.getFriend_username());
+                        tvBalance.setText(String.valueOf(Math.abs(balance)));
+
+                        //add new card to existing container
+                        containerFriendCards.addView(newCard);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<FriendBalanceModel>> call, Throwable t) {
+                //error getting cards
+                Log.d(TAG,t.getMessage());
+                Toast.makeText(getContext(),"error fetching data",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void add(Context context, String username, String friendName){

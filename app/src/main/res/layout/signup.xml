@@ -51,7 +51,7 @@
                 android:layout_marginTop="20dp"
                 android:ems="10"
                 android:hint="Email"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
 
                 android:textAlignment="center"
                 tools:layout_editor_absoluteX="30dp"
@@ -81,7 +81,7 @@
                 android:layout_marginTop="20dp"
                 android:ems="10"
                 android:hint="Phone"
-                android:inputType="textPassword"
+                android:inputType="textPhonetic"
                 android:textAlignment="center"
                 tools:layout_editor_absoluteX="30dp"
                 tools:layout_editor_absoluteY="334dp" />
@@ -95,7 +95,7 @@
                 android:layout_marginTop="20dp"
                 android:ems="10"
                 android:hint="Address"
-                android:inputType="textPassword"
+                android:inputType="textLongMessage"
                 android:textAlignment="center"
                 tools:layout_editor_absoluteX="30dp"
                 tools:layout_editor_absoluteY="424dp" />
@@ -109,7 +109,7 @@
                 android:layout_marginTop="20dp"
                 android:ems="10"
                 android:hint="Gender"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:textAlignment="center"
                 tools:layout_editor_absoluteX="30dp"
                 tools:layout_editor_absoluteY="522dp" />
