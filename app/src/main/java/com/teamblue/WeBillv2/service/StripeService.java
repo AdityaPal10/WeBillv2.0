@@ -21,6 +21,8 @@ import retrofit2.Response;
 
 public class StripeService {
 
+    private String TAG = "STRIPE";
+
     /**
      * makes a network call to our backend api (which in turn calls Stripe) to create a Stripe
      * Account and Customer object for our user
@@ -57,7 +59,7 @@ public class StripeService {
      * @param mode either "account" or "customer" to signify which value is saved in preferences
      */
     public void getAccount(Context context, String username, String mode) {
-        Toast.makeText(context, "Processing...", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(context, "Processing...", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<UserStripeAccount> call = stripeMethods.getStripeAccounts(username);
         call.enqueue(new Callback<UserStripeAccount>() {
@@ -68,9 +70,11 @@ public class StripeService {
                     SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     if (mode.equals("account")) {
-                        editor.putString(username, result.getAccount_id());
+                        editor.putString("acc_" + username, result.getAccount_id());
+                        Log.d(TAG, "acc_" + username + ": " + result.getAccount_id());
                     } else if (mode.equals("customer")) {
-                        editor.putString(username, result.getCustomer_id());
+                        editor.putString("cus_" + username, result.getCustomer_id());
+                        Log.d(TAG, "cus_" + username + ": " + result.getCustomer_id());
                     }
                     editor.apply();
                 } else {
