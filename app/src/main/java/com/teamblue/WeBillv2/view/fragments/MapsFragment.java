@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.clustering.ClusterManager;
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.controller.MapsController;
+import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.LocationItem;
 import com.teamblue.WeBillv2.model.pojo.LocationModel;
 import com.teamblue.WeBillv2.service.MapsService;
@@ -88,6 +90,11 @@ public class MapsFragment extends Fragment {
             clusterManager.setOnClusterItemInfoWindowLongClickListener(new ClusterManager.OnClusterItemInfoWindowLongClickListener<LocationItem>() {
                 @Override
                 public void onClusterItemInfoWindowLongClick(LocationItem item) {
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.TEMP_PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong(Constants.MAP_LAT,Double.doubleToRawLongBits(item.getLatitude()));
+                    editor.putLong(Constants.MAP_LNG,Double.doubleToRawLongBits(item.getLongitude()));
+                    editor.apply();
                     Bundle result = new Bundle();
                     result.putDouble("clickedItemLat", item.getLatitude());
                     result.putDouble("clickedItemLng", item.getLongitude());

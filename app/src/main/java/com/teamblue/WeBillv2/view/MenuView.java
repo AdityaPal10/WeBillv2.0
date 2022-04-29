@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.view.fragments.AccountFragment;
 import com.teamblue.WeBillv2.view.fragments.AddBillFragment;
 import com.teamblue.WeBillv2.view.fragments.FriendFragment;
@@ -31,6 +34,10 @@ public class MenuView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences tempSharedPref = getSharedPreferences(Constants.TEMP_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = tempSharedPref.edit();
+        editor.clear();
+        editor.apply();
         setContentView(R.layout.friends_home);
         setTitle("We Bill");
 
@@ -103,6 +110,7 @@ public class MenuView extends AppCompatActivity {
         }
 
         if (fragment != null) {
+//            animatedBottomBar.selectTabById(fragmentTo, true);
             fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
                     .commit();
