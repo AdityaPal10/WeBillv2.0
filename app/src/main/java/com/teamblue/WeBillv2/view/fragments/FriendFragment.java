@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.controller.StripeController;
 import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.api.FriendRequest;
 import com.teamblue.WeBillv2.model.pojo.Constants;
@@ -47,6 +48,7 @@ public class FriendFragment extends Fragment {
     private String TAG = "Friend";
 
     Context context;
+    StripeController stripeController = new StripeController();
 
     public FriendFragment() {
         // Required empty public constructor
@@ -180,11 +182,13 @@ public class FriendFragment extends Fragment {
                         TextView tvFriendName = newCard.findViewById(R.id.tvFriendName);
                         TextView tvBalance = newCard.findViewById(R.id.tvFriendBalance);
                         TextView tvStatus = newCard.findViewById(R.id.tvFriendStatus);
+                        Button btnPay = newCard.findViewById(R.id.btnFriendStatus);
                         double balance = friendBalanceModel.getAmountOwed()-friendBalanceModel.getAmountToPay();
                         if(balance<0){
                             tvStatus.setText("To pay : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.takeBackRed));
                             tvBalance.setTextColor(getResources().getColor(R.color.takeBackRed));
+                            setPayOnClick(btnPay, friendBalanceModel.getFriend_username(), Math.abs(balance));
                         }else if(balance>0){
                             tvStatus.setText("To take back : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.quantum_googgreen));
@@ -260,6 +264,29 @@ public class FriendFragment extends Fragment {
             }
         });
 
+    }
+
+    private void setPayOnClick(Button button, String friend, double balance) {
+        // make sure preferences has account_id/customer_id that we'll need when paying
+        SharedPreferences sharedPref = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        String username = sharedPref.getString(Constants.USERNAME_KEY, null);
+        if (!sharedPref.contains("cus_" + username)){
+            stripeController.getStripeAccounts(context, username, "customer");
+        }
+        if (!sharedPref.contains("acc_" + friend)) {
+            stripeController.getStripeAccounts(context, friend, "account");
+        }
+
+        int cents = (int) (balance * 100);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String scrCustomer = sharedPref.getString("cus_" + username, null);
+                String destAccount = sharedPref.getString("acc_" + friend, null);
+                stripeController.stripeTransaction(context, scrCustomer, destAccount, cents);
+            }
+        });
     }
 
 }
