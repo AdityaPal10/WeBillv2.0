@@ -1,6 +1,7 @@
 package com.teamblue.WeBillv2.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,9 +25,9 @@ public class MapsService {
     ArrayList<LocationModel> expLocationList= new ArrayList<>();
 
     public void getExpenseLocations(Context context, MapsController mapsControllerCallback){
-//        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
-//        String username = sharedPreferences.getString(Constants.USERNAME_KEY,"");
-        String username = "test";
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+        String username = sharedPreferences.getString(Constants.USERNAME_KEY,"");
+//        String username = "test";
 
         MapsMethods mapsMethods = LoginRetrofitClient.getRetrofitInstance().create(MapsMethods.class);
         Call<ArrayList<LocationModel>> call = mapsMethods.getExpenseLocation(new User(username));

@@ -8,8 +8,13 @@ public class Constants {
     public static final int NO_FRIEND_EXISTS = 402;
     public static final int RESPONSE_ERROR = 400;
     public static final int NO_FRIEND_BALANCE_EXISTS=404;
+    public static final long MAP_COORD_ERROR=404;
+    public static final double MAP_COORD_ERROR_D=404.0;
     public static final String PREFERENCES_FILE_NAME = "WEBILL_PREFERENCES";
+    public static final String TEMP_PREFERENCES_FILE_NAME = "WEBILL_PREFERENCES_TEMP";
     public static final String USERNAME_KEY = "Username";
     public static final String BALANCE_TO_PAY = "balance_to_pay";
     public static final String BALANCE_TO_TAKE = "balance_to_take";
+    public static final String MAP_LAT = "map_lat";
+    public static final String MAP_LNG = "map_lng";
 }
