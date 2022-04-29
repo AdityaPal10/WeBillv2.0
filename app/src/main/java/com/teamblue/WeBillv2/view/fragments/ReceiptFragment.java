@@ -126,7 +126,7 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
         //btnAddCard = (Button) view.findViewById(R.id.btnAddCard);
         receiptContainer = (LinearLayout) view.findViewById(R.id.receiptContainer);
 
-        buildDialog();// building the layout for pop-up window and wait for call
+//        buildDialog();// building the layout for pop-up window and wait for call
 //        btnAddCard.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -229,83 +229,83 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     //3.1 handling the addReceiptDialog function
-    private void buildDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-        View view = getLayoutInflater().inflate(R.layout.popup_receipt_bill_info, null);
-
-        EditText edtBillAmount = view.findViewById(R.id.edtBillAmount);
-        EditText edtActivityName = view.findViewById(R.id.edtActivityName);
-        EditText edtDate = view.findViewById(R.id.edtDate);
-
-        builder.setView(view);
-        builder.setTitle("Enter Bills")
-                .setPositiveButton("Apply", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        addCard(edtBillAmount.getText().toString(),
-                                edtActivityName.getText().toString(),
-                                edtDate.getText().toString());
-
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-        addReceiptDialog = builder.create();
-    }
-
-    //3.2 once finished entering the information, pass them into the current new cardView
-    private void addCard(String BillAmount, String ActivityName, String Date) {
-        View view = getLayoutInflater().inflate(R.layout.cardview_receipt, null);
-
-        TextView tvReceiptAmount = view.findViewById(R.id.tvReceiptAmount);
-        TextView tvActivityName = view.findViewById(R.id.tvActivityName);
-        TextView tvReceiptDate = view.findViewById(R.id.tvReceiptDate);
-
-        Button btnRemoveCard = view.findViewById(R.id.btnRemoveCard);
-        Button btnReceiptDetails = view.findViewById(R.id.btnReceiptDetails);
-
-        //4 handing the details button
-        btnReceiptDetails.setOnClickListener(new View.OnClickListener() { // when user click "details" at current bill cardView
-            @Override
-            public void onClick(View view) {
-                buildBillDetails(BillAmount, ActivityName, Date); // pass any information we want to the pop up window
-                receiptDetailsDialog.show();
-            }
-        });
-
-
-        btnRemoveCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                receiptContainer.removeView(view);
-            }
-        });
-        tvReceiptAmount.setText(BillAmount);
-        tvActivityName.setText(ActivityName);
-        tvReceiptDate.setText(Date);
-        receiptContainer.addView(view);
-    }
-
-    //4.1 Render the receipt details pop up windows here
-    private void buildBillDetails(String BillAmount, String ActivityName, String Date) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-        View viewReceiptDetails = getLayoutInflater().inflate(R.layout.popup_receipt_click_details, null);
-
-        TextView tvTotal = viewReceiptDetails.findViewById(R.id.tvTotal);
-        TextView tvActivityText = viewReceiptDetails.findViewById(R.id.tvActivityText);
-        TextView tvDate = viewReceiptDetails.findViewById(R.id.tvDate);
-
-        builder.setView(viewReceiptDetails);
-
-        tvTotal.setText(BillAmount);
-        tvActivityText.setText(ActivityName);
-        tvDate.setText(Date);
-        receiptDetailsDialog = builder.create();
-    }
+//    private void buildDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+//        View view = getLayoutInflater().inflate(R.layout.popup_receipt_bill_info, null);
+//
+//        EditText edtBillAmount = view.findViewById(R.id.edtBillAmount);
+//        EditText edtActivityName = view.findViewById(R.id.edtActivityName);
+//        EditText edtDate = view.findViewById(R.id.edtDate);
+//
+//        builder.setView(view);
+//        builder.setTitle("Enter Bills")
+//                .setPositiveButton("Apply", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        addCard(edtBillAmount.getText().toString(),
+//                                edtActivityName.getText().toString(),
+//                                edtDate.getText().toString());
+//
+//                    }
+//                })
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
+//
+//        addReceiptDialog = builder.create();
+//    }
+//
+//    //3.2 once finished entering the information, pass them into the current new cardView
+//    private void addCard(String BillAmount, String ActivityName, String Date) {
+//        View view = getLayoutInflater().inflate(R.layout.cardview_receipt, null);
+//
+//        TextView tvReceiptAmount = view.findViewById(R.id.tvReceiptAmount);
+//        TextView tvActivityName = view.findViewById(R.id.tvActivityName);
+//        TextView tvReceiptDate = view.findViewById(R.id.tvReceiptDate);
+//
+//        Button btnRemoveCard = view.findViewById(R.id.btnRemoveCard);
+//        Button btnReceiptDetails = view.findViewById(R.id.btnReceiptDetails);
+//
+//        //4 handing the details button
+//        btnReceiptDetails.setOnClickListener(new View.OnClickListener() { // when user click "details" at current bill cardView
+//            @Override
+//            public void onClick(View view) {
+//                buildBillDetails(BillAmount, ActivityName, Date); // pass any information we want to the pop up window
+//                receiptDetailsDialog.show();
+//            }
+//        });
+//
+//
+//        btnRemoveCard.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                receiptContainer.removeView(view);
+//            }
+//        });
+//        tvReceiptAmount.setText(BillAmount);
+//        tvActivityName.setText(ActivityName);
+//        tvReceiptDate.setText(Date);
+//        receiptContainer.addView(view);
+//    }
+//
+//    //4.1 Render the receipt details pop up windows here
+//    private void buildBillDetails(String BillAmount, String ActivityName, String Date) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+//        View viewReceiptDetails = getLayoutInflater().inflate(R.layout.popup_receipt_click_details, null);
+//
+//        TextView tvTotal = viewReceiptDetails.findViewById(R.id.tvTotal);
+//        TextView tvActivityText = viewReceiptDetails.findViewById(R.id.tvActivityText);
+//        TextView tvDate = viewReceiptDetails.findViewById(R.id.tvDate);
+//
+//        builder.setView(viewReceiptDetails);
+//
+//        tvTotal.setText(BillAmount);
+//        tvActivityText.setText(ActivityName);
+//        tvDate.setText(Date);
+//        receiptDetailsDialog = builder.create();
+//    }
 
 }
