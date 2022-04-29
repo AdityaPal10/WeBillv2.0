@@ -61,8 +61,16 @@
         <activity
             android:name=".view.ScanBillActivity"
             android:exported="false"
-            android:parentActivityName=".view.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
+        <provider
+            android:authorities="com.teamblue.WeBillv2.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
     </application>
 
 </manifest>

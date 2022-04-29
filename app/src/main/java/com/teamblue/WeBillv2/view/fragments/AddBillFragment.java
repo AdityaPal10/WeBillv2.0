@@ -7,15 +7,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -28,7 +32,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+
+import android.widget.ImageView;
+
 import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.google.android.libraries.places.api.Places;
@@ -39,6 +47,9 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
+
+import com.teamblue.WeBillv2.view.AddBillView;
+
 import com.teamblue.WeBillv2.model.api.BillMethods;
 import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.api.FriendRequest;
@@ -48,11 +59,14 @@ import com.teamblue.WeBillv2.model.pojo.LoginModel;
 import com.teamblue.WeBillv2.model.pojo.OCRBill;
 import com.teamblue.WeBillv2.model.pojo.VeryfiOcrResponse;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
+
 import com.teamblue.WeBillv2.view.MainActivity;
 import com.teamblue.WeBillv2.view.ScanBillActivity;
 import com.teamblue.WeBillv2.view.SplitBillActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -73,9 +87,13 @@ public class AddBillFragment extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap imageBitmap;
     private static final String TAG = "BASE64";
-    private String Base64String;
+
+    private String Base64String, currentPhotoPath;
+
     ViewGroup container;
 
+
+//    private ImageView testPicture;
     public AddBillFragment() {
         // Required empty public constructor
     }
@@ -99,13 +117,20 @@ public class AddBillFragment extends Fragment {
         /***************Handling Receipt Scanning Camera Here ************/
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             //5.6 then we use bundle to retrieve information from Bitmap
-            Bundle extras = data.getExtras();
-            imageBitmap = (Bitmap) extras.get("data");
+
+//            Bundle extras = data.getExtras();
+//            imageBitmap = (Bitmap) extras.get("data");
             //save image to local storage
-            new ImageSaver(getContext()).setFileName("billScan.jpg").setDirectoryName("imagesDir").save(imageBitmap);
+//            new ImageSaver(getContext()).setFileName("billScan.jpg").setDirectoryName("imagesDir").save(imageBitmap);
 
 //            captureIV.setImageBitmap(imageBitmap);
 //            captureIV.setRotation(90);
+            /*******New Solution for high resolution image ****/
+            imageBitmap = BitmapFactory.decodeFile(currentPhotoPath); // Technically this is the full size image
+//            testPicture.setImageBitmap(imageBitmap);
+//            testPicture.setRotation(90);
+
+
             // initialize byte stream
             ByteArrayOutputStream stream=new ByteArrayOutputStream();
             // compress Bitmap
@@ -137,7 +162,7 @@ public class AddBillFragment extends Fragment {
         ByteArrayOutputStream stream=new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
         byte[] bytes=stream.toByteArray();
-        Base64String= Base64.encodeToString(bytes,Base64.DEFAULT);
+//        Base64String= Base64.encodeToString(bytes,Base64.DEFAULT);
 
         //2. create a call object which will make the REST API call to our backend by passing in username and friendName as paramaters
         Call<VeryfiOcrResponse> call = billMethods.scanBillForImage(new OCRBill(Base64String,billName));
@@ -210,6 +235,7 @@ public class AddBillFragment extends Fragment {
         btnEnterAddBill = (Button) view.findViewById(R.id.btnEnterAddBill);
         btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
 
+//        testPicture = (ImageView) view.findViewById(R.id.testPicture);
 
 
         // Initialize the Google Maps Places SDK and create PlacesClient instance
@@ -282,8 +308,24 @@ public class AddBillFragment extends Fragment {
 //                Intent gotoScanBillActivity = new Intent(view.getContext(), ScanBillActivity.class);
 //                startActivity(gotoScanBillActivity);
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
+                /*******New Solution for high resolution image ****/
+                String fileName = "receiptPhoto";
+                File storageDirectory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+                try {
+                    File imageFile = File.createTempFile(fileName, ".jpg", storageDirectory);
+
+                    currentPhotoPath = imageFile.getAbsolutePath();
+
+                    Uri imageUri = FileProvider.getUriForFile(getContext(),"com.teamblue.WeBillv2.fileprovider",imageFile);
+
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

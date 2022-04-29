@@ -9,7 +9,7 @@
         android:layout_height="250dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         app:cardBackgroundColor="#FFFFFF"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
@@ -32,82 +32,89 @@
                 android:layout_marginTop="20dp"
                 android:src="@drawable/receipt1" />
 
-            <TextView
-                android:id="@+id/tvBillAmountText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="50dp"
-                android:layout_toRightOf="@+id/imgFriend1"
-                android:fontFamily="@font/calibri"
-                android:text="Bill Amount: $0.00"
-                android:textColor="#000000"
-                android:textSize="17dp"
-                android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/imgFriend1">
 
-            <TextView
-                android:id="@+id/tvReceiptAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:layout_marginTop="50dp"
-                android:layout_toRightOf="@+id/tvBillAmountText"
-                android:fontFamily="@font/calibri"
-                android:text="0.00"
-                android:textColor="#000000"
-                android:textSize="17dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvBillAmountText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="50dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="Bill Amount: $"
+                    android:textColor="#000000"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvActivityName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvBillAmountText"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/imgFriend1"
-                android:fontFamily="@font/calibri"
-                android:text="Star Market"
-                android:textColor="#138806"
-                android:textSize="25dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvReceiptAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_toRightOf="@+id/tvBillAmountText"
+                    android:fontFamily="@font/calibri"
+                    android:text=""
+                    android:textColor="#000000"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvReceiptDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvActivityName"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/imgFriend1"
-                android:fontFamily="@font/calibri"
-                android:text="01/01/2022"
-                android:textColor="#000000"
-                android:textSize="17dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvActivityName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvBillAmountText"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="Star Market"
 
-            <Button
-                android:id="@+id/btnRemoveCard"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentLeft="true"
-                android:background="#ECE8E8"
-                android:fontFamily="@font/calibri"
-                android:text="x"
-                android:textStyle="bold" />
+                    android:textColor="#138806"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvReceiptDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvActivityName"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="01/01/2022"
+                    android:textColor="#000000"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+                <!--            <Button-->
+                <!--                android:id="@+id/btnRemoveCard"-->
+                <!--                android:layout_width="30dp"-->
+                <!--                android:layout_height="30dp"-->
+                <!--                android:layout_alignParentLeft="true"-->
+                <!--                android:background="#ECE8E8"-->
+                <!--                android:fontFamily="@font/calibri"-->
+                <!--                android:text="x"-->
+                <!--                android:textStyle="bold" />-->
+
+
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/btnReceiptDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="15dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/roundedbutton"
                 android:fontFamily="@font/calibri"
                 android:text="Details"
                 android:textStyle="bold"
                 app:cornerRadius="38dp" />
+
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

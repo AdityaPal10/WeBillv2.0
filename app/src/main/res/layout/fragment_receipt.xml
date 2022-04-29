@@ -35,27 +35,33 @@
 
     </RelativeLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/fragmentReceiptTop"
-        android:scrollbars="none"
-        android:fillViewport="true">
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_below="@+id/fragmentReceiptTop"-->
+<!--        android:scrollbars="none"-->
+<!--        android:fillViewport="true">-->
 
         <LinearLayout
             android:id="@+id/receiptContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_below="@+id/fragmentReceiptTop"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
             <ListView
                 android:id="@+id/billsListView"
                 style="@android:style/Widget.Holo.Light.ListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@drawable/divider" />
+                android:divider="@drawable/divider"
+                android:layout_margin="10dp"
+                android:layout_centerInParent="true"
+
+                />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+<!--    </androidx.core.widget.NestedScrollView>-->
 
 
 </RelativeLayout>
