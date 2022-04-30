@@ -117,7 +117,7 @@
                     android:id="@+id/AddBillDateLayout"
                     android:layout_width="280dp"
                     android:layout_height="40dp"
-                    android:layout_below="@+id/AddBillActivityNameLayout"
+                    android:layout_below="@+id/AddBillActivityAddressLayout"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp">
 
@@ -128,20 +128,21 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/calendar" />
 
-                    <EditText
-                        android:id="@+id/edtDateSplitBill"
+                    <Button
+                        android:id="@+id/btnDatePickerSplitBill"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@+id/imgDate"
-                        android:hint="Date"
-                        android:inputType="date"
-                        android:textAlignment="center" />
+                        android:background="@color/Transparent"
+                        android:textAlignment="center"
+                        android:textSize="20sp"/>
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/AddBillActivityAddressLayout"
                     android:layout_width="280dp"
                     android:layout_height="40dp"
-                    android:layout_below="@+id/AddBillDateLayout"
+                    android:layout_below="@+id/AddBillActivityNameLayout"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp">
 

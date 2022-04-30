@@ -1,5 +1,6 @@
 package com.teamblue.WeBillv2.view;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.number.Precision;
@@ -9,6 +10,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -34,6 +36,7 @@ import org.w3c.dom.Text;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class SplitBillActivity extends AppCompatActivity {
@@ -42,8 +45,11 @@ public class SplitBillActivity extends AppCompatActivity {
     private EditText edtActivityNameSplitBill,edtTotalAmountSplitBill,edtDateSplitBill,edtAddressSplitBill,edtPayerName;
     private TextView tvRemainAmount, tvTotalAmountSplitBill;
     private String getActivityName, getTotalAmount, getDate, getAddress;
-    private Button btnAddSplitFriend,btnSaveBill;
+    private Button btnAddSplitFriend;
+    private Button btnSaveBill;
+    private Button btnDatePickerSplitBill;
     private Double RemainAmount, CurrentAmount,TotalAmount;
+    private DatePickerDialog datePickerDialog;
     LinearLayout LinearFriendSplit;
     AlertDialog AddSplitFriendDialog;
 
@@ -59,13 +65,14 @@ public class SplitBillActivity extends AppCompatActivity {
         PlacesClient placesClient = Places.createClient(getBaseContext());
 
         edtActivityNameSplitBill = (EditText) findViewById(R.id.edtActivityNameSplitBill);
-        edtDateSplitBill = (EditText) findViewById(R.id.edtDateSplitBill);
+        btnDatePickerSplitBill = (Button) findViewById(R.id.btnDatePickerSplitBill);
         edtAddressSplitBill = (EditText) findViewById(R.id.edtAddressSplitBill);
         edtPayerName = (EditText) findViewById(R.id.edtPayerName);
         tvTotalAmountSplitBill = (TextView) findViewById(R.id.tvTotalAmountSplitBill);
         tvRemainAmount = (TextView) findViewById(R.id.tvRemainAmount);
         LinearFriendSplit = findViewById(R.id.LinearFriendSplit);
         btnSaveBill = (Button) findViewById(R.id.btnSaveBill);
+        initDatePicker();
 
         /******** Check Final Bill Information Completeness *********/
         btnSaveBill.setOnClickListener(new View.OnClickListener() {
@@ -77,8 +84,8 @@ public class SplitBillActivity extends AppCompatActivity {
                 }else if(TextUtils.isEmpty(edtDateSplitBill.getText().toString())) {
                     edtDateSplitBill.setError("Must Not Be Empty!");
                     return;
-                }else if(TextUtils.isEmpty(edtAddressSplitBill.getText().toString())){
-                    edtAddressSplitBill.setError("Must Not Be Empty!");
+                }else if(TextUtils.isEmpty(btnDatePickerSplitBill.getText().toString())){
+                    btnDatePickerSplitBill.setError("Must Not Be Empty!");
                     return;
                 }else if(TextUtils.isEmpty(edtPayerName.getText().toString())) {
                     edtPayerName.setError("Must Not Be Empty!");
@@ -90,7 +97,7 @@ public class SplitBillActivity extends AppCompatActivity {
     /**********TODO: After Finishing a Bill Information, put all data needed to whatever fragment/activity the app needs *******/
                     Bundle bundle = new Bundle();
                     bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameSplitBill.getText().toString());
-                    bundle.putString("BILL_DATE",edtDateSplitBill.getText().toString());
+                    bundle.putString("BILL_DATE",btnDatePickerSplitBill.getText().toString());
                     bundle.putString("BILL_ADDRESS",edtAddressSplitBill.getText().toString());
                     bundle.putString("BILL_TOTAL_AMOUNT",tvTotalAmountSplitBill.getText().toString());
                     //Right now I just go to ScanBillActivity Again, I wanted to goto AddBillFragment but I don't know how......
@@ -112,7 +119,7 @@ public class SplitBillActivity extends AppCompatActivity {
         /************Put Bundles from AddBillFragment into SplitBillActivity************/
         edtActivityNameSplitBill.setText(getActivityName);
         tvTotalAmountSplitBill.setText(getTotalAmount);
-        edtDateSplitBill.setText(getDate);
+        btnDatePickerSplitBill.setText(getDate);
         edtAddressSplitBill.setText(getAddress);
 
         /************Handle Dialog of Adding Split Friends************/
@@ -167,6 +174,48 @@ public class SplitBillActivity extends AppCompatActivity {
                 AddSplitFriendDialog.show();
             }
         });
+
+        btnDatePickerSplitBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
+    }
+
+    private String getTodaysDate() {
+        //Set default date as today
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        month = month + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        return makeDateString(day,month,year);
+    }
+
+    private void initDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = makeDateString(day,month,year);
+                btnDatePickerSplitBill.setText(date);
+            }
+        };
+
+        //Set default date as today
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        //Initialize Date Picker Dialog
+        int style = android.app.AlertDialog.THEME_HOLO_LIGHT;
+        datePickerDialog = new DatePickerDialog(this,style,dateSetListener,year,month,day);
+    }
+
+    private String makeDateString(int day, int month, int year) {
+        return month + "/" + day + "/" + year;
     }
 
     @Override
@@ -253,81 +302,11 @@ public class SplitBillActivity extends AppCompatActivity {
                 tvRemainAmount.setText(df.format(RemainAmount));
             }
         });
-        
-
-/********Buggy function (Not Able to change amount from cards directly*********/
-//        edtFriendSplitAmount.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if (charSequence.toString().equals("")) {
-//                    edtFriendSplitAmount.setText("0");
-////                    edtFriendSplitAmount.setError("Must Not Be Empty! Or Delete This Card!");
-////                    Double NewAmount = Double.valueOf(edtFriendSplitAmount.getText().toString());
-////                    RemainAmount = RemainAmount + CurrentAmount - NewAmount;
-////                    CurrentAmount = NewAmount;
-////                    tvRemainAmount.setText(RemainAmount.toString());
-////                    return;
-//                }
-////                if(TextUtils.isEmpty(charSequence.toString()) ){
-////                    edtFriendSplitAmount.setError("Must Not Be Empty! Or Delete This Card!");
-////                    return;
-////                }
-//
-//                /*******Working Logic for Changing Amount*******/
-//                Double NewAmount = Double.valueOf(edtFriendSplitAmount.getText().toString());
-//                RemainAmount = RemainAmount + CurrentAmount - NewAmount;
-//                CurrentAmount = NewAmount;
-//                tvRemainAmount.setText(RemainAmount.toString());
-//
-////                if (Double.parseDouble(charSequence.toString()) > RemainAmount){
-////                    edtFriendSplitAmount.setError("Too much money!");
-////                    return;
-////                }
-//                if ( RemainAmount < 0){
-//                    edtFriendSplitAmount.setError("Too much money!");
-//                    return;
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                if (editable.toString().equals("")) {
-//                    edtFriendSplitAmount.setText("0");
-////                    edtFriendSplitAmount.setError("Must Not Be Empty! Or Delete This Card!");
-////                    Double NewAmount = Double.valueOf(edtFriendSplitAmount.getText().toString());
-////                    RemainAmount = RemainAmount + CurrentAmount - NewAmount;
-////                    CurrentAmount = NewAmount;
-////                    tvRemainAmount.setText(RemainAmount.toString());
-////                    return;
-//                }
-////                if(TextUtils.isEmpty(charSequence.toString()) ){
-////                    edtFriendSplitAmount.setError("Must Not Be Empty! Or Delete This Card!");
-////                    return;
-////                }
-//
-//                /*******Working Logic for Changing Amount*******/
-//                Double NewAmount = Double.valueOf(edtFriendSplitAmount.getText().toString());
-//                RemainAmount = RemainAmount + CurrentAmount - NewAmount;
-//                CurrentAmount = NewAmount;
-//                tvRemainAmount.setText(RemainAmount.toString());
-//
-////                if (Double.parseDouble(charSequence.toString()) > RemainAmount){
-////                    edtFriendSplitAmount.setError("Too much money!");
-////                    return;
-////                }
-//                if ( RemainAmount < 0){
-//                    edtFriendSplitAmount.setError("Too much money!");
-//                    return;
-//                }
-//            }
-//        });
 
         LinearFriendSplit.addView(cardview);
 
     }
+
+
+
 }
