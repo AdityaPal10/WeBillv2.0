@@ -4,6 +4,8 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -27,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -59,6 +62,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -75,7 +80,7 @@ public class AddBillFragment extends Fragment {
 
     private static int AUTOCOMPLETE_REQUEST_CODE = 7001;
     private EditText edtActivityNameAddBill,edtTotalAmountAddBill,edtDateAddBill,edtAddressAddBill;
-    private Button btnEnterAddBill,btnScanBill;
+    private Button btnEnterAddBill,btnScanBill,btnDatePicker;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap imageBitmap;
     private static final String TAG = "BASE64";
@@ -83,6 +88,7 @@ public class AddBillFragment extends Fragment {
     private Uri uri;
 
     private String Base64String, currentPhotoPath;
+    private DatePickerDialog datePickerDialog;
 
     ViewGroup container;
 
@@ -161,14 +167,15 @@ public class AddBillFragment extends Fragment {
                     View view = layoutInflater.inflate(R.layout.fragment_add_bill, container, false);
                     edtActivityNameAddBill = (EditText) view.findViewById(R.id.edtActivityNameAddBill);
                     edtTotalAmountAddBill = (EditText) view.findViewById(R.id.edtTotalAmountAddBill);
-                    edtDateAddBill = (EditText) view.findViewById(R.id.edtDateAddBill);
+                    btnDatePicker = (Button) view.findViewById(R.id.btnDatePicker);
                     edtAddressAddBill = (EditText) view.findViewById(R.id.edtAddressAddBill);
                     btnEnterAddBill = (Button) view.findViewById(R.id.btnEnterAddBill);
                     btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
 
+
                     edtActivityNameAddBill.setText(veryfiOcrResponse.getVendor().getName());
                     edtTotalAmountAddBill.setText(String.valueOf(veryfiOcrResponse.getTotal()));
-                    edtDateAddBill.setText(veryfiOcrResponse.getDate());
+                    btnDatePicker.setText(veryfiOcrResponse.getDate());
                     edtAddressAddBill.setText(veryfiOcrResponse.getVendor().getAddress());
 
                     container.removeAllViews();
@@ -194,10 +201,12 @@ public class AddBillFragment extends Fragment {
         this.container = container;
         edtActivityNameAddBill = (EditText) view.findViewById(R.id.edtActivityNameAddBill);
         edtTotalAmountAddBill = (EditText) view.findViewById(R.id.edtTotalAmountAddBill);
-        edtDateAddBill = (EditText) view.findViewById(R.id.edtDateAddBill);
+        btnDatePicker = (Button) view.findViewById(R.id.btnDatePicker);
         edtAddressAddBill = (EditText) view.findViewById(R.id.edtAddressAddBill);
         btnEnterAddBill = (Button) view.findViewById(R.id.btnEnterAddBill);
         btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
+        initDatePicker();
+        btnDatePicker.setText(getTodaysDate());//Set Default Date as today's date
 
 //        testPicture = (ImageView) view.findViewById(R.id.testPicture);
 
@@ -235,9 +244,9 @@ public class AddBillFragment extends Fragment {
                 }else if(TextUtils.isEmpty(edtTotalAmountAddBill.getText().toString())) {
                     edtTotalAmountAddBill.setError("Must Not Be Empty!");
                     return;
-                }else if(TextUtils.isEmpty(edtDateAddBill.getText().toString())){
-                    edtDateAddBill.setError("Must Not Be Empty!");
-                    return;
+                }else if(TextUtils.isEmpty(btnDatePicker.getText().toString())){
+                    btnDatePicker.setError("Must Not Be Empty!");
+                        return;
                 }else if(TextUtils.isEmpty(edtAddressAddBill.getText().toString())){
                     edtAddressAddBill.setError("Must Not Be Empty!");
                     return;
@@ -245,7 +254,7 @@ public class AddBillFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameAddBill.getText().toString());
                     bundle.putString("BILL_TOTAL_AMOUNT",edtTotalAmountAddBill.getText().toString());
-                    bundle.putString("BILL_DATE",edtDateAddBill.getText().toString());
+                    bundle.putString("BILL_DATE",btnDatePicker.getText().toString());
                     bundle.putString("BILL_ADDRESS",edtAddressAddBill.getText().toString());
                     Intent gotoSplitBillActivity = new Intent(view.getContext(), SplitBillActivity.class);
                     gotoSplitBillActivity.putExtras(bundle);
@@ -294,8 +303,53 @@ public class AddBillFragment extends Fragment {
             }
         });
 
+        /*****Handler for Date Picker *****/
+        btnDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
+
         return view;
     }
+
+
+    private String getTodaysDate() {
+        //Set default date as today
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        month = month + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        return makeDateString(day,month,year);
+    }
+
+    private void initDatePicker() {
+            DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    month = month + 1;
+                    String date = makeDateString(day,month,year);
+                    btnDatePicker.setText(date);
+                }
+            };
+
+            //Set default date as today
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+
+            //Initialize Date Picker Dialog
+            int style = AlertDialog.THEME_HOLO_LIGHT;
+            datePickerDialog = new DatePickerDialog(getActivity(),style,dateSetListener,year,month,day);//Debug
+        }
+
+        private String makeDateString(int day, int month, int year) {
+            return month + "/" + day + "/" + year;
+        }
+
 
     private File createPhotoFile() throws IOException{
         // Create an image file name
@@ -312,5 +366,6 @@ public class AddBillFragment extends Fragment {
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
 
 }
