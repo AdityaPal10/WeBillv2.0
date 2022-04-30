@@ -167,7 +167,7 @@ public class AddBillFragment extends Fragment {
                     View view = layoutInflater.inflate(R.layout.fragment_add_bill, container, false);
                     edtActivityNameAddBill = (EditText) view.findViewById(R.id.edtActivityNameAddBill);
                     edtTotalAmountAddBill = (EditText) view.findViewById(R.id.edtTotalAmountAddBill);
-                    edtDateAddBill = (EditText) view.findViewById(R.id.edtDateAddBill);
+                    btnDatePicker = (Button) view.findViewById(R.id.btnDatePicker);
                     edtAddressAddBill = (EditText) view.findViewById(R.id.edtAddressAddBill);
                     btnEnterAddBill = (Button) view.findViewById(R.id.btnEnterAddBill);
                     btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
@@ -175,7 +175,7 @@ public class AddBillFragment extends Fragment {
 
                     edtActivityNameAddBill.setText(veryfiOcrResponse.getVendor().getName());
                     edtTotalAmountAddBill.setText(String.valueOf(veryfiOcrResponse.getTotal()));
-                    edtDateAddBill.setText(veryfiOcrResponse.getDate());
+                    btnDatePicker.setText(veryfiOcrResponse.getDate());
                     edtAddressAddBill.setText(veryfiOcrResponse.getVendor().getAddress());
 
                     container.removeAllViews();
