@@ -8,21 +8,14 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LoginRetrofitClient {
-
+public class VeryfiRetrofitClient {
     private static Retrofit retrofit;
-    private static String BASE_URL = Constants.API_URL;
-    public static  OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-            .connectTimeout(180, TimeUnit.SECONDS)
-            .readTimeout(180, TimeUnit.SECONDS)
-            .writeTimeout(180, TimeUnit.SECONDS)
-            .build();
+    private static String BASE_URL = Constants.VERYFI_API_URL;
     public static Retrofit getRetrofitInstance(){
         if(retrofit==null){
             retrofit = new retrofit2.Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(okHttpClient)
                     .build();
         }
         return retrofit;
