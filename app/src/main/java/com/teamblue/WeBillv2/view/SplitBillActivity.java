@@ -81,9 +81,6 @@ public class SplitBillActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(edtActivityNameSplitBill.getText().toString())) {
                     edtActivityNameSplitBill.setError("Must Not Be Empty!");
                     return;
-                }else if(TextUtils.isEmpty(edtDateSplitBill.getText().toString())) {
-                    edtDateSplitBill.setError("Must Not Be Empty!");
-                    return;
                 }else if(TextUtils.isEmpty(btnDatePickerSplitBill.getText().toString())){
                     btnDatePickerSplitBill.setError("Must Not Be Empty!");
                     return;
