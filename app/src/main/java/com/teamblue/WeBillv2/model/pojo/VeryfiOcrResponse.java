@@ -16,20 +16,20 @@ public class VeryfiOcrResponse {
 
     private String img_url;
 
-    private String invoice_number;
+    private double subtotal;
 
     private double total;
 
     private String ocr_text;
 
-    private List<LineItems> line_items;
+    //private List<LineItems> line_items;
 
     private Vendor vendor;
 
     public VeryfiOcrResponse() {
     }
 
-    public VeryfiOcrResponse(String category, String currency_code, String date, String document_reference_number, String img_file_name, String img_thumbnail_url, String img_url, String invoice_number, double total, String ocr_text, List<LineItems> line_items, Vendor vendor) {
+    public VeryfiOcrResponse(String category, String currency_code, String date, String document_reference_number, String img_file_name, String img_thumbnail_url, String img_url, double subtotal, double total, String ocr_text, Vendor vendor) {
         this.category = category;
         this.currency_code = currency_code;
         this.date = date;
@@ -37,10 +37,9 @@ public class VeryfiOcrResponse {
         this.img_file_name = img_file_name;
         this.img_thumbnail_url = img_thumbnail_url;
         this.img_url = img_url;
-        this.invoice_number = invoice_number;
+        this.subtotal = subtotal;
         this.total = total;
         this.ocr_text = ocr_text;
-        this.line_items = line_items;
         this.vendor = vendor;
     }
 
@@ -100,12 +99,12 @@ public class VeryfiOcrResponse {
         this.img_url = img_url;
     }
 
-    public String getInvoice_number() {
-        return invoice_number;
+    public double getSubtotal() {
+        return subtotal;
     }
 
-    public void setInvoice_number(String invoice_number) {
-        this.invoice_number = invoice_number;
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
     }
 
     public double getTotal() {
@@ -124,19 +123,28 @@ public class VeryfiOcrResponse {
         this.ocr_text = ocr_text;
     }
 
-    public List<LineItems> getLine_items() {
-        return line_items;
-    }
-
-    public void setLine_items(List<LineItems> line_items) {
-        this.line_items = line_items;
-    }
-
     public Vendor getVendor() {
         return vendor;
     }
 
     public void setVendor(Vendor vendor) {
         this.vendor = vendor;
+    }
+
+    @Override
+    public String toString() {
+        return "VeryfiOcrResponse{" +
+                "category='" + category + '\'' +
+                ", currency_code='" + currency_code + '\'' +
+                ", date='" + date + '\'' +
+                ", document_reference_number='" + document_reference_number + '\'' +
+                ", img_file_name='" + img_file_name + '\'' +
+                ", img_thumbnail_url='" + img_thumbnail_url + '\'' +
+                ", img_url='" + img_url + '\'' +
+                ", subtotal=" + subtotal +
+                ", total=" + total +
+                ", ocr_text='" + ocr_text + '\'' +
+                ", vendor=" + vendor +
+                '}';
     }
 }
