@@ -197,7 +197,7 @@ public class FriendFragment extends Fragment {
                         }
                         tvFriendName.setText(friendBalanceModel.getFriend_username());
                         tvBalance.setText(String.valueOf(Math.abs(balance)));
-
+                        Log.d(TAG, friendBalanceModel.getFriend_username());
                         //add new card to existing container
                         containerFriendCards.addView(newCard);
                     }
