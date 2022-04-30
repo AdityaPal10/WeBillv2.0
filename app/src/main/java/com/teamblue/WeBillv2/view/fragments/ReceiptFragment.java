@@ -52,11 +52,14 @@ import retrofit2.Response;
  */
 public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    private Button btnFilterMonth;
-    private Spinner spinnerMonths;
+    private Button btnFilterYear,btnFilterApply;
+    private Spinner spinnerYears;
     private Dialog filterDialog;
     private Dialog addReceiptDialog;
     private Dialog receiptDetailsDialog;
+    private TextView tvFilterYear;
+    private String savedFilterYear;
+
 
     double clickedItemLat = Double.NaN;
     double clickedItemLng = Double.NaN;
@@ -101,26 +104,31 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
 //            }
 //        });
 
+        tvFilterYear = (TextView) view.findViewById(R.id.tvFilterYear);
+
+
         //1 handling filter button and its pop up window
         filterDialog = new Dialog(this.getContext());
         filterDialog.setContentView(R.layout.popup_receipt_filter);
-        btnFilterMonth = (Button) view.findViewById(R.id.btnFilterMonth);
-        btnFilterMonth.setOnClickListener(new View.OnClickListener() {
+        btnFilterYear = (Button) view.findViewById(R.id.btnFilterYear);
+        btnFilterYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filterDialog.show();
             }
         });
 
+
         //2 Basic settings for spinner inside a Fragment
-        spinnerMonths = (Spinner) filterDialog.findViewById(R.id.spinnerMonths);// since spinner is inside myDialog, don't use view.getContext()
+        spinnerYears = (Spinner) filterDialog.findViewById(R.id.spinnerMonths);// since spinner is inside myDialog, don't use view.getContext()
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 getActivity().getBaseContext(),
-                R.array.months,
+                R.array.years,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMonths.setAdapter(adapter);
-        spinnerMonths.setOnItemSelectedListener(this);
+        spinnerYears.setAdapter(adapter);
+        spinnerYears.setOnItemSelectedListener(this);
+
 
         //3 handling the receiptContainer
         //btnAddCard = (Button) view.findViewById(R.id.btnAddCard);
@@ -136,15 +144,16 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         getBillsForUser(getContext(), sharedPref.getString(Constants.USERNAME_KEY, ""));
-
+        loadData();
         return view;
     }
 
     //2.1 Do spinner's functions here, now a demo of showing Toast text when select a month
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String textMonth = spinnerMonths.getSelectedItem().toString();
-        Toast.makeText(this.getContext(), textMonth, Toast.LENGTH_SHORT).show();
+        String textYear = spinnerYears.getSelectedItem().toString();
+        Toast.makeText(this.getContext(), textYear, Toast.LENGTH_SHORT).show();
+        tvFilterYear.setText(textYear); //Display filter year here
     }
 
     @Override
@@ -307,5 +316,29 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
 //        tvDate.setText(Date);
 //        receiptDetailsDialog = builder.create();
 //    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveData();
+
+    }
+
+
+    public void saveData(){
+        //create a shared preferences object, on private mode means no other app can modify the data
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("FILTERYEAR",tvFilterYear.getText().toString());
+        editor.apply();
+//        Toast.makeText(this.getContext(), "Saved data", Toast.LENGTH_SHORT).show();
+    }
+
+    public void loadData(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+        savedFilterYear = sharedPreferences.getString("FILTERYEAR","2000");
+        tvFilterYear.setText(savedFilterYear);
+//        Toast.makeText(this.getContext(), "Loaded Data", Toast.LENGTH_SHORT).show();
+    }
 
 }
