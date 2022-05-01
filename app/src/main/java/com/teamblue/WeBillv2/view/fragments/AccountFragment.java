@@ -11,6 +11,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.text.method.PasswordTransformationMethod;
+import android.text.method.ReplacementTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +75,7 @@ public class AccountFragment extends Fragment {
         btnChangePhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changePhoneNumber();
+                buildChangePhoneNumberDialog();
             }
         });
 
@@ -103,6 +105,46 @@ public class AccountFragment extends Fragment {
 
         loadData(); //sharedPreference load saved data
         return view;
+    }
+
+    private void buildChangePhoneNumberDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
+        alertDialog.setTitle("Values");
+        final EditText oldPhoneNumber = new EditText(this.getContext());
+        final EditText newPhoneNumber = new EditText(this.getContext());
+        final EditText confirmPhoneNumber = new EditText(this.getContext());
+
+
+        //oldPhoneNumber.setTransformationMethod(ReplacementTransformationMethod.getOriginal);
+        //newPass.setTransformationMethod(TransformationMethod.getInstance());
+        //confirmPass.setTransformationMethod(TransformationMethod.getInstance());
+
+        oldPhoneNumber.setHint("Old Phone Number");
+        newPhoneNumber.setHint("New Phone Number");
+        confirmPhoneNumber.setHint("Confirm Phone Number");
+        LinearLayout ll=new LinearLayout(this.getContext());
+        ll.setOrientation(LinearLayout.VERTICAL);
+
+        ll.addView(oldPhoneNumber);
+
+        ll.addView(newPhoneNumber);
+        ll.addView(confirmPhoneNumber);
+        alertDialog.setView(ll);
+        alertDialog.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert12 = alertDialog.create();
+        alert12.show();
     }
 
     private void buildChangePasswordDialog() {
