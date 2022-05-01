@@ -10,11 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import com.teamblue.WeBillv2.view.MainActivity;
 public class AccountFragment extends Fragment {
 
     private Button btnProfilePic,btnLogOut,btnChangeUsername;
+    private Button btnChangePassword, btnChangePhoneNumber;
     private Integer ImgId;
     private Integer savedImg;
     private String savedUsername;
@@ -58,6 +61,21 @@ public class AccountFragment extends Fragment {
                 dialogChooseProfilePic.show();
             }
         });
+        // build contents here
+        btnChangePassword= (Button) view.findViewById(R.id.btnResetPassword);
+        btnChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buildChangePasswordDialog();
+            }
+        });
+        btnChangePhoneNumber= (Button) view.findViewById(R.id.btnModifyMobileNumber);
+        btnChangePhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changePhoneNumber();
+            }
+        });
 
 
         /******Dialog for User Logout ****************/
@@ -85,6 +103,76 @@ public class AccountFragment extends Fragment {
 
         loadData(); //sharedPreference load saved data
         return view;
+    }
+
+    private void buildChangePasswordDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
+        alertDialog.setTitle("Values");
+        final EditText oldPass = new EditText(this.getContext());
+        final EditText newPass = new EditText(this.getContext());
+        final EditText confirmPass = new EditText(this.getContext());
+
+
+        oldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+        oldPass.setHint("Old Password");
+        newPass.setHint("New Password");
+        confirmPass.setHint("Confirm Password");
+        LinearLayout ll=new LinearLayout(this.getContext());
+        ll.setOrientation(LinearLayout.VERTICAL);
+
+        ll.addView(oldPass);
+
+        ll.addView(newPass);
+        ll.addView(confirmPass);
+        alertDialog.setView(ll);
+        alertDialog.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = alertDialog.create();
+        alert11.show();
+    }
+
+    private void changePhoneNumber() {
+
+    }
+
+    private void changePassword() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());
+        //Choose Dialog Layout here
+        View dialogView = getLayoutInflater().inflate(R.layout.popup_logout, null);
+
+        builder.setView(dialogView);
+        builder.setTitle("Are you sure to Logout?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(dialogView.getContext(), "We'll miss you ❤️", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+        dialogLogout = builder.create();
+
     }
 
 //    private void buildChangeUsernameDialog() {
