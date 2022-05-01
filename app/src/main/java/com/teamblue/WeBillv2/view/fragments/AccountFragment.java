@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.telephony.PhoneNumberUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.ReplacementTransformationMethod;
 import android.text.method.TransformationMethod;
@@ -108,16 +109,11 @@ public class AccountFragment extends Fragment {
     }
 
     private void buildChangePhoneNumberDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
-        alertDialog.setTitle("Values");
+        AlertDialog.Builder phoneNumberDialog = new AlertDialog.Builder(this.getContext());
+        phoneNumberDialog.setTitle("Values");
         final EditText oldPhoneNumber = new EditText(this.getContext());
         final EditText newPhoneNumber = new EditText(this.getContext());
         final EditText confirmPhoneNumber = new EditText(this.getContext());
-
-
-        //oldPhoneNumber.setTransformationMethod(ReplacementTransformationMethod.getOriginal);
-        //newPass.setTransformationMethod(TransformationMethod.getInstance());
-        //confirmPass.setTransformationMethod(TransformationMethod.getInstance());
 
         oldPhoneNumber.setHint("Old Phone Number");
         newPhoneNumber.setHint("New Phone Number");
@@ -129,27 +125,39 @@ public class AccountFragment extends Fragment {
 
         ll.addView(newPhoneNumber);
         ll.addView(confirmPhoneNumber);
-        alertDialog.setView(ll);
-        alertDialog.setPositiveButton("Yes",
+        phoneNumberDialog.setView(ll);
+
+
+        phoneNumberDialog.setPositiveButton("RESET PHONE NUMBER",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        String regexStr = "^\\+[0-9]{10,13}$";
+                        String number=newPhoneNumber.getText().toString();
+                        if(number.matches(regexStr)==false  ) {
+                            Toast.makeText(phoneNumberDialog.getContext(),"Please enter a valid phone number",Toast.LENGTH_SHORT).show();
+                            if (!newPhoneNumber.getEditableText().toString().equals(confirmPhoneNumber.getEditableText().toString())){
+                            Toast.makeText(phoneNumberDialog.getContext(), "new phone number and confirm number don't match", Toast.LENGTH_SHORT).show();
+
+                            }
+                            dialog.cancel();
+                        }
                         dialog.cancel();
                     }
                 });
-        alertDialog.setNegativeButton("No",
+        phoneNumberDialog.setNegativeButton("CANCEL",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
 
-        AlertDialog alert12 = alertDialog.create();
-        alert12.show();
+        AlertDialog resetPhoneNumber = phoneNumberDialog.create();
+        resetPhoneNumber.show();
     }
 
     private void buildChangePasswordDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
-        alertDialog.setTitle("Values");
+        AlertDialog.Builder passwordDialog = new AlertDialog.Builder(this.getContext());
+        passwordDialog.setTitle("Values");
         final EditText oldPass = new EditText(this.getContext());
         final EditText newPass = new EditText(this.getContext());
         final EditText confirmPass = new EditText(this.getContext());
@@ -169,53 +177,30 @@ public class AccountFragment extends Fragment {
 
         ll.addView(newPass);
         ll.addView(confirmPass);
-        alertDialog.setView(ll);
-        alertDialog.setPositiveButton("Yes",
+        passwordDialog.setView(ll);
+        passwordDialog.setPositiveButton("RESET PASSWORD",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (!newPass.getEditableText().toString().equals(confirmPass.getEditableText().toString())){
+                            Toast.makeText(passwordDialog.getContext(), "new and confirm password don't match", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                        dialog.cancel();
+                }
+                });
+        passwordDialog.setNegativeButton("CANCEL",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-        alertDialog.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
 
-        AlertDialog alert11 = alertDialog.create();
-        alert11.show();
+        AlertDialog resetPassword = passwordDialog.create();
+        resetPassword.show();
     }
 
-    private void changePhoneNumber() {
 
-    }
 
-    private void changePassword() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());
-        //Choose Dialog Layout here
-        View dialogView = getLayoutInflater().inflate(R.layout.popup_logout, null);
-
-        builder.setView(dialogView);
-        builder.setTitle("Are you sure to Logout?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(dialogView.getContext(), "We'll miss you ❤️", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-        dialogLogout = builder.create();
-
-    }
 
 //    private void buildChangeUsernameDialog() {
 //        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());
