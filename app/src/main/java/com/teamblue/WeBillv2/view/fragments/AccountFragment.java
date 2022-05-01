@@ -1,5 +1,7 @@
 package com.teamblue.WeBillv2.view.fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,8 +28,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.api.AccountsMethods;
+import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
+import com.teamblue.WeBillv2.model.pojo.LoginModel;
+import com.teamblue.WeBillv2.service.LoginRetrofitClient;
 import com.teamblue.WeBillv2.view.MainActivity;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -164,11 +177,34 @@ public class AccountFragment extends Fragment {
                         String regexStr = "^\\+[0-9]{10,13}$";
                         String number=newPhoneNumber.getText().toString();
                         if(number.matches(regexStr)==false  ) {
-                            Toast.makeText(phoneNumberDialog.getContext(),"Please enter a valid phone number",Toast.LENGTH_SHORT).show();
-                            if (!newPhoneNumber.getEditableText().toString().equals(confirmPhoneNumber.getEditableText().toString())){
+                            Toast.makeText(phoneNumberDialog.getContext(), "Please enter a valid phone number", Toast.LENGTH_SHORT).show();
+                        }
+                         else if (!newPhoneNumber.getEditableText().toString().equals(confirmPhoneNumber.getEditableText().toString())) {
                                 Toast.makeText(phoneNumberDialog.getContext(), "new phone number and confirm number don't match", Toast.LENGTH_SHORT).show();
-
                             }
+                            else {
+                                SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                                String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
+                            AccountsMethods accountsMethods = LoginRetrofitClient.getRetrofitInstance().create(AccountsMethods.class);
+                            //2. create a call object which will make the REST API call to our backend by passing in username as paramaters
+                            Call<LoginModel> call = accountsMethods.getOldPhoneNumber(loggedInUsername);
+
+                            call.enqueue(new Callback<LoginModel>() {
+                                @Override
+                                public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+                                    Log.d(TAG, "response code :" + response.code());
+
+                                    if (response.code() == Constants.RESPONSE_OK) {
+                                     int f=1;
+
+                                    }
+                                }
+                                             @Override
+                                             public void onFailure(Call<LoginModel> call, Throwable t) {
+                                    int f=0;
+
+                                             }
+                                         });
                             dialog.cancel();
                         }
                         dialog.cancel();
