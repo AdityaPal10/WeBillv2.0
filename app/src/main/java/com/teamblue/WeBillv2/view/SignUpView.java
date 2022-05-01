@@ -3,6 +3,7 @@ package com.teamblue.WeBillv2.view;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +42,19 @@ public class SignUpView extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(TextUtils.isEmpty(username.getText().toString())) {
+                    username.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(email.getText().toString())) {
+                    email.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(password.getText().toString())) {
+                    password.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(phone.getText().toString())) {
+                    phone.setError("Must Not Be Empty!");
+                    return;
+                }
                 loginController.signUp(getApplicationContext(),email,username,password,phone,address,gender);
             }
         });
