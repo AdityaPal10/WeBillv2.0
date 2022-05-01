@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.telephony.PhoneNumberUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.ReplacementTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +36,7 @@ import com.teamblue.WeBillv2.view.MainActivity;
 public class AccountFragment extends Fragment {
 
     private Button btnProfilePic,btnLogOut,btnChangeUsername;
-    private Button btnChangePassword, btnChangePhoneNumber;
+    private Button btnChangePassword, btnChangePhoneNumber, btnContactUs;
     private Integer ImgId;
     private Integer savedImg;
     private String savedUsername;
@@ -77,6 +79,34 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 buildChangePhoneNumberDialog();
+            }
+        });
+        btnContactUs= (Button) view.findViewById(R.id.btnContactUs);
+        btnContactUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Send email", "");
+
+                String[] TO = {"pal.aditya.ap@gmail.com"};
+                //String[] CC = {"harsh@gmail.com"};
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setData(Uri.parse("mailto:"));
+                emailIntent.setType("text/plain");
+
+
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+                //emailIntent.putExtra(Intent.EXTRA_CC, CC);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "WeBill Contact Developers");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Please enter your inquiry here");
+
+                try {
+                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                    Log.i("Finished sending", "");
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getContext(),
+                            "There is no email client installed.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -136,7 +166,7 @@ public class AccountFragment extends Fragment {
                         if(number.matches(regexStr)==false  ) {
                             Toast.makeText(phoneNumberDialog.getContext(),"Please enter a valid phone number",Toast.LENGTH_SHORT).show();
                             if (!newPhoneNumber.getEditableText().toString().equals(confirmPhoneNumber.getEditableText().toString())){
-                            Toast.makeText(phoneNumberDialog.getContext(), "new phone number and confirm number don't match", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(phoneNumberDialog.getContext(), "new phone number and confirm number don't match", Toast.LENGTH_SHORT).show();
 
                             }
                             dialog.cancel();
@@ -183,10 +213,10 @@ public class AccountFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         if (!newPass.getEditableText().toString().equals(confirmPass.getEditableText().toString())){
                             Toast.makeText(passwordDialog.getContext(), "new and confirm password don't match", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
                         dialog.cancel();
                     }
-                        dialog.cancel();
-                }
                 });
         passwordDialog.setNegativeButton("CANCEL",
                 new DialogInterface.OnClickListener() {
