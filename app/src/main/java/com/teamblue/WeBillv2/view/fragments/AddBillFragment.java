@@ -164,19 +164,44 @@ public class AddBillFragment extends Fragment {
                     Log.d(TAG2,"success getting bill");
                     veryfiOcrResponse = (VeryfiOcrResponse) response.body();
                     Log.d(TAG2,veryfiOcrResponse.toString());
+                    Log.d(TAG2,"date on bill :"+veryfiOcrResponse.getDate().split(" ")[0]);
                     View view = layoutInflater.inflate(R.layout.fragment_add_bill, container, false);
                     edtActivityNameAddBill = (EditText) view.findViewById(R.id.edtActivityNameAddBill);
                     edtTotalAmountAddBill = (EditText) view.findViewById(R.id.edtTotalAmountAddBill);
                     btnDatePicker = (Button) view.findViewById(R.id.btnDatePicker);
                     edtAddressAddBill = (EditText) view.findViewById(R.id.edtAddressAddBill);
+                    Log.d(TAG2,"address filled");
                     btnEnterAddBill = (Button) view.findViewById(R.id.btnEnterAddBill);
+                    btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            addBillOnClickListener(view);
+                        }
+                    });
                     btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
+                    btnScanBill.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            scanBillOnClickListener(view);
+                        }
+                    });
 
 
                     edtActivityNameAddBill.setText(veryfiOcrResponse.getVendor().getName());
                     edtTotalAmountAddBill.setText(String.valueOf(veryfiOcrResponse.getTotal()));
-                    btnDatePicker.setText(veryfiOcrResponse.getDate());
-                    edtAddressAddBill.setText(veryfiOcrResponse.getVendor().getAddress());
+                    if(veryfiOcrResponse.getDate()!=null || !veryfiOcrResponse.getDate().isEmpty()){
+                        btnDatePicker.setText(createDate(veryfiOcrResponse.getDate().toString()));
+                    }else{
+                        btnDatePicker.setText(getTodaysDate());
+                    }
+                    //btnDatePicker.setText(veryfiOcrResponse.getDate());
+                    edtAddressAddBill.setHint("begin typing to see places");
+                    edtAddressAddBill.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getAutocompleteFeature(view);
+                        }
+                    });
 
                     container.removeAllViews();
                     container.addView(view);
@@ -207,10 +232,7 @@ public class AddBillFragment extends Fragment {
         btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
         initDatePicker();
         btnDatePicker.setText(getTodaysDate());//Set Default Date as today's date
-
-//        testPicture = (ImageView) view.findViewById(R.id.testPicture);
-
-
+        
         // Initialize the Google Maps Places SDK and create PlacesClient instance
         // we need this for the autocomplete feature in the address field
         if (!Places.isInitialized())
@@ -221,46 +243,14 @@ public class AddBillFragment extends Fragment {
         edtAddressAddBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // set the fields to specify which types of place data to return after the user
-                // has made a selection
-                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
-
-                // start the autocomplete intent
-                Intent autocompleteIntent = new Autocomplete
-                        .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                        .build(getContext());
-                startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+                getAutocompleteFeature(view);
             }
         });
 
         btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //Checking for no total amount empty error
-                if(TextUtils.isEmpty(edtActivityNameAddBill.getText().toString())) {
-                    edtActivityNameAddBill.setError("Must Not Be Empty!");
-                    return;
-                }else if(TextUtils.isEmpty(edtTotalAmountAddBill.getText().toString())) {
-                    edtTotalAmountAddBill.setError("Must Not Be Empty!");
-                    return;
-                }else if(TextUtils.isEmpty(btnDatePicker.getText().toString())){
-                    btnDatePicker.setError("Must Not Be Empty!");
-                        return;
-                }else if(TextUtils.isEmpty(edtAddressAddBill.getText().toString())){
-                    edtAddressAddBill.setError("Must Not Be Empty!");
-                    return;
-                }else{
-                    Bundle bundle = new Bundle();
-                    bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameAddBill.getText().toString());
-                    bundle.putString("BILL_TOTAL_AMOUNT",edtTotalAmountAddBill.getText().toString());
-                    bundle.putString("BILL_DATE",btnDatePicker.getText().toString());
-                    bundle.putString("BILL_ADDRESS",edtAddressAddBill.getText().toString());
-                    Intent gotoSplitBillActivity = new Intent(view.getContext(), SplitBillActivity.class);
-                    gotoSplitBillActivity.putExtras(bundle);
-                    startActivity(gotoSplitBillActivity);
-                }
-
+                addBillOnClickListener(view);
             }
         });
 
@@ -278,28 +268,7 @@ public class AddBillFragment extends Fragment {
         btnScanBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                if(takePictureIntent.resolveActivity(getActivity().getPackageManager())!=null){
-                    File photoFile = null;
-                    try{
-                        photoFile = createPhotoFile();
-                    }catch (IOException ioException){
-                        Log.d(TAG2,ioException.getMessage());
-                    }
-
-                    if(photoFile!=null){
-                        Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.android.fileprovider", photoFile);
-                        //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        uri = photoURI;
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
-                        //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                    }
-                }
-
-//                    startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
-
+                scanBillOnClickListener(view);
             }
         });
 
@@ -312,6 +281,66 @@ public class AddBillFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void getAutocompleteFeature(View view){
+        // set the fields to specify which types of place data to return after the user
+        // has made a selection
+        List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
+
+        // start the autocomplete intent
+        Intent autocompleteIntent = new Autocomplete
+                .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .build(getContext());
+        startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
+    private void scanBillOnClickListener(View view){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(takePictureIntent.resolveActivity(getActivity().getPackageManager())!=null){
+            File photoFile = null;
+            try{
+                photoFile = createPhotoFile();
+            }catch (IOException ioException){
+                Log.d(TAG2,ioException.getMessage());
+            }
+
+            if(photoFile!=null){
+                Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.android.fileprovider", photoFile);
+                //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                uri = photoURI;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+                //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private void addBillOnClickListener(View view){
+        //Checking for no total amount empty error
+        if(TextUtils.isEmpty(edtActivityNameAddBill.getText().toString())) {
+            edtActivityNameAddBill.setError("Must Not Be Empty!");
+            return;
+        }else if(TextUtils.isEmpty(edtTotalAmountAddBill.getText().toString())) {
+            edtTotalAmountAddBill.setError("Must Not Be Empty!");
+            return;
+        }else if(TextUtils.isEmpty(btnDatePicker.getText().toString())){
+            btnDatePicker.setError("Must Not Be Empty!");
+            return;
+        }else if(TextUtils.isEmpty(edtAddressAddBill.getText().toString())){
+            edtAddressAddBill.setError("Must Not Be Empty!");
+            return;
+        }else{
+            Bundle bundle = new Bundle();
+            bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameAddBill.getText().toString());
+            bundle.putString("BILL_TOTAL_AMOUNT",edtTotalAmountAddBill.getText().toString());
+            bundle.putString("BILL_DATE",btnDatePicker.getText().toString());
+            bundle.putString("BILL_ADDRESS",edtAddressAddBill.getText().toString());
+            Intent gotoSplitBillActivity = new Intent(view.getContext(), SplitBillActivity.class);
+            gotoSplitBillActivity.putExtras(bundle);
+            startActivity(gotoSplitBillActivity);
+        }
     }
 
 
@@ -344,6 +373,14 @@ public class AddBillFragment extends Fragment {
             //Initialize Date Picker Dialog
             int style = AlertDialog.THEME_HOLO_LIGHT;
             datePickerDialog = new DatePickerDialog(getActivity(),style,dateSetListener,year,month,day);//Debug
+        }
+
+        private String createDate(String dateString){
+            int year = Integer.parseInt(dateString.split(" ")[0].split("-")[0]);
+            int month = Integer.parseInt(dateString.split(" ")[0].split("-")[1]);
+            int day = Integer.parseInt(dateString.split(" ")[0].split("-")[2]);
+
+            return makeDateString(day,month,year);
         }
 
         private String makeDateString(int day, int month, int year) {
