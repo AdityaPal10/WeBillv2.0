@@ -33,7 +33,10 @@ import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
+import com.teamblue.WeBillv2.model.pojo.ModifyPasswordModel;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
+import com.teamblue.WeBillv2.service.ModifyPasswordService;
+import com.teamblue.WeBillv2.service.ModifyPhoneNumberService;
 import com.teamblue.WeBillv2.view.MainActivity;
 
 import java.util.List;
@@ -185,27 +188,8 @@ public class AccountFragment extends Fragment {
                             else {
                                 SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                                 String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
-                            AccountsMethods accountsMethods = LoginRetrofitClient.getRetrofitInstance().create(AccountsMethods.class);
-                            //2. create a call object which will make the REST API call to our backend by passing in username as paramaters
-                            Call<LoginModel> call = accountsMethods.getOldPhoneNumber(loggedInUsername);
-
-                            call.enqueue(new Callback<LoginModel>() {
-                                @Override
-                                public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                                    Log.d(TAG, "response code :" + response.code());
-
-                                    if (response.code() == Constants.RESPONSE_OK) {
-                                     int f=1;
-
-                                    }
-                                }
-                                             @Override
-                                             public void onFailure(Call<LoginModel> call, Throwable t) {
-                                    int f=0;
-
-                                             }
-                                         });
-                            dialog.cancel();
+                            ModifyPhoneNumberService modifyPhoneNumberService=new ModifyPhoneNumberService();
+                            modifyPhoneNumberService.updatePhoneNumber(getContext(), loggedInUsername, oldPhoneNumber.toString(), newPhoneNumber.toString());
                         }
                         dialog.cancel();
                     }
@@ -250,6 +234,12 @@ public class AccountFragment extends Fragment {
                         if (!newPass.getEditableText().toString().equals(confirmPass.getEditableText().toString())){
                             Toast.makeText(passwordDialog.getContext(), "new and confirm password don't match", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
+                        }
+                        else {
+                            SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                            String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
+                            ModifyPasswordService modifyPasswordService=new ModifyPasswordService();
+                            modifyPasswordService.updatePassword(getContext(), loggedInUsername, oldPass.toString(), newPass.toString());
                         }
                         dialog.cancel();
                     }

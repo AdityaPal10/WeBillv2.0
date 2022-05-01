@@ -1,10 +1,8 @@
 package com.teamblue.WeBillv2.model.api;
 
-import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
-import com.teamblue.WeBillv2.model.pojo.PayFriendModel;
-
-import java.util.List;
+import com.teamblue.WeBillv2.model.pojo.ModifyPasswordModel;
+import com.teamblue.WeBillv2.model.pojo.ModifyPhoneNumberModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,10 +14,10 @@ import retrofit2.http.Query;
 public interface AccountsMethods {
 
     @GET("accounts/getOldPassword")
-    Call<LoginModel> getOldPassword(@Query("username")String username);
+    Call<ModifyPasswordModel> getOldPassword(@Query("username")String username);
 
     @GET("accounts/getOldPhoneNumber")
-    Call<LoginModel> getOldPhoneNumber(@Query("username")String username);
+    Call<ModifyPhoneNumberModel> getOldPhoneNumber(@Query("username")String username);
 
     @POST("accounts/setNewPhoneNumber")
     Call<LoginModel> setNewPhoneNumber(@Body String newPhoneNumber);
