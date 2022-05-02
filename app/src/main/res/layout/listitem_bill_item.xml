@@ -28,23 +28,24 @@
             android:text="itemQuantity"
             android:textColor="@color/quantum_black_100"
             android:textSize="20dp" />
+
         <TextView
             android:id="@+id/tvDollarSign"
-            android:layout_toLeftOf="@+id/tvItemPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tvItemPrice"
             android:text="$"
             android:textColor="@color/quantum_black_100"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tvItemPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
             android:layout_alignParentRight="true"
-            android:text="0.00"
+            android:layout_marginLeft="0dp"
             android:layout_marginRight="20dp"
+            android:text="0.00"
             android:textColor="@color/quantum_black_100"
             android:textSize="20dp" />
 
