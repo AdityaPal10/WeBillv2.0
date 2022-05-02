@@ -1,18 +1,24 @@
 package com.teamblue.WeBillv2.view;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.number.Precision;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -27,8 +34,12 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.gson.Gson;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.LineItems;
+import com.teamblue.WeBillv2.model.pojo.VeryfiOcrResponse;
 import com.teamblue.WeBillv2.view.fragments.AddBillFragment;
 
 import org.w3c.dom.Text;
@@ -48,10 +59,13 @@ public class SplitBillActivity extends AppCompatActivity {
     private Button btnAddSplitFriend;
     private Button btnSaveBill;
     private Button btnDatePickerSplitBill;
+    private Button lineItemsButton;
     private Double RemainAmount, CurrentAmount,TotalAmount;
     private DatePickerDialog datePickerDialog;
     LinearLayout LinearFriendSplit;
     AlertDialog AddSplitFriendDialog;
+
+    List<LineItems> lineItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +81,20 @@ public class SplitBillActivity extends AppCompatActivity {
         edtActivityNameSplitBill = (EditText) findViewById(R.id.edtActivityNameSplitBill);
         btnDatePickerSplitBill = (Button) findViewById(R.id.btnDatePickerSplitBill);
         edtAddressSplitBill = (EditText) findViewById(R.id.edtAddressSplitBill);
+        //getting logged in username to set default payer
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         edtPayerName = (EditText) findViewById(R.id.edtPayerName);
+        edtPayerName.setText(sharedPref.getString(Constants.USERNAME_KEY,""));
         tvTotalAmountSplitBill = (TextView) findViewById(R.id.tvTotalAmountSplitBill);
         tvRemainAmount = (TextView) findViewById(R.id.tvRemainAmount);
         LinearFriendSplit = findViewById(R.id.LinearFriendSplit);
         btnSaveBill = (Button) findViewById(R.id.btnSaveBill);
+        lineItemsButton = (Button) findViewById(R.id.lineItemsPopupButton);
+
+        //get line items data
+        lineItems = getLineItems();
+
+
         initDatePicker();
 
         /******** Check Final Bill Information Completeness *********/
@@ -178,6 +201,21 @@ public class SplitBillActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+    }
+
+
+    //fetch line items from shared preferences
+    private List<LineItems> getLineItems(){
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String jsonString = sharedPref.getString(Constants.VERYI_RESPONSE_KEY,"");
+        VeryfiOcrResponse veryfiOcrResponse = gson.fromJson(jsonString,VeryfiOcrResponse.class);
+
+        int noOfItems = veryfiOcrResponse.getLineItems().size();
+        if(noOfItems>0){
+            lineItems = veryfiOcrResponse.getLineItems();
+        }
+        return lineItems;
     }
 
     private String getTodaysDate() {

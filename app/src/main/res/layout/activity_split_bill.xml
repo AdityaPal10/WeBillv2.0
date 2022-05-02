@@ -163,17 +163,18 @@
                         android:textAlignment="center" />
                 </RelativeLayout>
 
-<!--                <Button-->
-<!--                    android:layout_width="40dp"-->
-<!--                    android:layout_height="30dp"-->
-<!--                    android:layout_alignParentRight="true"-->
-<!--                    android:layout_alignParentBottom="true"-->
-<!--                    android:layout_marginRight="20dp"-->
-<!--                    android:layout_marginBottom="20dp"-->
-<!--                    android:background="@color/Transparent"-->
-<!--                    android:text="Items"-->
-<!--                    android:textAllCaps="false"-->
-<!--                    android:textColor="#2665B8" />-->
+                <Button
+                    android:id="@+id/lineItemsPopupButton"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/Transparent"
+                    android:text="Items"
+                    android:textAllCaps="false"
+                    android:textColor="#2665B8" />
 
                 <TextView
                     android:id="@+id/tvPaidByText"
