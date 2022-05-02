@@ -6,20 +6,29 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
         android:padding="10dp">
 
-        <EditText
+        <!--        <EditText-->
+        <!--            android:id="@+id/edtAddFriendName"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:hint="Name"-->
+        <!--            android:inputType="text" />-->
+
+        <Spinner
             android:id="@+id/edtAddFriendName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Name"
-            android:inputType="text" />
+            android:layout_width="395dp"
+            android:layout_height="48dp"
+            android:hint="Name" />
 
         <EditText
             android:id="@+id/edtAddFriendAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edtAddFriendName"
+            android:layout_marginTop="72dp"
+            android:layout_marginEnd="19dp"
             android:hint="Amount"
             android:inputType="numberDecimal"
             android:textSize="20dp" />
