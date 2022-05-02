@@ -379,7 +379,10 @@ public class SplitBillActivity extends AppCompatActivity {
             lineItems = new ArrayList<>();
             return lineItems;
         }
-        int noOfItems = veryfiOcrResponse.getLineItems().size();
+        int noOfItems = 0;
+        if(veryfiOcrResponse.getLineItems()!=null){
+            noOfItems=veryfiOcrResponse.getLineItems().size();
+        }
         if(noOfItems>0){
             lineItems = veryfiOcrResponse.getLineItems();
         }else{
