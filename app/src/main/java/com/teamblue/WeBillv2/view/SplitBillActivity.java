@@ -241,8 +241,6 @@ public class SplitBillActivity extends AppCompatActivity {
         }
 
 
-        /********** List Items **********/
-
         builder.setView(view);
         ItemsDialog = builder.create();
     }
