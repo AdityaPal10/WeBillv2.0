@@ -156,7 +156,7 @@ public class AccountFragment extends Fragment {
 
     private void buildChangePhoneNumberDialog() {
         AlertDialog.Builder phoneNumberDialog = new AlertDialog.Builder(this.getContext());
-        phoneNumberDialog.setTitle("Values");
+        phoneNumberDialog.setTitle("Modify Phone Number");
         final EditText oldPhoneNumber = new EditText(this.getContext());
         final EditText newPhoneNumber = new EditText(this.getContext());
         final EditText confirmPhoneNumber = new EditText(this.getContext());
@@ -207,7 +207,7 @@ public class AccountFragment extends Fragment {
 
     private void buildChangePasswordDialog() {
         AlertDialog.Builder passwordDialog = new AlertDialog.Builder(this.getContext());
-        passwordDialog.setTitle("Values");
+        passwordDialog.setTitle("Reset Password");
         final EditText oldPass = new EditText(this.getContext());
         final EditText newPass = new EditText(this.getContext());
         final EditText confirmPass = new EditText(this.getContext());
