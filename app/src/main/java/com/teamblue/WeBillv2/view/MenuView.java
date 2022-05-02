@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,6 +41,9 @@ public class MenuView extends AppCompatActivity {
         editor.apply();
         setContentView(R.layout.friends_home);
         setTitle("We Bill");
+
+
+
 
         animatedBottomBar = findViewById(R.id.animatedBottomBar);
 

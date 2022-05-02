@@ -6,6 +6,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -44,6 +47,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.gson.Gson;
+import com.stripe.android.model.Card;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.model.api.BillMethods;
@@ -56,6 +60,9 @@ import com.teamblue.WeBillv2.model.pojo.OCRBill;
 import com.teamblue.WeBillv2.model.pojo.VeryfiOcrResponse;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
 import com.teamblue.WeBillv2.service.VeryfiRetrofitClient;
+import com.teamblue.WeBillv2.view.AppUtil;
+import com.teamblue.WeBillv2.view.MainActivity;
+import com.teamblue.WeBillv2.view.MenuView;
 import com.teamblue.WeBillv2.view.SplitBillActivity;
 
 import org.json.JSONObject;
@@ -173,6 +180,9 @@ public class AddBillFragment extends Fragment {
                         String veryfiResponse = gson.toJson(veryfiOcrResponse);
                         editor.putString(Constants.VERYI_RESPONSE_KEY,veryfiResponse);
                         editor.apply();
+
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString(Constants.VERYI_RESPONSE_KEY,veryfiResponse);
                     }
                     //Log.d(TAG2,veryfiOcrResponse.toString());
                     System.out.println(veryfiOcrResponse.toString());
@@ -245,7 +255,7 @@ public class AddBillFragment extends Fragment {
         btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
         initDatePicker();
         btnDatePicker.setText(getTodaysDate());//Set Default Date as today's date
-        
+
         // Initialize the Google Maps Places SDK and create PlacesClient instance
         // we need this for the autocomplete feature in the address field
         if (!Places.isInitialized())

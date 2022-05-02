@@ -251,6 +251,7 @@ public class SplitBillActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String jsonString = sharedPref.getString(Constants.VERYI_RESPONSE_KEY,"");
+//        String jsonString = (String) getIntent().getExtras().get(Constants.VERYI_RESPONSE_KEY);
         VeryfiOcrResponse veryfiOcrResponse = gson.fromJson(jsonString,VeryfiOcrResponse.class);
 
         int noOfItems = veryfiOcrResponse.getLineItems().size();
