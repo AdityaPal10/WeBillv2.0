@@ -95,6 +95,7 @@ public class AddBillFragment extends Fragment {
     private String Base64String, currentPhotoPath;
     private DatePickerDialog datePickerDialog;
     private boolean isScanned = false;
+    private VeryfiOcrResponse veryfiOcrResponseBundle = new VeryfiOcrResponse();
 
     ViewGroup container;
 
@@ -169,6 +170,7 @@ public class AddBillFragment extends Fragment {
                 if(response.code()==Constants.RESPONSE_OK){
                     Log.d(TAG2,"success getting bill");
                     veryfiOcrResponse = (VeryfiOcrResponse) response.body();
+                    veryfiOcrResponseBundle = veryfiOcrResponse;
                     if(veryfiOcrResponse!=null){
                         SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
@@ -386,6 +388,9 @@ public class AddBillFragment extends Fragment {
                     bundle.putString("BILL_TOTAL_AMOUNT", df.format(Double.parseDouble(edtTotalAmountAddBill.getText().toString())));
                     bundle.putString("BILL_DATE",btnDatePicker.getText().toString());
                     bundle.putString("BILL_ADDRESS", edtAddressAddBill.getText().toString());
+                    Gson gson = new Gson();
+                    String veryfiResponseString = gson.toJson(veryfiOcrResponseBundle);
+                    bundle.putString(Constants.VERYI_RESPONSE_KEY,veryfiResponseString);
                     Intent gotoSplitBillActivity = new Intent(view.getContext(), SplitBillActivity.class);
                     gotoSplitBillActivity.putExtras(bundle);
                     startActivity(gotoSplitBillActivity);
