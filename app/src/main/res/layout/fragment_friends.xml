@@ -60,64 +60,70 @@
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/girl" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/imgProfilePic"
-                android:text="My Balance"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/imgProfilePic">
 
-            <TextView
-                android:id="@+id/tvToPay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="26dp"
-                android:layout_marginTop="60dp"
-                android:layout_toRightOf="@+id/imgProfilePic"
-                android:text="To Pay: $"
-                android:textColor="#EC0D5C"
-                android:textSize="15sp"
-                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvMyToPayNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="60dp"
-                android:layout_toRightOf="@+id/tvToPay"
-                android:text="0.00"
-                android:textColor="#EC0D5C"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="70dp"
+                    android:layout_marginTop="10dp"
+                    android:text="My Balance"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvMyToTakeBackNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="26dp"
-                android:layout_marginTop="100dp"
-                android:layout_toRightOf="@+id/imgProfilePic"
-                android:text="To Take Back: $"
-                android:textColor="#138806"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvToPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginTop="60dp"
+                    android:text="To Pay: $"
+                    android:textColor="#EC0D5C"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvToTakeBackNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="100dp"
-                android:layout_toRightOf="@+id/tvMyToTakeBackNumber"
-                android:text="0.00"
-                android:textColor="#138806"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvMyToPayNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_toRightOf="@+id/tvToPay"
+                    android:text="0.00"
+                    android:textColor="#EC0D5C"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvMyToTakeBackNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginTop="100dp"
+                    android:text="To Take Back: $"
+                    android:textColor="#138806"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvToTakeBackNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="100dp"
+                    android:layout_toRightOf="@+id/tvMyToTakeBackNumber"
+                    android:text="0.00"
+                    android:textColor="#138806"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
 
 
         </RelativeLayout>

@@ -7,23 +7,35 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.content.SharedPreferences;
+import android.icu.number.Precision;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -31,6 +43,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.gson.Gson;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.model.api.SplitBillMethods;
@@ -40,6 +53,11 @@ import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
 import com.teamblue.WeBillv2.model.pojo.SplitBillModel;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
+import com.teamblue.WeBillv2.model.adapter.LineItemsAdapter;
+import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.LineItems;
+import com.teamblue.WeBillv2.model.pojo.VeryfiOcrResponse;
+import com.teamblue.WeBillv2.view.fragments.AddBillFragment;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -66,9 +84,12 @@ public class SplitBillActivity extends AppCompatActivity {
     private Button btnSaveBill;
     private Button btnDatePickerSplitBill;
     private Double RemainAmount, CurrentAmount, TotalAmount;
+    private Button lineItemsButton;
     private DatePickerDialog datePickerDialog;
     LinearLayout LinearFriendSplit;
-    AlertDialog AddSplitFriendDialog;
+    AlertDialog AddSplitFriendDialog, ItemsDialog;
+
+    List<LineItems> lineItems;
 
     private String username;
     private List<String> allFriendsList;
@@ -104,12 +125,30 @@ public class SplitBillActivity extends AppCompatActivity {
         edtActivityNameSplitBill = (EditText) findViewById(R.id.edtActivityNameSplitBill);
         btnDatePickerSplitBill = (Button) findViewById(R.id.btnDatePickerSplitBill);
         edtAddressSplitBill = (EditText) findViewById(R.id.edtAddressSplitBill);
+        //getting logged in username to set default payer
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+//        edtPayerName = (EditText) findViewById(R.id.edtPayerName);
+//        edtPayerName.setText(sharedPref.getString(Constants.USERNAME_KEY,""));
         edtPayerName = (Spinner) findViewById(R.id.edtPayerName);
         tvTotalAmountSplitBill = (TextView) findViewById(R.id.tvTotalAmountSplitBill);
         tvRemainAmount = (TextView) findViewById(R.id.tvRemainAmount);
         LinearFriendSplit = findViewById(R.id.LinearFriendSplit);
         btnSaveBill = (Button) findViewById(R.id.btnSaveBill);
+        lineItemsButton = (Button) findViewById(R.id.lineItemsPopupButton);
+
         initDatePicker();
+        //TODO:Re-enable item dialog after test.
+//        buildItemsDialog();
+
+
+        /******** Show Items Dialog *********/
+        //TODO:Re-enable item dialog after test.
+//        lineItemsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ItemsDialog.show();
+//            }
+//        });
 
         edtPayerName.setAdapter(paidByArrayAdapter);
         edtPayerName.setSelection(0);
@@ -133,6 +172,8 @@ public class SplitBillActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(edtActivityNameSplitBill.getText().toString())) {
                     edtActivityNameSplitBill.setError("Must Not Be Empty!");
                     return;
+                }else if(TextUtils.isEmpty(btnDatePickerSplitBill.getText().toString())){
+                    return;
 //                }else if(TextUtils.isEmpty(edtDateSplitBill.getText().toString())) {
 //                    edtDateSplitBill.setError("Must Not Be Empty!");
 //                    return;
@@ -146,7 +187,6 @@ public class SplitBillActivity extends AppCompatActivity {
                     Toast.makeText(SplitBillActivity.this, "You Still Have Remain Amount", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    /**********TODO: After Finishing a Bill Information, put all data needed to whatever fragment/activity the app needs *******/
                     Geocoder geocoder = new Geocoder(getApplicationContext());
                     Address geocodedAddress = null;
 //                    DecimalFormat df = new DecimalFormat("###.#####");
@@ -283,6 +323,55 @@ public class SplitBillActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+    }
+
+    /********** Building Items content Dialog **********/
+    //TODO:Re-enable item dialog after test.
+//    private void buildItemsDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        View view = getLayoutInflater().inflate(R.layout.popup_bill_conclusion_items, null);
+//
+//        lineItems = getLineItems();
+//        ListView SplitBillItemLists = view.findViewById(R.id.SplitBillItemLists);
+//        int size = lineItems.size();
+//        if(size>0){
+//            String[] itemNames = new String[size];
+//            double[] itemsQ = new double[size];
+//            double[] totals = new double[size];
+//            int index = 0;
+//            for(LineItems lineItem : lineItems){
+//                itemNames[index] = lineItem.getDescription();
+//                itemsQ[index] = lineItem.getQuantity();
+//                totals[index] = lineItem.getTotal();
+//                index++;
+//            }
+//
+//            LineItemsAdapter lineItemsAdapter = new LineItemsAdapter(this,itemNames,itemsQ,totals);
+//            SplitBillItemLists.setAdapter(lineItemsAdapter);
+//        }else{
+//            Toast.makeText(getApplicationContext(),"No line items to show",Toast.LENGTH_LONG).show();
+//        }
+//
+//
+//        /********** List Items **********/
+//
+//        builder.setView(view);
+//        ItemsDialog = builder.create();
+//    }
+
+
+    //fetch line items from shared preferences
+    private List<LineItems> getLineItems(){
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String jsonString = sharedPref.getString(Constants.VERYI_RESPONSE_KEY,"");
+        VeryfiOcrResponse veryfiOcrResponse = gson.fromJson(jsonString,VeryfiOcrResponse.class);
+
+        int noOfItems = veryfiOcrResponse.getLineItems().size();
+        if(noOfItems>0){
+            lineItems = veryfiOcrResponse.getLineItems();
+        }
+        return lineItems;
     }
 
     private String getTodaysDate() {
@@ -488,5 +577,7 @@ public class SplitBillActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }

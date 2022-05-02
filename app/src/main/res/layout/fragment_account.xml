@@ -80,107 +80,115 @@
     </androidx.cardview.widget.CardView>
 
     <RelativeLayout
-        android:id="@+id/settingsTextRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@+id/cardViewProfile"
-        android:background="#F1F1F1">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/cardViewProfile">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/settingsTextRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+
+            android:background="#F1F1F1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:fontFamily="@font/calibri"
+                android:text="Settings"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:fontFamily="@font/calibri"
-            android:text="Settings"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+            android:layout_below="@+id/settingsTextRelativeLayout"
+            android:orientation="vertical">
+
+            <!--        <Button-->
+            <!--            android:id="@+id/btnChangeUsername"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:layout_marginTop="0dp"-->
+            <!--            android:background="@color/Transparent"-->
+            <!--            android:paddingLeft="-250dp"-->
+            <!--            android:text="Change Username"-->
+            <!--            android:textAllCaps="false"-->
+            <!--            android:textSize="15dp" />-->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/btnResetPassword"
+                android:background="#F1F1F1" />
+
+            <Button
+                android:id="@+id/btnResetPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:background="@color/Transparent"
+                android:paddingLeft="-245dp"
+                android:text="Reset Password"
+                android:textAllCaps="false"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/btnResetPassword"
+                android:background="#F1F1F1" />
+
+
+            <Button
+                android:id="@+id/btnModifyMobileNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:background="@color/Transparent"
+                android:paddingLeft="-200dp"
+                android:text="Modify Mobile Number"
+                android:textAllCaps="false"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/btnResetPassword"
+                android:background="#F1F1F1" />
+
+            <Button
+                android:id="@+id/btnContactUs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:background="@color/Transparent"
+                android:paddingLeft="-280dp"
+                android:text="Contact Us"
+                android:textAllCaps="false"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/btnResetPassword"
+                android:background="#F1F1F1" />
+        </LinearLayout>
+
     </RelativeLayout>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/settingsTextRelativeLayout"
-        android:orientation="vertical">
-
-<!--        <Button-->
-<!--            android:id="@+id/btnChangeUsername"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="0dp"-->
-<!--            android:background="@color/Transparent"-->
-<!--            android:paddingLeft="-250dp"-->
-<!--            android:text="Change Username"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textSize="15dp" />-->
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/btnResetPassword"
-            android:background="#F1F1F1" />
-
-        <Button
-            android:id="@+id/btnResetPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:background="@color/Transparent"
-            android:paddingLeft="-265dp"
-            android:text="Reset Password"
-            android:textAllCaps="false"
-            android:textSize="15dp" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/btnResetPassword"
-            android:background="#F1F1F1" />
-
-
-        <Button
-            android:id="@+id/btnModifyMobileNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:background="@color/Transparent"
-            android:paddingLeft="-220dp"
-            android:text="Modify Mobile Number"
-            android:textAllCaps="false"
-            android:textSize="15dp" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/btnResetPassword"
-            android:background="#F1F1F1" />
-
-        <Button
-            android:id="@+id/btnContactUs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:background="@color/Transparent"
-            android:paddingLeft="-300dp"
-            android:text="Contact Us"
-            android:textAllCaps="false"
-            android:textSize="15dp" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/btnResetPassword"
-            android:background="#F1F1F1" />
-    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnLogOut"
-        android:text="Made with :) Team Blue @ BU CS501"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"/>
+        android:text="Made with :) Team Blue @ BU CS501" />
 
     <Button
         android:id="@+id/btnLogOut"

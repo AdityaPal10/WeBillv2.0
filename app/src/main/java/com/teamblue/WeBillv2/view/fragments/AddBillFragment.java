@@ -6,7 +6,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +43,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.gson.Gson;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.model.api.BillMethods;
@@ -91,6 +94,7 @@ public class AddBillFragment extends Fragment {
 
     private String Base64String, currentPhotoPath;
     private DatePickerDialog datePickerDialog;
+    private boolean isScanned = false;
 
     ViewGroup container;
 
@@ -165,20 +169,55 @@ public class AddBillFragment extends Fragment {
                 if(response.code()==Constants.RESPONSE_OK){
                     Log.d(TAG2,"success getting bill");
                     veryfiOcrResponse = (VeryfiOcrResponse) response.body();
-                    Log.d(TAG2,veryfiOcrResponse.toString());
+                    if(veryfiOcrResponse!=null){
+                        SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        Gson gson = new Gson();
+                        String veryfiResponse = gson.toJson(veryfiOcrResponse);
+                        editor.putString(Constants.VERYI_RESPONSE_KEY,veryfiResponse);
+                        editor.apply();
+                    }
+                    //Log.d(TAG2,veryfiOcrResponse.toString());
+                    System.out.println(veryfiOcrResponse.toString());
+                    Log.d(TAG2,veryfiOcrResponse.getLineItems().toString());
+                    Log.d(TAG2,"date on bill :"+veryfiOcrResponse.getDate().split(" ")[0]);
                     View view = layoutInflater.inflate(R.layout.fragment_add_bill, container, false);
                     edtActivityNameAddBill = (EditText) view.findViewById(R.id.edtActivityNameAddBill);
                     edtTotalAmountAddBill = (EditText) view.findViewById(R.id.edtTotalAmountAddBill);
                     btnDatePicker = (Button) view.findViewById(R.id.btnDatePicker);
                     edtAddressAddBill = (EditText) view.findViewById(R.id.edtAddressAddBill);
+                    Log.d(TAG2,"address filled");
                     btnEnterAddBill = (Button) view.findViewById(R.id.btnEnterAddBill);
+                    btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            addBillOnClickListener(view);
+                        }
+                    });
                     btnScanBill = (Button) view.findViewById(R.id.btnScanBill);
+                    btnScanBill.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            scanBillOnClickListener(view);
+                        }
+                    });
 
 
                     edtActivityNameAddBill.setText(veryfiOcrResponse.getVendor().getName());
                     edtTotalAmountAddBill.setText(String.valueOf(veryfiOcrResponse.getTotal()));
-                    btnDatePicker.setText(veryfiOcrResponse.getDate());
-                    edtAddressAddBill.setText(veryfiOcrResponse.getVendor().getAddress());
+                    if(veryfiOcrResponse.getDate()!=null || !veryfiOcrResponse.getDate().isEmpty()){
+                        btnDatePicker.setText(createDate(veryfiOcrResponse.getDate().toString()));
+                    }else{
+                        btnDatePicker.setText(getTodaysDate());
+                    }
+                    //btnDatePicker.setText(veryfiOcrResponse.getDate());
+                    edtAddressAddBill.setHint("begin typing to see places");
+                    edtAddressAddBill.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getAutocompleteFeature(view);
+                        }
+                    });
 
                     container.removeAllViews();
                     container.addView(view);
@@ -210,9 +249,6 @@ public class AddBillFragment extends Fragment {
         initDatePicker();
         btnDatePicker.setText(getTodaysDate());//Set Default Date as today's date
 
-//        testPicture = (ImageView) view.findViewById(R.id.testPicture);
-
-
         // Initialize the Google Maps Places SDK and create PlacesClient instance
         // we need this for the autocomplete feature in the address field
         if (!Places.isInitialized())
@@ -223,33 +259,15 @@ public class AddBillFragment extends Fragment {
         edtAddressAddBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // set the fields to specify which types of place data to return after the user
-                // has made a selection
-                List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
-
-                // start the autocomplete intent
-                Intent autocompleteIntent = new Autocomplete
-                        .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                        .build(getContext());
-                startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+                getAutocompleteFeature(view);
             }
         });
 
-        edtAddressAddBill.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        edtAddressAddBill.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                // set the fields to specify which types of place data to return after the user
-                // has made a selection
-                if(hasFocus) {
-                    // set the fields to specify which types of place data to return after the user
-                    // has made a selection
-                    List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
-
-                    // start the autocomplete intent
-                    Intent autocompleteIntent = new Autocomplete
-                            .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                            .build(getContext());
-                    startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+                if(hasFocus){
+                    getAutocompleteFeature(view);
                 }
             }
         });
@@ -257,7 +275,96 @@ public class AddBillFragment extends Fragment {
         btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                addBillOnClickListener(view);
+            }
+        });
 
+
+        /***************Handling Receipt Scanning Camera Here ************/
+        //Asking Permission
+        if (ContextCompat.checkSelfPermission(view.getContext(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions((Activity) view.getContext(),
+                    new String[]{Manifest.permission.CAMERA},REQUEST_IMAGE_CAPTURE);
+
+        }
+
+        btnScanBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scanBillOnClickListener(view);
+            }
+        });
+
+        /*****Handler for Date Picker *****/
+        btnDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
+
+        return view;
+    }
+
+    private void getAutocompleteFeature(View view){
+        // set the fields to specify which types of place data to return after the user
+        // has made a selection
+        List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
+
+        // start the autocomplete intent
+        Intent autocompleteIntent = new Autocomplete
+                .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .build(getContext());
+        startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
+    private void scanBillOnClickListener(View view){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(takePictureIntent.resolveActivity(getActivity().getPackageManager())!=null){
+            File photoFile = null;
+            try{
+                photoFile = createPhotoFile();
+            }catch (IOException ioException){
+                Log.d(TAG2,ioException.getMessage());
+            }
+
+            if(photoFile!=null){
+                Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.android.fileprovider", photoFile);
+                //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                uri = photoURI;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+                //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+//        btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//        if(takePictureIntent.resolveActivity(getActivity().getPackageManager())!=null){
+//            File photoFile = null;
+//            try{
+//                photoFile = createPhotoFile();
+//            }catch (IOException ioException){
+//                Log.d(TAG2,ioException.getMessage());
+//            }
+//
+//            if(photoFile!=null){
+//                Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.android.fileprovider", photoFile);
+//                //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                uri = photoURI;
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//                startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+//                //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//            }
+//        }
+//    }
+
+    private void addBillOnClickListener(View view){
                 //Checking for no total amount empty error
                 if(TextUtils.isEmpty(edtActivityNameAddBill.getText().toString())) {
                     edtActivityNameAddBill.setError("Must Not Be Empty!");
@@ -285,57 +392,18 @@ public class AddBillFragment extends Fragment {
                 }
 
             }
-        });
-
-
-        /***************Handling Receipt Scanning Camera Here ************/
-        //Asking Permission
-        if (ContextCompat.checkSelfPermission(view.getContext(),
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-
-            ActivityCompat.requestPermissions((Activity) view.getContext(),
-                    new String[]{Manifest.permission.CAMERA},REQUEST_IMAGE_CAPTURE);
-
-        }
-
-        btnScanBill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                if(takePictureIntent.resolveActivity(getActivity().getPackageManager())!=null){
-                    File photoFile = null;
-                    try{
-                        photoFile = createPhotoFile();
-                    }catch (IOException ioException){
-                        Log.d(TAG2,ioException.getMessage());
-                    }
-
-                    if(photoFile!=null){
-                        Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.android.fileprovider", photoFile);
-                        //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        uri = photoURI;
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
-                        //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                    }
-                }
-
-//                    startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
-
-            }
-        });
-
-        /*****Handler for Date Picker *****/
-        btnDatePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                datePickerDialog.show();
-            }
-        });
-
-        return view;
-    }
+//
+//
+//        /***************Handling Receipt Scanning Camera Here ************/
+//        //Asking Permission
+//        if (ContextCompat.checkSelfPermission(view.getContext(),
+//                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+//
+//            ActivityCompat.requestPermissions((Activity) view.getContext(),
+//                    new String[]{Manifest.permission.CAMERA},REQUEST_IMAGE_CAPTURE);
+//
+//        }
+//    }
 
 
     private String getTodaysDate() {
@@ -367,6 +435,14 @@ public class AddBillFragment extends Fragment {
             //Initialize Date Picker Dialog
             int style = AlertDialog.THEME_HOLO_LIGHT;
             datePickerDialog = new DatePickerDialog(getActivity(),style,dateSetListener,year,month,day);//Debug
+        }
+
+        private String createDate(String dateString){
+            int year = Integer.parseInt(dateString.split(" ")[0].split("-")[0]);
+            int month = Integer.parseInt(dateString.split(" ")[0].split("-")[1]);
+            int day = Integer.parseInt(dateString.split(" ")[0].split("-")[2]);
+
+            return makeDateString(day,month,year);
         }
 
         private String makeDateString(int day, int month, int year) {
