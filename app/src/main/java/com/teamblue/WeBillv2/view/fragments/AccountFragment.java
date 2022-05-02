@@ -231,15 +231,17 @@ public class AccountFragment extends Fragment {
         passwordDialog.setPositiveButton("RESET PASSWORD",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
                         if (!newPass.getEditableText().toString().equals(confirmPass.getEditableText().toString())){
                             Toast.makeText(passwordDialog.getContext(), "new and confirm password don't match", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
-                        else if (!oldPass.getEditableText().toString().equals(Constants.PASSWORD_KEY)) {
+
+                        else if (!oldPass.getEditableText().toString().equals(sharedPreferences.getString(Constants.PASSWORD_KEY,""))) {
                             Toast.makeText(passwordDialog.getContext(), "old password is not correct", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
-                        else if (!newPass.getEditableText().toString().equals(confirmPass.getEditableText())) {
+                        else if (newPass.getEditableText().toString().equals(oldPass.getEditableText().toString())) {
                             Toast.makeText(passwordDialog.getContext(), "new password cannot be the same as old password", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
@@ -247,7 +249,8 @@ public class AccountFragment extends Fragment {
                             SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                             String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
                             ModifyPasswordService modifyPasswordService=new ModifyPasswordService();
-                            modifyPasswordService.updatePassword(getContext(), loggedInUsername, newPass.toString());
+                            modifyPasswordService.updatePassword(getContext(), loggedInUsername, newPass.getText().toString());
+                            Toast.makeText(passwordDialog.getContext(), "password is changed", Toast.LENGTH_SHORT).show();
                         }
                         dialog.cancel();
                     }

@@ -21,23 +21,24 @@ public class ModifyPhoneNumberService {
     public void updatePhoneNumber(Context context, String username, String oldPhoneNumber, String newPhoneNumber){
 
     AccountsMethods accountsMethods = LoginRetrofitClient.getRetrofitInstance().create(AccountsMethods.class);
+    ModifyPhoneNumberModel modifyPhoneNumberModel = new ModifyPhoneNumberModel(username,newPhoneNumber);
     //2. create a call object which will make the REST API call to our backend by passing in username as paramaters
-    Call<ModifyPhoneNumberModel> call = accountsMethods.getOldPhoneNumber(username);
-    call.enqueue(new Callback<ModifyPhoneNumberModel>() {
+    Call<LoginModel> call = accountsMethods.setNewPhoneNumber(modifyPhoneNumberModel);
+    call.enqueue(new Callback<LoginModel>() {
 
         @Override
-        public void onResponse(Call<ModifyPhoneNumberModel> call, Response<ModifyPhoneNumberModel> response) {
+        public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
             Log.d(TAG,String.valueOf(response.code()));
             Log.d(TAG,response.toString());
             if(response.code()==Constants.RESPONSE_OK){
-                ModifyPhoneNumberModel apiResponse = (ModifyPhoneNumberModel) response.body();
+                //ModifyPhoneNumberModel apiResponse = (ModifyPhoneNumberModel) response.body();
                 Toast.makeText(context, "number is updated", Toast.LENGTH_LONG).show();
             }
 
         }
 
         @Override
-        public void onFailure(Call<ModifyPhoneNumberModel> call, Throwable t) {
+        public void onFailure(Call<LoginModel> call, Throwable t) {
             Toast.makeText(context, "number is not updated", Toast.LENGTH_LONG).show();
 
         }

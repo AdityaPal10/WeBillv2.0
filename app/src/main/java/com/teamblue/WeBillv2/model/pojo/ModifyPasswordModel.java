@@ -2,7 +2,15 @@ package com.teamblue.WeBillv2.model.pojo;
 
 public class ModifyPasswordModel {
     private String username;
-    private String newPass;
+    private String newPassword;
+
+    public ModifyPasswordModel() {
+    }
+
+    public ModifyPasswordModel(String username, String newPass) {
+        this.username = username;
+        this.newPassword = newPass;
+    }
 
     public String getUsername() {
         return username;
@@ -14,10 +22,10 @@ public class ModifyPasswordModel {
 
 
     public String getNewPass() {
-        return newPass;
+        return newPassword;
     }
 
     public void setNewPass(String newPass) {
-        this.newPass = newPass;
+        this.newPassword = newPass;
     }
 }
