@@ -38,8 +38,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.core.JsonProcessingException;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -70,6 +70,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
@@ -99,6 +101,8 @@ public class AddBillFragment extends Fragment {
 
     private String Base64String, currentPhotoPath;
     private DatePickerDialog datePickerDialog;
+    private boolean isScanned = false;
+    private VeryfiOcrResponse veryfiOcrResponseBundle = new VeryfiOcrResponse();
 
     ViewGroup container;
 
@@ -173,6 +177,7 @@ public class AddBillFragment extends Fragment {
                 if(response.code()==Constants.RESPONSE_OK){
                     Log.d(TAG2,"success getting bill");
                     veryfiOcrResponse = (VeryfiOcrResponse) response.body();
+                    veryfiOcrResponseBundle = veryfiOcrResponse;
                     if(veryfiOcrResponse!=null){
                         SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
@@ -270,6 +275,15 @@ public class AddBillFragment extends Fragment {
             }
         });
 
+        edtAddressAddBill.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    getAutocompleteFeature(view);
+                }
+            }
+        });
+
         btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -340,31 +354,71 @@ public class AddBillFragment extends Fragment {
         }
     }
 
+//        btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//        if(takePictureIntent.resolveActivity(getActivity().getPackageManager())!=null){
+//            File photoFile = null;
+//            try{
+//                photoFile = createPhotoFile();
+//            }catch (IOException ioException){
+//                Log.d(TAG2,ioException.getMessage());
+//            }
+//
+//            if(photoFile!=null){
+//                Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.android.fileprovider", photoFile);
+//                //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                uri = photoURI;
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//                startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+//                //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//            }
+//        }
+//    }
+
     private void addBillOnClickListener(View view){
-        //Checking for no total amount empty error
-        if(TextUtils.isEmpty(edtActivityNameAddBill.getText().toString())) {
-            edtActivityNameAddBill.setError("Must Not Be Empty!");
-            return;
-        }else if(TextUtils.isEmpty(edtTotalAmountAddBill.getText().toString())) {
-            edtTotalAmountAddBill.setError("Must Not Be Empty!");
-            return;
-        }else if(TextUtils.isEmpty(btnDatePicker.getText().toString())){
-            btnDatePicker.setError("Must Not Be Empty!");
-            return;
-        }else if(TextUtils.isEmpty(edtAddressAddBill.getText().toString())){
-            edtAddressAddBill.setError("Must Not Be Empty!");
-            return;
-        }else{
-            Bundle bundle = new Bundle();
-            bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameAddBill.getText().toString());
-            bundle.putString("BILL_TOTAL_AMOUNT",edtTotalAmountAddBill.getText().toString());
-            bundle.putString("BILL_DATE",btnDatePicker.getText().toString());
-            bundle.putString("BILL_ADDRESS",edtAddressAddBill.getText().toString());
-            Intent gotoSplitBillActivity = new Intent(view.getContext(), SplitBillActivity.class);
-            gotoSplitBillActivity.putExtras(bundle);
-            startActivity(gotoSplitBillActivity);
-        }
-    }
+                //Checking for no total amount empty error
+                if(TextUtils.isEmpty(edtActivityNameAddBill.getText().toString())) {
+                    edtActivityNameAddBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(edtTotalAmountAddBill.getText().toString())) {
+                    edtTotalAmountAddBill.setError("Must Not Be Empty!");
+                    return;
+                }else if(TextUtils.isEmpty(btnDatePicker.getText().toString())){
+                    btnDatePicker.setError("Must Not Be Empty!");
+                        return;
+                }else if(TextUtils.isEmpty(edtAddressAddBill.getText().toString())){
+                    edtAddressAddBill.setError("Must Not Be Empty!");
+                    return;
+                }else{
+                    DecimalFormat df = new DecimalFormat("###.00");
+                    df.setRoundingMode(RoundingMode.DOWN);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameAddBill.getText().toString());
+                    bundle.putString("BILL_TOTAL_AMOUNT", df.format(Double.parseDouble(edtTotalAmountAddBill.getText().toString())));
+                    bundle.putString("BILL_DATE",btnDatePicker.getText().toString());
+                    bundle.putString("BILL_ADDRESS", edtAddressAddBill.getText().toString());
+                    Gson gson = new Gson();
+                    String veryfiResponseString = gson.toJson(veryfiOcrResponseBundle);
+                    bundle.putString(Constants.VERYI_RESPONSE_KEY,veryfiResponseString);
+                    Intent gotoSplitBillActivity = new Intent(view.getContext(), SplitBillActivity.class);
+                    gotoSplitBillActivity.putExtras(bundle);
+                    startActivity(gotoSplitBillActivity);
+                }
+
+            }
+//
+//
+//        /***************Handling Receipt Scanning Camera Here ************/
+//        //Asking Permission
+//        if (ContextCompat.checkSelfPermission(view.getContext(),
+//                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+//
+//            ActivityCompat.requestPermissions((Activity) view.getContext(),
+//                    new String[]{Manifest.permission.CAMERA},REQUEST_IMAGE_CAPTURE);
+//
+//        }
+//    }
 
 
     private String getTodaysDate() {

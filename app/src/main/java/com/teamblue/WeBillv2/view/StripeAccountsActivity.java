@@ -32,6 +32,7 @@ public class StripeAccountsActivity extends AppCompatActivity {
         String message = txtStripeAccounts.getText().toString().replace("{user}", username);
         txtStripeAccounts.setText(message);
 
+        // create Stripe accounts, essentially a wallet, for the user
         btnStripeAccounts.setOnClickListener(view -> {
             stripeController.createStripeAccounts(view.getContext(), username);
         });

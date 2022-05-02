@@ -20,4 +20,7 @@ public interface AccountsMethods {
     @POST("login/changePassword")
     Call<LoginModel> setNewPassword(@Body ModifyPasswordModel modifyPasswordModel);
 
+    @GET("login/getPhone")
+    Call<ModifyPhoneNumberModel> getPhoneNumber(@Query("username") String username);
+
 }
