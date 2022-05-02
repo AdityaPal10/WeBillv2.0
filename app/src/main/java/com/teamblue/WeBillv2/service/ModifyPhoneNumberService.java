@@ -44,4 +44,28 @@ public class ModifyPhoneNumberService {
         }
     });
     }
+
+    public void getPhoneNumber(Context context, String username) {
+        AccountsMethods accountsMethods = LoginRetrofitClient.getRetrofitInstance().create(AccountsMethods.class);
+        Call<ModifyPhoneNumberModel> call = accountsMethods.getPhoneNumber(username);
+        call.enqueue(new Callback<ModifyPhoneNumberModel>() {
+            @Override
+            public void onResponse(Call<ModifyPhoneNumberModel> call, Response<ModifyPhoneNumberModel> response) {
+                if (response.code() == Constants.RESPONSE_OK) {
+                    ModifyPhoneNumberModel result = response.body();
+                    SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("tel_" + username, result.getNewPhoneNumber());
+                    editor.apply();
+                } else {
+                    Log.d("Phone", "couldn't find # for " + username);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ModifyPhoneNumberModel> call, Throwable t) {
+                Log.d("Phone", "couldn't find # for " + username);
+            }
+        });
+    }
 }

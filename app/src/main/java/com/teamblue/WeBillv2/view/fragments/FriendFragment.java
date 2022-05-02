@@ -30,6 +30,7 @@ import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
 import com.teamblue.WeBillv2.service.FriendService;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
+import com.teamblue.WeBillv2.service.ModifyPhoneNumberService;
 
 import java.util.List;
 import java.util.Locale;
@@ -195,7 +196,7 @@ public class FriendFragment extends Fragment {
                         }else if(balance>0){
                             tvStatus.setText("To take back : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.quantum_googgreen));
-                            setRemindOnClick(btnPay, balance);
+                            setRemindOnClick(btnPay, friendBalanceModel.getFriend_username(), balance);
                         }else{
                             continue;
                         }
@@ -298,8 +299,8 @@ public class FriendFragment extends Fragment {
             public void onClick(View view) {
                 String scrCustomer = sharedPref.getString("cus_" + username, null);
                 String destAccount = sharedPref.getString("acc_" + friend, null);
-                Toast.makeText(context, scrCustomer + "\n" + destAccount, Toast.LENGTH_LONG).show();
-                // stripeController.stripeTransaction(context, scrCustomer, destAccount, cents);
+                // Toast.makeText(context, scrCustomer + "\n" + destAccount, Toast.LENGTH_LONG).show();
+                stripeController.stripeTransaction(context, scrCustomer, destAccount, cents);
             }
         });
     }
@@ -309,18 +310,22 @@ public class FriendFragment extends Fragment {
      * @param button the button to set the listener on
      * @param balance the amount (in dollars i.e. 5.24) owed by the friend
      */
-    private void setRemindOnClick(Button button, double balance) {
+    private void setRemindOnClick(Button button, String friend, double balance) {
         // set the button image to be a bell to signify "remind"
         button.setBackgroundResource(R.drawable.bell);
 
-        // TODO check for friend's phone number in shared prefs
+        // make sure preferences has the phone number for the friend we want to remind
+        SharedPreferences sharedPref = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        if (!sharedPref.contains("tel_" + friend)) {
+            ModifyPhoneNumberService service = new ModifyPhoneNumberService();
+            service.getPhoneNumber(context, friend);
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO populate number with friend's number
                 // create the text message and SMS intent
-                String number = "1234567890";
+                String number = sharedPref.getString("tel_" + friend, "1234567890");
                 String message = "Hey, just reminding you that you still owe me $" + String.format(Locale.US,"%.2f", balance);
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null));
                 intent.putExtra("sms_body", message);
