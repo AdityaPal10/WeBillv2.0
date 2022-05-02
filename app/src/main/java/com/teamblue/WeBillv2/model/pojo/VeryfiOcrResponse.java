@@ -1,5 +1,7 @@
 package com.teamblue.WeBillv2.model.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class VeryfiOcrResponse {
@@ -26,10 +28,12 @@ public class VeryfiOcrResponse {
 
     private Vendor vendor;
 
+    private List<LineItems> line_items;
+
     public VeryfiOcrResponse() {
     }
 
-    public VeryfiOcrResponse(String category, String currency_code, String date, String document_reference_number, String img_file_name, String img_thumbnail_url, String img_url, double subtotal, double total, String ocr_text, Vendor vendor) {
+    public VeryfiOcrResponse(String category, String currency_code, String date, String document_reference_number, String img_file_name, String img_thumbnail_url, String img_url, double subtotal, double total, String ocr_text, Vendor vendor, List<LineItems> lineItems) {
         this.category = category;
         this.currency_code = currency_code;
         this.date = date;
@@ -41,6 +45,15 @@ public class VeryfiOcrResponse {
         this.total = total;
         this.ocr_text = ocr_text;
         this.vendor = vendor;
+        this.line_items = lineItems;
+    }
+
+    public List<LineItems> getLineItems() {
+        return line_items;
+    }
+
+    public void setLineItems(List<LineItems> lineItems) {
+        this.line_items = lineItems;
     }
 
     public String getCategory() {
@@ -145,6 +158,7 @@ public class VeryfiOcrResponse {
                 ", total=" + total +
                 ", ocr_text='" + ocr_text + '\'' +
                 ", vendor=" + vendor +
+                ", lineItems=" + line_items +
                 '}';
     }
 }
