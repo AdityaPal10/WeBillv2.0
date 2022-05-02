@@ -12,7 +12,10 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -46,6 +49,7 @@ import org.w3c.dom.Text;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -63,7 +67,7 @@ public class SplitBillActivity extends AppCompatActivity {
     private Double RemainAmount, CurrentAmount,TotalAmount;
     private DatePickerDialog datePickerDialog;
     LinearLayout LinearFriendSplit;
-    AlertDialog AddSplitFriendDialog;
+    AlertDialog AddSplitFriendDialog, ItemsDialog;
 
     List<LineItems> lineItems;
 
@@ -92,10 +96,22 @@ public class SplitBillActivity extends AppCompatActivity {
         lineItemsButton = (Button) findViewById(R.id.lineItemsPopupButton);
 
         //get line items data
-        lineItems = getLineItems();
+//        lineItems = getLineItems();
+
+
 
 
         initDatePicker();
+        buildItemsDialog();
+
+
+        /******** Show Items Dialog *********/
+        lineItemsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ItemsDialog.show();
+            }
+        });
 
         /******** Check Final Bill Information Completeness *********/
         btnSaveBill.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +217,24 @@ public class SplitBillActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+    }
+
+    /********** Building Items content Dialog **********/
+    private void buildItemsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.popup_bill_conclusion_items, null);
+
+        ListView SplitBillItemLists = view.findViewById(R.id.SplitBillItemLists);
+
+        LayoutInflater inflater=this.getLayoutInflater();
+        View rowView=inflater.inflate(R.layout.listitem_bill_item, null,true);
+
+        /********** List Items **********/
+
+
+
+        builder.setView(view);
+        ItemsDialog = builder.create();
     }
 
 
@@ -341,6 +375,8 @@ public class SplitBillActivity extends AppCompatActivity {
         LinearFriendSplit.addView(cardview);
 
     }
+
+
 
 
 
