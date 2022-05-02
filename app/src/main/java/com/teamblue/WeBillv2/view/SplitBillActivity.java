@@ -40,6 +40,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.adapter.LineItemsAdapter;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.LineItems;
 import com.teamblue.WeBillv2.model.pojo.VeryfiOcrResponse;
@@ -94,12 +95,6 @@ public class SplitBillActivity extends AppCompatActivity {
         LinearFriendSplit = findViewById(R.id.LinearFriendSplit);
         btnSaveBill = (Button) findViewById(R.id.btnSaveBill);
         lineItemsButton = (Button) findViewById(R.id.lineItemsPopupButton);
-
-        //get line items data
-//        lineItems = getLineItems();
-
-
-
 
         initDatePicker();
         buildItemsDialog();
@@ -224,14 +219,29 @@ public class SplitBillActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.popup_bill_conclusion_items, null);
 
+        lineItems = getLineItems();
         ListView SplitBillItemLists = view.findViewById(R.id.SplitBillItemLists);
+        int size = lineItems.size();
+        if(size>0){
+            String[] itemNames = new String[size];
+            double[] itemsQ = new double[size];
+            double[] totals = new double[size];
+            int index = 0;
+            for(LineItems lineItem : lineItems){
+                itemNames[index] = lineItem.getDescription();
+                itemsQ[index] = lineItem.getQuantity();
+                totals[index] = lineItem.getTotal();
+                index++;
+            }
 
-        LayoutInflater inflater=this.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.listitem_bill_item, null,true);
+            LineItemsAdapter lineItemsAdapter = new LineItemsAdapter(this,itemNames,itemsQ,totals);
+            SplitBillItemLists.setAdapter(lineItemsAdapter);
+        }else{
+            Toast.makeText(getApplicationContext(),"No line items to show",Toast.LENGTH_LONG).show();
+        }
+
 
         /********** List Items **********/
-
-
 
         builder.setView(view);
         ItemsDialog = builder.create();

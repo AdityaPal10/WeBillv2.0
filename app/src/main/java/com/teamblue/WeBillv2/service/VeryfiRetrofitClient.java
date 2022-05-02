@@ -12,9 +12,9 @@ public class VeryfiRetrofitClient {
     private static Retrofit retrofit;
     private static String BASE_URL = Constants.VERYFI_API_URL;
     public static  OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-            .connectTimeout(180, TimeUnit.SECONDS)
-            .readTimeout(180, TimeUnit.SECONDS)
-            .writeTimeout(180, TimeUnit.SECONDS)
+            .connectTimeout(240, TimeUnit.SECONDS)
+            .readTimeout(240, TimeUnit.SECONDS)
+            .writeTimeout(240, TimeUnit.SECONDS)
             .build();
     public static Retrofit getRetrofitInstance(){
         if(retrofit==null){
