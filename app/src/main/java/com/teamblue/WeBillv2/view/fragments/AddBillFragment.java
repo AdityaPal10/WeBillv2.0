@@ -6,7 +6,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +43,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.gson.Gson;
 import com.teamblue.WeBillv2.BuildConfig;
 import com.teamblue.WeBillv2.R;
 import com.teamblue.WeBillv2.model.api.BillMethods;
@@ -163,7 +166,17 @@ public class AddBillFragment extends Fragment {
                 if(response.code()==Constants.RESPONSE_OK){
                     Log.d(TAG2,"success getting bill");
                     veryfiOcrResponse = (VeryfiOcrResponse) response.body();
-                    Log.d(TAG2,veryfiOcrResponse.toString());
+                    if(veryfiOcrResponse!=null){
+                        SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        Gson gson = new Gson();
+                        String veryfiResponse = gson.toJson(veryfiOcrResponse);
+                        editor.putString(Constants.VERYI_RESPONSE_KEY,veryfiResponse);
+                        editor.apply();
+                    }
+                    //Log.d(TAG2,veryfiOcrResponse.toString());
+                    System.out.println(veryfiOcrResponse.toString());
+                    Log.d(TAG2,veryfiOcrResponse.getLineItems().toString());
                     Log.d(TAG2,"date on bill :"+veryfiOcrResponse.getDate().split(" ")[0]);
                     View view = layoutInflater.inflate(R.layout.fragment_add_bill, container, false);
                     edtActivityNameAddBill = (EditText) view.findViewById(R.id.edtActivityNameAddBill);
