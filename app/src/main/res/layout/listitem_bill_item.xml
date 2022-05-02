@@ -12,22 +12,24 @@
 
         <TextView
             android:id="@+id/tvItemName"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
+            android:maxEms="12"
+            android:singleLine="false"
             android:text="itemName"
             android:textColor="@color/quantum_black_100"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/tvItemQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="itemQuantity"
+            android:layout_centerInParent="true"
+            android:text="Quantity"
             android:textColor="@color/quantum_black_100"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/tvDollarSign"
@@ -35,8 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/tvItemPrice"
             android:text="$"
+            android:layout_centerVertical="true"
             android:textColor="@color/quantum_black_100"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/tvItemPrice"
@@ -46,8 +49,9 @@
             android:layout_marginLeft="0dp"
             android:layout_marginRight="20dp"
             android:text="0.00"
+            android:layout_centerVertical="true"
             android:textColor="@color/quantum_black_100"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
     </RelativeLayout>
 

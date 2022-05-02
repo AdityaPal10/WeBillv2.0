@@ -191,7 +191,7 @@
 
                 <Spinner
                     android:id="@+id/edtPayerName"
-                    android:layout_width="200dp"
+                    android:layout_width="150dp"
                     android:layout_height="40dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="5dp"
