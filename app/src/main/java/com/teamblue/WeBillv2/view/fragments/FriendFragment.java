@@ -2,7 +2,9 @@ package com.teamblue.WeBillv2.view.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -30,6 +32,7 @@ import com.teamblue.WeBillv2.service.FriendService;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
 
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -151,7 +154,7 @@ public class FriendFragment extends Fragment {
          * Set @+id/tvFriendBalance to Specific Dollar amount e.g. 10.00  , !!!color #138806!!! *******/
 
 
-        /******TODO: Set user's correct Profilc Pic in the future from backend *******/
+        /******TODO: Set user's correct Profile Pic in the future from backend *******/
 
         /*******Original example is in z_demo_initial_friend_page.xml ********/
 
@@ -192,12 +195,13 @@ public class FriendFragment extends Fragment {
                         }else if(balance>0){
                             tvStatus.setText("To take back : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.quantum_googgreen));
+                            setRemindOnClick(btnPay, balance);
                         }else{
                             continue;
                         }
                         tvFriendName.setText(friendBalanceModel.getFriend_username());
-                        tvBalance.setText(String.valueOf(Math.abs(balance)));
-
+                        tvBalance.setText(String.format(java.util.Locale.US, "%.2f", Math.abs(balance)));
+                        Log.d(TAG, friendBalanceModel.getFriend_username());
                         //add new card to existing container
                         containerFriendCards.addView(newCard);
                     }
@@ -245,7 +249,7 @@ public class FriendFragment extends Fragment {
                             Toast.makeText(context,"Friend already exists",Toast.LENGTH_LONG).show();
                             break;
                         case Constants.NO_FRIEND_EXISTS:
-                            Toast.makeText(context,"Friend doesn't have an accout",Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,"Friend doesn't have an account",Toast.LENGTH_LONG).show();
                             break;
                         default:
                             Toast.makeText(context,"Error adding friend, please try again",Toast.LENGTH_LONG).show();
@@ -266,7 +270,16 @@ public class FriendFragment extends Fragment {
 
     }
 
+    /**
+     * custom onClickListener to trigger paying friends
+     * @param button the button to set the listener on
+     * @param friend the username of the friend to be paid
+     * @param balance the amount (in dollars i.e 5.24) to be paid
+     */
     private void setPayOnClick(Button button, String friend, double balance) {
+        // set the button image to be a credit card to signify "pay"
+        button.setBackgroundResource(R.drawable.credit_card);
+
         // make sure preferences has account_id/customer_id that we'll need when paying
         SharedPreferences sharedPref = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         String username = sharedPref.getString(Constants.USERNAME_KEY, null);
@@ -277,6 +290,7 @@ public class FriendFragment extends Fragment {
             stripeController.getStripeAccounts(context, friend, "account");
         }
 
+        // Stripe uses lowest denomination of the currency; change dollars to cents
         int cents = (int) (balance * 100);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -284,7 +298,33 @@ public class FriendFragment extends Fragment {
             public void onClick(View view) {
                 String scrCustomer = sharedPref.getString("cus_" + username, null);
                 String destAccount = sharedPref.getString("acc_" + friend, null);
-                stripeController.stripeTransaction(context, scrCustomer, destAccount, cents);
+                Toast.makeText(context, scrCustomer + "\n" + destAccount, Toast.LENGTH_LONG).show();
+                // stripeController.stripeTransaction(context, scrCustomer, destAccount, cents);
+            }
+        });
+    }
+
+    /**
+     * custom onClickListener to remind friends via SMS about their balance
+     * @param button the button to set the listener on
+     * @param balance the amount (in dollars i.e. 5.24) owed by the friend
+     */
+    private void setRemindOnClick(Button button, double balance) {
+        // set the button image to be a bell to signify "remind"
+        button.setBackgroundResource(R.drawable.bell);
+
+        // TODO check for friend's phone number in shared prefs
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO populate number with friend's number
+                // create the text message and SMS intent
+                String number = "1234567890";
+                String message = "Hey, just reminding you that you still owe me $" + String.format(Locale.US,"%.2f", balance);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null));
+                intent.putExtra("sms_body", message);
+                startActivity(intent);
             }
         });
     }

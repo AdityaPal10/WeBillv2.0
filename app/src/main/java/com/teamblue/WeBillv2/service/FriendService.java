@@ -13,6 +13,7 @@ import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -111,8 +112,8 @@ public class FriendService {
                     double amountToPay = Double.parseDouble(amountToPayStr.substring(0,amountToPayStr.length()-1));
 
 
-                    editor.putString(Constants.BALANCE_TO_TAKE,String.valueOf(amountOwed));
-                    editor.putString(Constants.BALANCE_TO_PAY,String.valueOf(amountToPay));
+                    editor.putString(Constants.BALANCE_TO_TAKE, String.format(Locale.US, "%.2f", amountOwed));
+                    editor.putString(Constants.BALANCE_TO_PAY, String.format(Locale.US, "%.2f", amountToPay));
                     editor.apply();
 
                 }
