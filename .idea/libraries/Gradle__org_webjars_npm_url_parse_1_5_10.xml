@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.webjars.npm:url-parse:1.5.10">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.npm/url-parse/1.5.10/c9302956b7397b2e7ef55b5ce4c2a5590d1d2ccc/url-parse-1.5.10.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.npm/url-parse/1.5.10/b04f3ee8f5e43fa3b162981b50bb72fe1acabb33/url-parse-1.5.10-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.npm/url-parse/1.5.10/b04f3ee8f5e43fa3b162981b50bb72fe1acabb33/url-parse-1.5.10-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
