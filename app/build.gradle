@@ -63,5 +63,8 @@ dependencies {
     // Custom Gif ImageView
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.20'
 
+    //Retrofit
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.1'
 }

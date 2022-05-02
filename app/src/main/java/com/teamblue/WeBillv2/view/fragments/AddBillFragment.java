@@ -33,8 +33,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.core.JsonProcessingException;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -60,6 +60,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
@@ -233,6 +235,25 @@ public class AddBillFragment extends Fragment {
             }
         });
 
+        edtAddressAddBill.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                // set the fields to specify which types of place data to return after the user
+                // has made a selection
+                if(hasFocus) {
+                    // set the fields to specify which types of place data to return after the user
+                    // has made a selection
+                    List<Place.Field> fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG);
+
+                    // start the autocomplete intent
+                    Intent autocompleteIntent = new Autocomplete
+                            .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                            .build(getContext());
+                    startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
+                }
+            }
+        });
+
         btnEnterAddBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,11 +272,13 @@ public class AddBillFragment extends Fragment {
                     edtAddressAddBill.setError("Must Not Be Empty!");
                     return;
                 }else{
+                    DecimalFormat df = new DecimalFormat("###.00");
+                    df.setRoundingMode(RoundingMode.DOWN);
                     Bundle bundle = new Bundle();
                     bundle.putString("BILL_ACTIVITY_NAME",edtActivityNameAddBill.getText().toString());
-                    bundle.putString("BILL_TOTAL_AMOUNT",edtTotalAmountAddBill.getText().toString());
+                    bundle.putString("BILL_TOTAL_AMOUNT", df.format(Double.parseDouble(edtTotalAmountAddBill.getText().toString())));
                     bundle.putString("BILL_DATE",btnDatePicker.getText().toString());
-                    bundle.putString("BILL_ADDRESS",edtAddressAddBill.getText().toString());
+                    bundle.putString("BILL_ADDRESS", edtAddressAddBill.getText().toString());
                     Intent gotoSplitBillActivity = new Intent(view.getContext(), SplitBillActivity.class);
                     gotoSplitBillActivity.putExtras(bundle);
                     startActivity(gotoSplitBillActivity);
