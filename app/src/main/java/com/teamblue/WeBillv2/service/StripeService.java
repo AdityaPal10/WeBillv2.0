@@ -69,6 +69,7 @@ public class StripeService {
                     UserStripeAccount result = response.body();
                     SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
+                    // depending on the mode, the key and value we add to shared prefs is different
                     if (mode.equals("account")) {
                         editor.putString("acc_" + username, result.getAccount_id());
                         Log.d(TAG, "acc_" + username + ": " + result.getAccount_id());
@@ -78,13 +79,13 @@ public class StripeService {
                     }
                     editor.apply();
                 } else {
-                    Toast.makeText(context, "Could not find " + username, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "couldn't find accounts for " + username);
                 }
             }
 
             @Override
             public void onFailure(Call<UserStripeAccount> call, Throwable t) {
-                Toast.makeText(context, "Could not find " + username, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "couldn't find accounts for " + username);
             }
         });
     }
@@ -104,6 +105,7 @@ public class StripeService {
             public void onResponse(Call call, Response response) {
                 if(response.code() == Constants.RESPONSE_OK) {
                     PaymentSheetModel result = (PaymentSheetModel) response.body();
+                    // create the intent and grab the info we need to add as the metadata for the Stripe payment sheet
                     Intent intent = new Intent(context, PaymentDetailsActivity.class);
                     intent.putExtra("setupIntent", result.getSetupIntent());
                     intent.putExtra("customerId", cusID);
@@ -120,6 +122,11 @@ public class StripeService {
         });
     }
 
+    /**
+     * makes a network call to our backend api, calling the Stripe Api to initiate a payment
+     * @param context the context from which we call this (Friend Fragment)
+     * @param payFriendModel the model representing who pays who and how much
+     */
     public void payFriend(Context context, PayFriendModel payFriendModel) {
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<LoginModel> call = stripeMethods.payFriendTransaction(payFriendModel);
