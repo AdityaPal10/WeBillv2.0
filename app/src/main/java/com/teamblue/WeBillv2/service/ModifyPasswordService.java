@@ -16,7 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ModifyPasswordService {
-    public void updatePassword(Context context, String username, String oldPassword, String newPassword){
+    public void updatePassword(Context context, String username, String newPassword){
 
         AccountsMethods accountsMethods = LoginRetrofitClient.getRetrofitInstance().create(AccountsMethods.class);
         //2. create a call object which will make the REST API call to our backend by passing in username as paramaters

@@ -235,11 +235,19 @@ public class AccountFragment extends Fragment {
                             Toast.makeText(passwordDialog.getContext(), "new and confirm password don't match", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
+                        else if (!oldPass.getEditableText().toString().equals(Constants.PASSWORD_KEY)) {
+                            Toast.makeText(passwordDialog.getContext(), "old password is not correct", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                        else if (!newPass.getEditableText().toString().equals(confirmPass.getEditableText())) {
+                            Toast.makeText(passwordDialog.getContext(), "new password cannot be the same as old password", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
                         else {
                             SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                             String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
                             ModifyPasswordService modifyPasswordService=new ModifyPasswordService();
-                            modifyPasswordService.updatePassword(getContext(), loggedInUsername, oldPass.toString(), newPass.toString());
+                            modifyPasswordService.updatePassword(getContext(), loggedInUsername, newPass.toString());
                         }
                         dialog.cancel();
                     }

@@ -2,7 +2,7 @@ package com.teamblue.WeBillv2.model.pojo;
 
 public class ModifyPhoneNumberModel {
     private String username;
-    private String oldPhoneNumber;
+   // private String oldPhoneNumber;
     private String newPhoneNumber;
 
     public String getUsername() {
@@ -13,13 +13,13 @@ public class ModifyPhoneNumberModel {
         this.username = username;
     }
 
-    public String getOldPhoneNumber() {
+    /*public String getOldPhoneNumber() {
         return oldPhoneNumber;
     }
 
     public void setOldPhoneNumber(String oldPhoneNumber) {
         this.oldPhoneNumber = oldPhoneNumber;
-    }
+    }*/
 
     public String getNewPhoneNumber() {
         return newPhoneNumber;

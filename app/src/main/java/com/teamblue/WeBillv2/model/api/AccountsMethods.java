@@ -13,16 +13,11 @@ import retrofit2.http.Query;
 
 public interface AccountsMethods {
 
-    @GET("accounts/getOldPassword")
-    Call<ModifyPasswordModel> getOldPassword(@Query("username")String username);
 
-    @GET("accounts/getOldPhoneNumber")
-    Call<ModifyPhoneNumberModel> getOldPhoneNumber(@Query("username")String username);
+    @POST("login/changePhone")
+    Call<LoginModel> setNewPhoneNumber(@Body ModifyPhoneNumberModel modifyPhoneNumberModel);
 
-    @POST("accounts/setNewPhoneNumber")
-    Call<LoginModel> setNewPhoneNumber(@Body String newPhoneNumber);
-
-    @POST("accounts/setNewPassword")
-    Call<LoginModel> setNewPassword(@Body String newPassword);
+    @POST("login/changePassword")
+    Call<LoginModel> setNewPassword(@Body ModifyPasswordModel modifyPasswordModel);
 
 }
