@@ -1,26 +1,49 @@
 package com.teamblue.WeBillv2.view.fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.telephony.PhoneNumberUtils;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.ReplacementTransformationMethod;
+import android.text.method.TransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamblue.WeBillv2.R;
+import com.teamblue.WeBillv2.model.api.AccountsMethods;
+import com.teamblue.WeBillv2.model.api.FriendMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
+import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
+import com.teamblue.WeBillv2.model.pojo.LoginModel;
+import com.teamblue.WeBillv2.model.pojo.ModifyPasswordModel;
+import com.teamblue.WeBillv2.service.LoginRetrofitClient;
+import com.teamblue.WeBillv2.service.ModifyPasswordService;
+import com.teamblue.WeBillv2.service.ModifyPhoneNumberService;
 import com.teamblue.WeBillv2.view.MainActivity;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -29,6 +52,7 @@ import com.teamblue.WeBillv2.view.MainActivity;
 public class AccountFragment extends Fragment {
 
     private Button btnProfilePic,btnLogOut,btnChangeUsername;
+    private Button btnChangePassword, btnChangePhoneNumber, btnContactUs;
     private Integer ImgId;
     private Integer savedImg;
     private String savedUsername;
@@ -56,6 +80,49 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 dialogChooseProfilePic.show();
+            }
+        });
+        // build contents here
+        btnChangePassword= (Button) view.findViewById(R.id.btnResetPassword);
+        btnChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buildChangePasswordDialog();
+            }
+        });
+        btnChangePhoneNumber= (Button) view.findViewById(R.id.btnModifyMobileNumber);
+        btnChangePhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buildChangePhoneNumberDialog();
+            }
+        });
+        btnContactUs= (Button) view.findViewById(R.id.btnContactUs);
+        btnContactUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Send email", "");
+
+                String[] TO = {"pal.aditya.ap@gmail.com"};
+                //String[] CC = {"harsh@gmail.com"};
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setData(Uri.parse("mailto:"));
+                emailIntent.setType("text/plain");
+
+
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+                //emailIntent.putExtra(Intent.EXTRA_CC, CC);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "WeBill Contact Developers");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Please enter your inquiry here");
+
+                try {
+                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                    Log.i("Finished sending", "");
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getContext(),
+                            "There is no email client installed.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -86,6 +153,121 @@ public class AccountFragment extends Fragment {
         loadData(); //sharedPreference load saved data
         return view;
     }
+
+    private void buildChangePhoneNumberDialog() {
+        AlertDialog.Builder phoneNumberDialog = new AlertDialog.Builder(this.getContext());
+        phoneNumberDialog.setTitle("Values");
+        final EditText oldPhoneNumber = new EditText(this.getContext());
+        final EditText newPhoneNumber = new EditText(this.getContext());
+        final EditText confirmPhoneNumber = new EditText(this.getContext());
+
+        oldPhoneNumber.setHint("Old Phone Number");
+        newPhoneNumber.setHint("New Phone Number");
+        confirmPhoneNumber.setHint("Confirm Phone Number");
+        LinearLayout ll=new LinearLayout(this.getContext());
+        ll.setOrientation(LinearLayout.VERTICAL);
+
+        ll.addView(oldPhoneNumber);
+
+        ll.addView(newPhoneNumber);
+        ll.addView(confirmPhoneNumber);
+        phoneNumberDialog.setView(ll);
+
+
+        phoneNumberDialog.setPositiveButton("RESET PHONE NUMBER",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String regexStr = "^\\+[0-9]{10,13}$";
+                        String number=newPhoneNumber.getText().toString();
+                        if(number.matches(regexStr)==false  ) {
+                            Toast.makeText(phoneNumberDialog.getContext(), "Please enter a valid phone number", Toast.LENGTH_SHORT).show();
+                        }
+                         else if (!newPhoneNumber.getEditableText().toString().equals(confirmPhoneNumber.getEditableText().toString())) {
+                                Toast.makeText(phoneNumberDialog.getContext(), "new phone number and confirm number don't match", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                                String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
+                            ModifyPhoneNumberService modifyPhoneNumberService=new ModifyPhoneNumberService();
+                            modifyPhoneNumberService.updatePhoneNumber(getContext(), loggedInUsername, oldPhoneNumber.toString(), newPhoneNumber.toString());
+                        }
+                        dialog.cancel();
+                    }
+                });
+        phoneNumberDialog.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog resetPhoneNumber = phoneNumberDialog.create();
+        resetPhoneNumber.show();
+    }
+
+    private void buildChangePasswordDialog() {
+        AlertDialog.Builder passwordDialog = new AlertDialog.Builder(this.getContext());
+        passwordDialog.setTitle("Values");
+        final EditText oldPass = new EditText(this.getContext());
+        final EditText newPass = new EditText(this.getContext());
+        final EditText confirmPass = new EditText(this.getContext());
+
+
+        oldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+        oldPass.setHint("Old Password");
+        newPass.setHint("New Password");
+        confirmPass.setHint("Confirm Password");
+        LinearLayout ll=new LinearLayout(this.getContext());
+        ll.setOrientation(LinearLayout.VERTICAL);
+
+        ll.addView(oldPass);
+
+        ll.addView(newPass);
+        ll.addView(confirmPass);
+        passwordDialog.setView(ll);
+        passwordDialog.setPositiveButton("RESET PASSWORD",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+                        if (!newPass.getEditableText().toString().equals(confirmPass.getEditableText().toString())){
+                            Toast.makeText(passwordDialog.getContext(), "new and confirm password don't match", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+
+                        else if (!oldPass.getEditableText().toString().equals(sharedPreferences.getString(Constants.PASSWORD_KEY,""))) {
+                            Toast.makeText(passwordDialog.getContext(), "old password is not correct", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                        else if (newPass.getEditableText().toString().equals(oldPass.getEditableText().toString())) {
+                            Toast.makeText(passwordDialog.getContext(), "new password cannot be the same as old password", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                        else {
+                            SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                            String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
+                            ModifyPasswordService modifyPasswordService=new ModifyPasswordService();
+                            modifyPasswordService.updatePassword(getContext(), loggedInUsername, newPass.getText().toString());
+                            Toast.makeText(passwordDialog.getContext(), "password is changed", Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.cancel();
+                    }
+                });
+        passwordDialog.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog resetPassword = passwordDialog.create();
+        resetPassword.show();
+    }
+
+
+
 
 //    private void buildChangeUsernameDialog() {
 //        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());

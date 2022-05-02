@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         usernameEditText = (EditText) findViewById(R.id.emailEditTextSignUp);
         passwordEditText = (EditText) findViewById(R.id.usernameEditTextSignUp);
 
-        btnSkip = (Button) findViewById(R.id.btnSkip); // Skip login for developer testing (Delete after finished)
+//        btnSkip = (Button) findViewById(R.id.btnSkip); // Skip login for developer testing (Delete after finished)
 
         //set on click listener for login button
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Skip login for developer testing (Delete after finished)
-        btnSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent goFriendPage = new Intent(MainActivity.this,MenuView.class);
-                startActivity(goFriendPage);
-            }
-        });
+//        // Skip login for developer testing (Delete after finished)
+//        btnSkip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent goFriendPage = new Intent(MainActivity.this,MenuView.class);
+//                startActivity(goFriendPage);
+//            }
+//        });
     }
 
     public void segueToSignUpActivity(){

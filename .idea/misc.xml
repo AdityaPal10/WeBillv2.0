@@ -24,8 +24,8 @@
         <entry key="app/src/main/res/drawable/oval_shadow.xml" value="0.127" />
         <entry key="app/src/main/res/drawable/roundedbutton.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/user.xml" value="0.2965" />
-        <entry key="app/src/main/res/layout-v31/activity_main.xml" value="0.4036458333333333" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3885416666666667" />
+        <entry key="app/src/main/res/layout-v31/activity_main.xml" value="0.5635416666666667" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.5635416666666667" />
         <entry key="app/src/main/res/layout/activity_scan_bill.xml" value="0.30833333333333335" />
         <entry key="app/src/main/res/layout/activity_split_bill.xml" value="0.30833333333333335" />
         <entry key="app/src/main/res/layout/cardview_add_split_friends.xml" value="0.5635416666666667" />
@@ -39,8 +39,10 @@
         <entry key="app/src/main/res/layout/fragment_spending_activity.xml" value="0.3885416666666667" />
         <entry key="app/src/main/res/layout/friends_home.xml" value="0.301314459049545" />
         <entry key="app/src/main/res/layout/friends_ledger_row.xml" value="0.5635416666666667" />
+        <entry key="app/src/main/res/layout/listitem_bill_item.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/layout/popup_add_new_friend.xml" value="0.5635416666666667" />
         <entry key="app/src/main/res/layout/popup_add_split_friends.xml" value="0.5635416666666667" />
+        <entry key="app/src/main/res/layout/popup_bill_conclusion_items.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/layout/popup_change_profile_pic.xml" value="0.5635416666666667" />
         <entry key="app/src/main/res/layout/popup_change_username.xml" value="0.37407407407407406" />
         <entry key="app/src/main/res/layout/popup_logout.xml" value="0.5635416666666667" />
