@@ -12,6 +12,7 @@ import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.FriendBalanceModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -84,7 +85,7 @@ public class FriendService {
 
     }
 
-    public void getBalance(View view, String username, TextView tvToPay,TextView tvToTakeBack) {
+    public void getBalance(View view, String username, TextView tvToPay,TextView tvToTakeBack,TextView tvMyBalanceNumber) {
         Context context = view.getContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -120,6 +121,9 @@ public class FriendService {
 
                 tvToPay.setText(sharedPreferences.getString(Constants.BALANCE_TO_PAY,"0.0"));
                 tvToTakeBack.setText(sharedPreferences.getString(Constants.BALANCE_TO_TAKE,"0.0"));
+                DecimalFormat df = new DecimalFormat("###.00");
+                Double Balance = Double.valueOf(tvToTakeBack.getText().toString()) - Double.valueOf(tvToPay.getText().toString());
+                tvMyBalanceNumber.setText(df.format(Balance));
             }
 
             @Override

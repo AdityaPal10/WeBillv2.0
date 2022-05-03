@@ -67,21 +67,33 @@
 
 
                 <TextView
+                    android:id="@+id/tvMyBalanceText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="70dp"
-                    android:layout_marginTop="10dp"
-                    android:text="My Balance"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="My Balance:$"
                     android:textColor="#000000"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvMyBalanceNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@+id/tvMyBalanceText"
+                    android:text="0.00"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvToPay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="26dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="60dp"
                     android:text="To Pay: $"
                     android:textColor="#EC0D5C"
@@ -104,8 +116,8 @@
                     android:id="@+id/tvMyToTakeBackNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="26dp"
-                    android:layout_marginTop="100dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="90dp"
                     android:text="To Take Back: $"
                     android:textColor="#138806"
                     android:textSize="15sp"
@@ -116,7 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="0dp"
-                    android:layout_marginTop="100dp"
+                    android:layout_marginTop="90dp"
                     android:layout_toRightOf="@+id/tvMyToTakeBackNumber"
                     android:text="0.00"
                     android:textColor="#138806"

@@ -45,32 +45,32 @@ public class MyBillsListView extends ArrayAdapter<Integer> {
         TextView tvBillAmount = (TextView) rowView.findViewById(R.id.tvBillAmountTextListView);
         TextView tvBillName = (TextView) rowView.findViewById(R.id.tvActivityNameListView);
         TextView tvBillDate = (TextView) rowView.findViewById(R.id.tvReceiptDateListView);
-        Button detailsButton = (Button) rowView.findViewById(R.id.btnReceiptDetailsListView);
+//        Button detailsButton = (Button) rowView.findViewById(R.id.btnReceiptDetailsListView);
 
         tvBillAmount.setText(tvBillAmount.getText().toString()+billAmounts[position]);
         tvBillName.setText(billNames[position]);
         tvBillDate.setText(billNames[position]);
 
-        detailsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                View viewReceiptDetails = inflater.inflate(R.layout.popup_receipt_click_details, null);
-
-                TextView tvTotal = viewReceiptDetails.findViewById(R.id.tvTotal);
-                TextView tvActivityText = viewReceiptDetails.findViewById(R.id.tvActivityText);
-                TextView tvDate = viewReceiptDetails.findViewById(R.id.tvDate);
-
-                builder.setView(viewReceiptDetails);
-
-                tvTotal.setText(billAmounts[position]);
-                tvActivityText.setText(billNames[position]);
-                tvDate.setText(billDates[position]);
-                Dialog receiptDetailsDialog;
-                receiptDetailsDialog = builder.create();
-                receiptDetailsDialog.show();
-            }
-        });
+//        detailsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+//                View viewReceiptDetails = inflater.inflate(R.layout.popup_receipt_click_details, null);
+//
+//                TextView tvTotal = viewReceiptDetails.findViewById(R.id.tvTotal);
+//                TextView tvActivityText = viewReceiptDetails.findViewById(R.id.tvActivityText);
+//                TextView tvDate = viewReceiptDetails.findViewById(R.id.tvDate);
+//
+//                builder.setView(viewReceiptDetails);
+//
+//                tvTotal.setText(billAmounts[position]);
+//                tvActivityText.setText(billNames[position]);
+//                tvDate.setText(billDates[position]);
+//                Dialog receiptDetailsDialog;
+//                receiptDetailsDialog = builder.create();
+//                receiptDetailsDialog.show();
+//            }
+//        });
 
         return rowView;
     }

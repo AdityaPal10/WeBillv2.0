@@ -32,6 +32,7 @@ import com.teamblue.WeBillv2.service.FriendService;
 import com.teamblue.WeBillv2.service.LoginRetrofitClient;
 import com.teamblue.WeBillv2.service.ModifyPhoneNumberService;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,6 +67,7 @@ public class FriendFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
         TextView tvToPay = view.findViewById(R.id.tvMyToPayNumber);
         TextView tvToTakeBack = view.findViewById(R.id.tvToTakeBackNumber);
+        TextView tvMyBalanceNumber = view.findViewById(R.id.tvMyBalanceNumber);
 
         btnAddFriends = view.findViewById(R.id.btnAddFriends);
         containerFriendCards = view.findViewById(R.id.containerFriendCards);
@@ -80,7 +82,7 @@ public class FriendFragment extends Fragment {
 
         //make network call to fetch overall balance of logged in user
         FriendService friendService = new FriendService();
-        friendService.getBalance(view,username,tvToPay,tvToTakeBack);
+        friendService.getBalance(view,username,tvToPay,tvToTakeBack,tvMyBalanceNumber);
 
         //make network call to populate friends status/breakdown
         getFriendBalances(context,username);
@@ -93,6 +95,10 @@ public class FriendFragment extends Fragment {
                 dialogAddNewFriend.show();
             }
         });
+
+
+
+
 
 
         return view;
