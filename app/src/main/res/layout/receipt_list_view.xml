@@ -102,19 +102,19 @@
 
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/btnReceiptDetailsListView"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/roundedbutton"
-                android:fontFamily="@font/calibri"
-                android:text="Details"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                app:cornerRadius="38dp" />
+<!--            <Button-->
+<!--                android:id="@+id/btnReceiptDetailsListView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="35dp"-->
+<!--                android:layout_alignParentBottom="true"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:background="@drawable/roundedbutton"-->
+<!--                android:fontFamily="@font/calibri"-->
+<!--                android:text="Details"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textStyle="bold"-->
+<!--                app:cornerRadius="38dp" />-->
 
 
         </RelativeLayout>
