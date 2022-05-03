@@ -23,4 +23,5 @@ public class Constants {
     public static final String MAP_LNG = "map_lng";
     public static final String PASSWORD_KEY = "PASSWORD";
     public static final String VERYI_RESPONSE_KEY = "VERYI_RESPONSE";
+    public static final String FILTER_YEAR = "FILTER_YEAR";
 }

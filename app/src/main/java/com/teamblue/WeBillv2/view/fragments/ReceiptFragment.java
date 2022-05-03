@@ -40,6 +40,7 @@ import com.teamblue.WeBillv2.view.MyBillsListView;
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
+import java.time.Year;
 import java.util.List;
 
 import retrofit2.Call;
@@ -50,10 +51,10 @@ import retrofit2.Response;
 /**
  * receipts fragment subclass.
  */
-public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class ReceiptFragment extends Fragment {
 
     private Button btnFilterYear,btnFilterApply;
-    private Spinner spinnerYears;
+//    private Spinner spinnerYears;
     private Dialog filterDialog;
     private Dialog addReceiptDialog;
     private Dialog receiptDetailsDialog;
@@ -108,26 +109,26 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
 
 
         //1 handling filter button and its pop up window
-        filterDialog = new Dialog(this.getContext());
-        filterDialog.setContentView(R.layout.popup_receipt_filter);
-        btnFilterYear = (Button) view.findViewById(R.id.btnFilterYear);
-        btnFilterYear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterDialog.show();
-            }
-        });
+//        filterDialog = new Dialog(this.getContext());
+//        filterDialog.setContentView(R.layout.popup_receipt_filter);
+//        btnFilterYear = (Button) view.findViewById(R.id.btnFilterYear);
+//        btnFilterYear.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                filterDialog.show();
+//            }
+//        });
 
 
         //2 Basic settings for spinner inside a Fragment
-        spinnerYears = (Spinner) filterDialog.findViewById(R.id.spinnerMonths);// since spinner is inside myDialog, don't use view.getContext()
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                getActivity().getBaseContext(),
-                R.array.years,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerYears.setAdapter(adapter);
-        spinnerYears.setOnItemSelectedListener(this);
+//        spinnerYears = (Spinner) filterDialog.findViewById(R.id.spinnerMonths);// since spinner is inside myDialog, don't use view.getContext()
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+//                getActivity().getBaseContext(),
+//                R.array.years,
+//                android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerYears.setAdapter(adapter);
+//        spinnerYears.setOnItemSelectedListener(this);
 
 
         //3 handling the receiptContainer
@@ -149,23 +150,24 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     //2.1 Do spinner's functions here, now a demo of showing Toast text when select a month
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String textYear = spinnerYears.getSelectedItem().toString();
-        Toast.makeText(this.getContext(), textYear, Toast.LENGTH_SHORT).show();
-        tvFilterYear.setText(textYear); //Display filter year here
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
+//    @Override
+//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//        String textYear = spinnerYears.getSelectedItem().toString();
+//        Toast.makeText(this.getContext(), textYear, Toast.LENGTH_SHORT).show();
+//        tvFilterYear.setText(textYear); //Display filter year here
+//    }
+//
+//    @Override
+//    public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//    }
 
     //make network call to receive bills belonging to user
     public void getBillsForUser(Context context, String username) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.TEMP_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         clickedItemLat = Double.longBitsToDouble(sharedPref.getLong(Constants.MAP_LAT, Constants.MAP_COORD_ERROR));
         clickedItemLng = Double.longBitsToDouble(sharedPref.getLong(Constants.MAP_LNG, Constants.MAP_COORD_ERROR));
+        String year = sharedPref.getString(Constants.FILTER_YEAR,Integer.toString(Year.now().getValue()));
         if (!(sharedPref.contains(Constants.MAP_LAT) && sharedPref.contains(Constants.MAP_LNG))){//((clickedItemLat == Constants.MAP_COORD_ERROR_D) || (clickedItemLng == Constants.MAP_COORD_ERROR_D)) {
             clickedItemLat = Double.NaN;
             clickedItemLng = Double.NaN;
@@ -181,9 +183,9 @@ public class ReceiptFragment extends Fragment implements AdapterView.OnItemSelec
         //2. create a call object which will make the REST API call to our backend by passing in username as parameters
         Call<List<BillModel>> call;
         if (!(Double.isNaN(clickedItemLat) && Double.isNaN(clickedItemLng))) {
-            call = billMethods.getBillsForUserByLoc(new BillsByLoc(username, clickedItemLat, clickedItemLng, ""));
+            call = billMethods.getBillsForUserByLoc(new BillsByLoc(username, clickedItemLat, clickedItemLng, year));
         } else {
-            call = billMethods.getBillsForUser(username);
+            call = billMethods.getBillsForUser(username,year);
         }
 
         call.enqueue(new Callback<List<BillModel>>() {

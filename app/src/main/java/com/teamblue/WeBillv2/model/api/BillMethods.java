@@ -17,7 +17,7 @@ import retrofit2.http.Query;
 public interface BillMethods {
 
     @GET("bill/getBillsForUser")
-    Call<List<BillModel>> getBillsForUser(@Query("username") String username);
+    Call<List<BillModel>> getBillsForUser(@Query("username") String username, @Query("year") String year);
 
     @POST("bill/getBillsForUserByLoc")
     Call<List<BillModel>> getBillsForUserByLoc(@Body BillsByLoc billsByLoc);
