@@ -2,6 +2,8 @@ package com.teamblue.WeBillv2.view.fragments;
 
 import static android.content.ContentValues.TAG;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,9 +23,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +44,7 @@ import com.teamblue.WeBillv2.service.ModifyPasswordService;
 import com.teamblue.WeBillv2.service.ModifyPhoneNumberService;
 import com.teamblue.WeBillv2.view.MainActivity;
 
+import java.time.Year;
 import java.util.List;
 
 import retrofit2.Call;
@@ -53,11 +59,13 @@ public class AccountFragment extends Fragment {
 
     private Button btnProfilePic,btnLogOut,btnChangeUsername;
     private Button btnChangePassword, btnChangePhoneNumber, btnContactUs;
+    private Spinner spnrYearFilter;
     private Integer ImgId;
     private Integer savedImg;
     private String savedUsername;
     private EditText edtChangeUserName;
     private TextView tvAccountPageUsername;
+    private boolean viewExists;
     AlertDialog dialogChooseProfilePic,dialogLogout,dialogChangeUsername;
 
     public AccountFragment() {
@@ -70,8 +78,38 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_account, container, false);
-
+        viewExists = false;
         tvAccountPageUsername = view.findViewById(R.id.tvAccountPageUsername);
+
+        spnrYearFilter = (Spinner) view.findViewById(R.id.spnrYearFilter);// since spinner is inside myDialog, don't use view.getContext()
+        ArrayAdapter<CharSequence> adapter =
+                ArrayAdapter.createFromResource(
+                getActivity().getBaseContext(),
+                R.array.years,
+                android.R.layout.simple_spinner_item);
+
+        System.out.println(adapter);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnrYearFilter.setAdapter(adapter);
+        spnrYearFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                if(viewExists){
+                    String year = adapterView.getItemAtPosition(pos).toString();
+                    setAppYear(year);
+                }
+                else{
+                    spnrYearFilter.setSelection(22);
+                    viewExists = true;
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                setDefaultAppYear();
+            }
+        });
 
         /******Dialog for Changing Profile Pics******/
         buildProfilePicDialog(); // build contents here
@@ -305,6 +343,7 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(dialogView.getContext(), "We'll miss you ❤️", Toast.LENGTH_SHORT).show();
+                        setDefaultAppYear();
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         startActivity(intent);
                     }
@@ -409,5 +448,24 @@ public class AccountFragment extends Fragment {
         btnProfilePic.setBackgroundResource(savedImg);
         ImgId = savedImg;
 //        Toast.makeText(this.getContext(), "Loaded Data", Toast.LENGTH_SHORT).show();
+    }
+
+    public void setDefaultAppYear(){
+        String currentYear = Integer.toString(Year.now().getValue());
+        //set it to preferences
+        SharedPreferences sharedPreferences = getActivity().getBaseContext().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Constants.FILTER_YEAR,currentYear);
+        editor.apply();
+        Log.d("=======TAG======",(sharedPreferences.getString(Constants.FILTER_YEAR,Integer.toString(Year.now().getValue()))));
+    }
+
+    public void setAppYear(String year){
+        //set it to preferences
+        SharedPreferences sharedPreferences = getActivity().getBaseContext().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Constants.FILTER_YEAR,year);
+        editor.apply();
+        Log.d("=======TAG======",(sharedPreferences.getString(Constants.FILTER_YEAR,Integer.toString(Year.now().getValue()))));
     }
 }

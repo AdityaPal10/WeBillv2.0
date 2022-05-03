@@ -10,9 +10,11 @@ import com.teamblue.WeBillv2.model.api.MapsMethods;
 import com.teamblue.WeBillv2.model.pojo.Constants;
 import com.teamblue.WeBillv2.model.pojo.LocationModel;
 import com.teamblue.WeBillv2.model.pojo.LoginModel;
+import com.teamblue.WeBillv2.model.pojo.MapsRequestModel;
 import com.teamblue.WeBillv2.model.pojo.User;
 import com.teamblue.WeBillv2.view.MenuView;
 
+import java.time.Year;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -27,10 +29,10 @@ public class MapsService {
     public void getExpenseLocations(Context context, MapsController mapsControllerCallback){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
         String username = sharedPreferences.getString(Constants.USERNAME_KEY,"");
-//        String username = "test";
+        String year = sharedPreferences.getString(Constants.FILTER_YEAR,Integer.toString(Year.now().getValue()));
 
         MapsMethods mapsMethods = LoginRetrofitClient.getRetrofitInstance().create(MapsMethods.class);
-        Call<ArrayList<LocationModel>> call = mapsMethods.getExpenseLocation(new User(username));
+        Call<ArrayList<LocationModel>> call = mapsMethods.getExpenseLocation(new MapsRequestModel(username,year));
 
         call.enqueue(new Callback<ArrayList<LocationModel>>() {
             @Override
