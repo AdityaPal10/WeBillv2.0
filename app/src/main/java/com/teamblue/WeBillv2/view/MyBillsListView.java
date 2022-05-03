@@ -49,7 +49,7 @@ public class MyBillsListView extends ArrayAdapter<Integer> {
 
         tvBillAmount.setText(tvBillAmount.getText().toString()+billAmounts[position]);
         tvBillName.setText(billNames[position]);
-        tvBillDate.setText(billNames[position]);
+        tvBillDate.setText(billDates[position]);
 
 //        detailsButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
