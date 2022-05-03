@@ -121,7 +121,7 @@ public class FriendService {
 
                 tvToPay.setText(sharedPreferences.getString(Constants.BALANCE_TO_PAY,"0.0"));
                 tvToTakeBack.setText(sharedPreferences.getString(Constants.BALANCE_TO_TAKE,"0.0"));
-                DecimalFormat df = new DecimalFormat("###.00");
+                DecimalFormat df = new DecimalFormat("##0.00");
                 Double Balance = Double.valueOf(tvToTakeBack.getText().toString()) - Double.valueOf(tvToPay.getText().toString());
                 tvMyBalanceNumber.setText(df.format(Balance));
             }
