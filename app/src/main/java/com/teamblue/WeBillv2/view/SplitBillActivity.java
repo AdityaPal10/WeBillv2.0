@@ -80,6 +80,7 @@ public class SplitBillActivity extends AppCompatActivity {
     private Spinner edtPayerName;
     private TextView tvRemainAmount, tvTotalAmountSplitBill;
     private String getActivityName, getTotalAmount, getDate, getAddress;
+    private String veryfiResponseString;
     private Button btnAddSplitFriend;
     private Button btnSaveBill;
     private Button btnDatePickerSplitBill;
@@ -105,6 +106,8 @@ public class SplitBillActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         username = sharedPreferences.getString(Constants.USERNAME_KEY, "");
+
+        veryfiResponseString = (String)getIntent().getExtras().get(Constants.VERYI_RESPONSE_KEY);
 
         allFriendsList = new ArrayList<>();
         allFriendsList.add("");
@@ -138,17 +141,17 @@ public class SplitBillActivity extends AppCompatActivity {
 
         initDatePicker();
         //TODO:Re-enable item dialog after test.
-//        buildItemsDialog();
+        buildItemsDialog();
 
 
         /******** Show Items Dialog *********/
         //TODO:Re-enable item dialog after test.
-//        lineItemsButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ItemsDialog.show();
-//            }
-//        });
+        lineItemsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ItemsDialog.show();
+            }
+        });
 
         edtPayerName.setAdapter(paidByArrayAdapter);
         edtPayerName.setSelection(0);
@@ -241,6 +244,7 @@ public class SplitBillActivity extends AppCompatActivity {
         getDate = (String) getIntent().getExtras().get("BILL_DATE");
         getAddress = (String) getIntent().getExtras().get("BILL_ADDRESS");
 
+
         /************Put Bundles from AddBillFragment into SplitBillActivity************/
         edtActivityNameSplitBill.setText(getActivityName);
         tvTotalAmountSplitBill.setText(getTotalAmount);
@@ -327,49 +331,68 @@ public class SplitBillActivity extends AppCompatActivity {
 
     /********** Building Items content Dialog **********/
     //TODO:Re-enable item dialog after test.
-//    private void buildItemsDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        View view = getLayoutInflater().inflate(R.layout.popup_bill_conclusion_items, null);
-//
-//        lineItems = getLineItems();
-//        ListView SplitBillItemLists = view.findViewById(R.id.SplitBillItemLists);
-//        int size = lineItems.size();
-//        if(size>0){
-//            String[] itemNames = new String[size];
-//            double[] itemsQ = new double[size];
-//            double[] totals = new double[size];
-//            int index = 0;
-//            for(LineItems lineItem : lineItems){
-//                itemNames[index] = lineItem.getDescription();
-//                itemsQ[index] = lineItem.getQuantity();
-//                totals[index] = lineItem.getTotal();
-//                index++;
-//            }
-//
-//            LineItemsAdapter lineItemsAdapter = new LineItemsAdapter(this,itemNames,itemsQ,totals);
-//            SplitBillItemLists.setAdapter(lineItemsAdapter);
-//        }else{
-//            Toast.makeText(getApplicationContext(),"No line items to show",Toast.LENGTH_LONG).show();
-//        }
-//
-//
-//        /********** List Items **********/
-//
-//        builder.setView(view);
-//        ItemsDialog = builder.create();
-//    }
+    private void buildItemsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.popup_bill_conclusion_items, null);
+
+        lineItems = getLineItems(veryfiResponseString);
+        ListView SplitBillItemLists = view.findViewById(R.id.SplitBillItemLists);
+        int size = lineItems.size();
+        if(size>0){
+            String[] itemNames = new String[size];
+            double[] itemsQ = new double[size];
+            double[] totals = new double[size];
+            int index = 0;
+            for(LineItems lineItem : lineItems){
+                itemNames[index] = lineItem.getDescription();
+                itemsQ[index] = lineItem.getQuantity();
+                totals[index] = lineItem.getTotal();
+                index++;
+            }
+
+            LineItemsAdapter lineItemsAdapter = new LineItemsAdapter(this,itemNames,itemsQ,totals);
+            SplitBillItemLists.setAdapter(lineItemsAdapter);
+        }else{
+            Toast.makeText(getApplicationContext(),"No line items to show",Toast.LENGTH_LONG).show();
+        }
+
+
+        /********** List Items **********/
+
+        builder.setView(view);
+        ItemsDialog = builder.create();
+    }
 
 
     //fetch line items from shared preferences
-    private List<LineItems> getLineItems(){
-        SharedPreferences sharedPref = this.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+    private List<LineItems> getLineItems(String veryfiResponseString){
+        //SharedPreferences sharedPref = this.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        //String jsonString = getIntent().getExtras().getString(Constants.VERYI_RESPONSE_KEY);
         Gson gson = new Gson();
-        String jsonString = sharedPref.getString(Constants.VERYI_RESPONSE_KEY,"");
-        VeryfiOcrResponse veryfiOcrResponse = gson.fromJson(jsonString,VeryfiOcrResponse.class);
-
-        int noOfItems = veryfiOcrResponse.getLineItems().size();
+//        jsonString = sharedPref.getString(Constants.VERYI_RESPONSE_KEY,"");
+//        if(veryfiResponseString.equals("") || veryfiResponseString.isEmpty()){
+//            lineItems = new ArrayList<>();
+//            return lineItems;
+//        }
+        Log.d("veryfi",veryfiResponseString);
+        VeryfiOcrResponse veryfiOcrResponse;
+        try{
+            veryfiOcrResponse = gson.fromJson(veryfiResponseString,VeryfiOcrResponse.class);
+        }catch (Exception e){
+            veryfiOcrResponse = null;
+        }
+        if(veryfiOcrResponse==null){
+            lineItems = new ArrayList<>();
+            return lineItems;
+        }
+        int noOfItems = 0;
+        if(veryfiOcrResponse.getLineItems()!=null){
+            noOfItems=veryfiOcrResponse.getLineItems().size();
+        }
         if(noOfItems>0){
             lineItems = veryfiOcrResponse.getLineItems();
+        }else{
+            lineItems = new ArrayList<>();
         }
         return lineItems;
     }

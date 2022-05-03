@@ -38,12 +38,14 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         txtPaymentDetails = (TextView) findViewById(R.id.txtPaymentDetails);
         btnPaymentDetails = (Button) findViewById(R.id.btnPaymentDetails);
 
+        // get the metadata needed to instantiate the payment sheet
         Intent intent = getIntent();
         setupIntentClientSecret = intent.getStringExtra("setupIntent");
         customerId = intent.getStringExtra("customerId");
         ephKey = intent.getStringExtra("ephKey");
         pubKey = intent.getStringExtra("pubKey");
 
+        // create the payment sheet and attach a callback method
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
         btnPaymentDetails.setOnClickListener(view -> {
@@ -51,6 +53,7 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         });
     }
 
+    // method to initiate the payment sheet with the necessary metadata and present it
     private void initPaymentSheet() {
         try {
             customerConfig = new PaymentSheet.CustomerConfiguration(customerId, ephKey);
@@ -67,6 +70,7 @@ public class PaymentDetailsActivity extends AppCompatActivity {
     }
 
 
+    // payment sheet callback
     void onPaymentSheetResult(final PaymentSheetResult paymentSheetResult) {
         if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
             Toast.makeText(getApplicationContext(),TAG+" Canceled",Toast.LENGTH_LONG).show();
