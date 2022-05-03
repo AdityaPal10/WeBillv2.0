@@ -165,9 +165,11 @@ public class ReceiptFragment extends Fragment {
     //make network call to receive bills belonging to user
     public void getBillsForUser(Context context, String username) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.TEMP_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences permSharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         clickedItemLat = Double.longBitsToDouble(sharedPref.getLong(Constants.MAP_LAT, Constants.MAP_COORD_ERROR));
         clickedItemLng = Double.longBitsToDouble(sharedPref.getLong(Constants.MAP_LNG, Constants.MAP_COORD_ERROR));
-        String year = sharedPref.getString(Constants.FILTER_YEAR,Integer.toString(Year.now().getValue()));
+        String year = permSharedPref.getString(Constants.FILTER_YEAR,Integer.toString(Year.now().getValue()));
+        Log.d("======TAG IN FRAG=====",year);
         if (!(sharedPref.contains(Constants.MAP_LAT) && sharedPref.contains(Constants.MAP_LNG))){//((clickedItemLat == Constants.MAP_COORD_ERROR_D) || (clickedItemLng == Constants.MAP_COORD_ERROR_D)) {
             clickedItemLat = Double.NaN;
             clickedItemLng = Double.NaN;
