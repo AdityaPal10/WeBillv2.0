@@ -44,6 +44,12 @@
             android:fontFamily="@font/calibri"
             android:textStyle="bold" />
 
+        <ImageView
+            android:layout_width="1000dp"
+            android:layout_height="60dp"
+            android:background="#FFFFFF"
+            android:layout_toRightOf="@+id/tvReceiptText"/>
+
 
     </RelativeLayout>
 
