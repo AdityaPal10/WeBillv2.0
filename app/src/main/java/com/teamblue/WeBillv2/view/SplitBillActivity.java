@@ -509,7 +509,7 @@ public class SplitBillActivity extends AppCompatActivity {
                 LinearFriendSplit.removeView(cardview);
                 CurrentAmount = Double.valueOf(tvFriendSplitAmount.getText().toString());
                 RemainAmount = RemainAmount + CurrentAmount;
-                DecimalFormat df = new DecimalFormat("###.00");
+                DecimalFormat df = new DecimalFormat("##0.00");
                 tvRemainAmount.setText(df.format(RemainAmount));
                 selectedFriendsMap.remove(tvFriendSplitUsername.getText().toString());
                 spinnerArrayAdapter.add(tvFriendSplitUsername.getText().toString());
