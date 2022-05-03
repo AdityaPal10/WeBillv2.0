@@ -193,13 +193,14 @@ public class FriendFragment extends Fragment {
                             tvStatus.setTextColor(getResources().getColor(R.color.takeBackRed));
                             tvBalance.setTextColor(getResources().getColor(R.color.takeBackRed));
                             setPayOnClick(btnPay, friendBalanceModel.getFriend_username(), Math.abs(balance));
-                        }else if(balance>0){
+                        }else if(balance>0) {
                             tvStatus.setText("To take back : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.quantum_googgreen));
                             setRemindOnClick(btnPay, friendBalanceModel.getFriend_username(), balance);
-                        }else{
-                            continue;
                         }
+//                        }else{
+//                            continue;
+//                        }
                         tvFriendName.setText(friendBalanceModel.getFriend_username());
                         tvBalance.setText(String.format(java.util.Locale.US, "%.2f", Math.abs(balance)));
                         Log.d(TAG, friendBalanceModel.getFriend_username());
