@@ -15,7 +15,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/calibri"
-        android:text="Friends"
+        android:text="@string/friends"
         android:textColor="#000000"
         android:textSize="26sp" />
 
@@ -28,7 +28,7 @@
         android:layout_marginRight="20dp"
         android:background="@color/Transparent"
         android:fontFamily="@font/calibri"
-        android:text="+ Add Friends"
+        android:text="@string/add_friends"
         android:textStyle="bold" />
 
     <androidx.cardview.widget.CardView
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="30dp"
-                    android:text="My Balance:$"
+                    android:text="@string/my_balance"
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="70dp"
-                    android:text="To Pay: $"
+                    android:text="@string/to_pay"
                     android:textColor="#EC0D5C"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="100dp"
-                    android:text="To Take Back: $"
+                    android:text="@string/to_take_back"
                     android:textColor="#138806"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -150,7 +150,7 @@
         android:layout_below="@+id/cardViewBalance"
         android:layout_marginLeft="27dp"
         android:fontFamily="@font/calibri"
-        android:text="Here's your Friends status:"
+        android:text="@string/here_s_your_friends_status"
         android:textSize="20dp"
         android:textStyle="bold" />
 <!--    If no friend or clean balance, set this textview to "You have no expenses"-->

@@ -50,7 +50,7 @@
                 android:layout_marginTop="45dp"
                 android:layout_toRightOf="@+id/imgFriend"
                 android:fontFamily="@font/calibri"
-                android:text="Balance: $"
+                android:text="@string/balance"
                 android:textColor="#138806"
                 android:textSize="14sp"
                 android:textStyle="bold" />

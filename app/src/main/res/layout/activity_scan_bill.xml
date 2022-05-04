@@ -9,11 +9,11 @@
         android:id="@+id/tvWelcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/calibri"
-        android:layout_centerHorizontal="true"
-        android:text="AI Receipt Scanner"
+        android:text="@string/ai_receipt_scanner"
         android:textColor="#000000"
         android:textSize="26sp" />
 
@@ -46,7 +46,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/calibri"
-                android:text="Your Result Will Be Here"
+                android:text="@string/your_result_will_be_here"
                 android:textColor="#000000"
                 android:textSize="30dp" />
 
@@ -70,7 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@+id/imgBill"
-                    android:hint="Activity Name"
+                    android:hint="@string/activity_name"
                     android:inputType="text"
                     android:textAlignment="center" />
             </RelativeLayout>
@@ -95,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@+id/imgAmount"
-                    android:hint="Total Amount"
+                    android:hint="@string/total_amount"
                     android:inputType="numberDecimal"
                     android:textAlignment="center" />
             </RelativeLayout>
@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@+id/imgDate"
-                    android:hint="Date"
+                    android:hint="@string/date"
                     android:inputType="date"
                     android:textAlignment="center" />
             </RelativeLayout>
@@ -144,7 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@+id/imgAddress"
-                    android:hint="Address"
+                    android:hint="@string/address"
                     android:inputType="text"
                     android:textAlignment="center" />
             </RelativeLayout>
@@ -158,7 +158,7 @@
                 android:layout_marginBottom="45dp"
                 android:background="@drawable/roundedbutton"
                 android:fontFamily="@font/calibri"
-                android:text="Next"
+                android:text="@string/next"
                 android:textAllCaps="false"
                 android:textSize="20dp"
                 android:textStyle="bold"
@@ -174,7 +174,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/calibri"
-        android:text="Hey WeBill"
+        android:text="@string/hey_webill"
         android:textColor="#000000"
         android:textSize="26sp"
         android:textStyle="bold" />

@@ -12,7 +12,7 @@
             android:id="@+id/edtChangeUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your New Username"
+            android:hint="@string/your_new_username"
             android:textSize="20dp" />
 
     </RelativeLayout>

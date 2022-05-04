@@ -13,7 +13,7 @@
             android:id="@+id/edtAddFriendUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
+            android:hint="@string/username_add"
             android:textSize="20dp"/>
 
 <!--Add more EditText or other information you want to enter below-->

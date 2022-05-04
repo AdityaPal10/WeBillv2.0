@@ -6,25 +6,25 @@
     <item
         android:id="@+id/friends"
         android:icon="@drawable/friends"
-        android:title="Friends" />
+        android:title="@string/friends_m" />
 
     <item
         android:id="@+id/receipt"
         android:icon="@drawable/invoice"
-        android:title="My Bills" />
+        android:title="@string/my_bills_m" />
 
     <item
         android:id="@+id/addbills"
         android:icon="@drawable/plus"
-        android:title="Add Bills" />
+        android:title="@string/add_bills_m" />
 
     <item
         android:id="@+id/spendingactivity"
         android:icon="@drawable/worldwide"
-        android:title="Activity" />
+        android:title="@string/activity_m" />
 
     <item
         android:id="@+id/account"
         android:icon="@drawable/user"
-        android:title="Account" />
+        android:title="@string/account_m" />
 </menu>

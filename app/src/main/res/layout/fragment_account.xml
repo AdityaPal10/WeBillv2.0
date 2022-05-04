@@ -17,7 +17,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/calibri"
-        android:text="Account"
+        android:text="@string/account"
         android:textColor="#000000"
         android:textSize="26sp" />
 
@@ -97,7 +97,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:fontFamily="@font/calibri"
-                android:text="Settings"
+                android:text="@string/settings"
                 android:textColor="#000000"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -133,7 +133,7 @@
                 android:layout_marginTop="0dp"
                 android:background="@color/Transparent"
                 android:paddingLeft="-245dp"
-                android:text="Reset Password"
+                android:text="@string/reset_password"
                 android:textAllCaps="false"
                 android:textSize="15dp" />
 
@@ -151,7 +151,7 @@
                 android:layout_marginTop="0dp"
                 android:background="@color/Transparent"
                 android:paddingLeft="-200dp"
-                android:text="Modify Mobile Number"
+                android:text="@string/modify_mobile_number"
                 android:textAllCaps="false"
                 android:textSize="15dp" />
 
@@ -168,7 +168,7 @@
                 android:layout_marginTop="0dp"
                 android:background="@color/Transparent"
                 android:paddingLeft="-280dp"
-                android:text="Contact Us"
+                android:text="@string/contact_us"
                 android:textAllCaps="false"
                 android:textSize="15dp" />
 
@@ -200,7 +200,7 @@
         android:layout_above="@+id/btnLogOut"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:text="Made with :) Team Blue @ BU CS501" />
+        android:text="@string/made_with_team_blue_bu_cs501" />
 
     <Button
         android:id="@+id/btnLogOut"
@@ -210,7 +210,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:background="@color/Transparent"
-        android:text="Log Out"
+        android:text="@string/log_out"
         android:textColor="#004AAD" />
 
 

@@ -15,7 +15,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginTop="60dp"
         android:fontFamily="@font/calibri"
-        android:text="Add New Bill"
+        android:text="@string/add_new_bill"
         android:textColor="#000000"
         android:textSize="26sp" />
 
@@ -60,7 +60,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="30dp"
                         android:fontFamily="@font/calibri"
-                        android:text="Bill Information"
+                        android:text="@string/bill_information"
                         android:textColor="#000000"
                         android:textSize="30dp" />
 
@@ -84,7 +84,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imgBill"
-                            android:hint="Activity Name"
+                            android:hint="@string/activity_name2"
                             android:inputType="text"
                             android:textAlignment="center" />
                     </RelativeLayout>
@@ -109,7 +109,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imgAmount"
-                            android:hint="Total Amount"
+                            android:hint="@string/total_amount2"
                             android:inputType="numberDecimal"
                             android:textAlignment="center" />
                     </RelativeLayout>
@@ -160,7 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imgAddress"
-                            android:hint="Address"
+                            android:hint="@string/address2"
                             android:inputType="text"
                             android:textAlignment="center" />
                     </RelativeLayout>
@@ -174,7 +174,7 @@
                         android:layout_marginBottom="45dp"
                         android:background="@drawable/roundedbutton"
                         android:fontFamily="@font/calibri"
-                        android:text="Enter"
+                        android:text="@string/enter"
                         android:textAllCaps="false"
                         android:textSize="20dp"
                         android:textStyle="bold"
@@ -213,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:text="Scan"
+                    android:text="@string/scan"
                     android:textColor="#606060"
                     android:textSize="12dp" />
             </RelativeLayout>

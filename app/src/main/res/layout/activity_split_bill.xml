@@ -47,7 +47,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/roundedbutton"
-                    android:text="Save"
+                    android:text="@string/save"
                     android:textAllCaps="false" />
 
                 <TextView
@@ -57,7 +57,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/calibri"
-                    android:text="Bill Conclusion"
+                    android:text="@string/bill_conclusion"
                     android:textColor="#000000"
                     android:textSize="30dp" />
 
@@ -92,12 +92,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tvPaidByText"
-                    android:fontFamily="@font/calibri"
-                    android:text="Total: $"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="@string/total"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="20dp"/>
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tvTotalAmountSplitBill"
@@ -172,7 +172,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="20dp"
                     android:background="@color/Transparent"
-                    android:text="Items"
+                    android:text="@string/items"
                     android:textAllCaps="false"
                     android:textColor="#2665B8" />
 
@@ -185,7 +185,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginBottom="30dp"
                     android:fontFamily="@font/calibri"
-                    android:text="Paid By:"
+                    android:text="@string/paid_by"
                     android:textColor="#000000"
                     android:textSize="20sp" />
 
@@ -198,7 +198,7 @@
                     android:layout_marginBottom="20dp"
                     android:layout_toRightOf="@+id/tvPaidByText"
                     android:fontFamily="@font/calibri"
-                    android:hint="Default Username"
+                    android:hint="@string/default_username"
                     android:inputType="text"
                     android:textColor="#000000"
                     android:textSize="20sp" />
@@ -221,7 +221,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/calibri"
-                android:text="Split With:"
+                android:text="@string/split_with"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -243,7 +243,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/btnAddSplitFriend"
                 android:fontFamily="@font/calibri"
-                android:text="Remain: $"
+                android:text="@string/remain"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 

@@ -1,0 +1,130 @@
+<resources>
+    <string name="app_name">Animated Bottom Bar</string>
+    <string name="webill">WeBill</string>
+    <string name="sign_in">登录</string>
+    <string name="sign_up">注册?</string>
+    <string name="username">请输入用户名</string>
+    <string name="password">请输入密码</string>
+    <string name="last_step_nplease_add_a_card">最后一步!\n请添加您的信用卡（测试卡4242）.</string>
+    <string name="add_card">添加卡片</string>
+    <string name="your_result_will_be_here">你的结果会在这里展示</string>
+    <string name="ai_receipt_scanner">AI 收据扫描器</string>
+    <string name="activity_name">账单名称</string>
+    <string name="total_amount">总价</string>
+    <string name="date">日期</string>
+    <string name="address">地址</string>
+    <string name="next">下一步</string>
+    <string name="hey_webill">Hey WeBill</string>
+    <string name="save">保存</string>
+    <string name="bill_conclusion">账单归总</string>
+    <string name="total">总价: $</string>
+    <string name="paid_by">支付人:</string>
+    <string name="default_username">Default Username</string>
+    <string name="split_with">分账人:</string>
+    <string name="remain">剩余: $</string>
+    <string name="items">详细</string>
+    <string name="hello_user_nthanks_for_signing_up_nthere_s_just_one_more_step">你好 {user}!\n感谢你的注册.\n只\需要最后一步.</string>
+    <string name="ok">OK</string>
+    <string name="balance">余额: $</string>
+    <string name="bill_amount">账单数额: $</string>
+    <string name="account">账户</string>
+    <string name="settings">设置</string>
+    <string name="reset_password">重置密码</string>
+    <string name="modify_mobile_number">修改电话号码</string>
+    <string name="contact_us">联系我们</string>
+    <string name="made_with_team_blue_bu_cs501">❤️由 :) 蓝队 @ BU CS501 开发❤️</string>
+    <string name="log_out">登出</string>
+    <string name="add_new_bill">添加新的账单</string>
+    <string name="scan">扫描</string>
+    <string name="bill_information">账单信息</string>
+    <string name="activity_name2">账单名称</string>
+    <string name="total_amount2">总价</string>
+    <string name="address2">地址</string>
+    <string name="enter">输入</string>
+    <string name="friends">朋友</string>
+    <string name="add_friends">+ 添加朋友</string>
+    <string name="my_balance">我的余额:$</string>
+    <string name="to_pay">需要支付: $</string>
+    <string name="to_take_back">需要取回: $</string>
+    <string name="here_s_your_friends_status">这\是你的朋友状况:</string>
+    <string name="my_bills">我的账单</string>
+    <string name="activity2">活动</string>
+    <string name="username_add">添加朋友的用户名</string>
+    <string name="amount_split">承担价格</string>
+    <string name="bill_item_details">账单明细</string>
+    <string name="item_name">物品名</string>
+    <string name="quantity_item">数量</string>
+    <string name="total_item">价格</string>
+    <string name="choose_your_profile_picture">请选择你的头像</string>
+    <string name="your_new_username">你的新用户名</string>
+    <string name="bill_amount2">账单数目: $</string>
+    <string name="username_s">用户昵称</string>
+    <string name="email_s">Email（输入假的）</string>
+    <string name="password_s">密码（输入假的）</string>
+    <string name="phone_s">电话号码（输入假的）</string>
+    <string name="address_s">地址（输入假的）</string>
+    <string name="gender_s">性别（M或者F）</string>
+    <string name="register_s">注册</string>
+    <string name="friends_m">朋友</string>
+    <string name="my_bills_m">我的账单</string>
+    <string name="add_bills_m">添加账单</string>
+    <string name="activity_m">消费记录</string>
+    <string name="account_m">我</string>
+
+
+    <string-array name="years">
+        <item>2000</item>
+        <item>2001</item>
+        <item>2002</item>
+        <item>2003</item>
+        <item>2004</item>
+        <item>2005</item>
+        <item>2006</item>
+        <item>2007</item>
+        <item>2008</item>
+        <item>2009</item>
+        <item>2010</item>
+        <item>2011</item>
+        <item>2012</item>
+        <item>2013</item>
+        <item>2014</item>
+        <item>2015</item>
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+        <item>2021</item>
+        <item>2022</item>
+        <item>2023</item>
+        <item>2024</item>
+        <item>2025</item>
+        <item>2026</item>
+        <item>2027</item>
+        <item>2028</item>
+        <item>2029</item>
+        <item>2030</item>
+        <item>2031</item>
+        <item>2032</item>
+        <item>2033</item>
+        <item>2034</item>
+        <item>2035</item>
+        <item>2036</item>
+        <item>2037</item>
+        <item>2038</item>
+        <item>2039</item>
+        <item>2040</item>
+        <item>2041</item>
+        <item>2042</item>
+        <item>2043</item>
+        <item>2044</item>
+        <item>2045</item>
+        <item>2046</item>
+        <item>2047</item>
+        <item>2048</item>
+        <item>2049</item>
+        <item>2050</item>
+
+    </string-array>
+
+</resources>
