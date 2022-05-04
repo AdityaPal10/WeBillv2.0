@@ -3,5 +3,6 @@ Second Draft of WeBill in MVC
 Team Blue
 Coded in MVC
 
-Reminder： There is a Gif at Scan Bill Activity (The fancy AI Camera Button under text "Hey WeBill")
-If you click scan bill button and app crashes, please try to delete and rebuild the app, since Android Studio could be buggy when building the project.
+Before you run the app:
+1. Make sure you have correct local.properties in the project. 
+2. Add MAPS_API_KEY=AIzaSyAc2nPhKlEoOLKy8s07IDBPKcNO7dTAC5U to local.properties
