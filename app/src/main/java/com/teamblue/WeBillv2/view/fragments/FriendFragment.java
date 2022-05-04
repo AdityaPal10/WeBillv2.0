@@ -73,7 +73,6 @@ public class FriendFragment extends Fragment {
         containerFriendCards = view.findViewById(R.id.containerFriendCards);
 
         context = getActivity().getApplicationContext();
-
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("FriendCardFinished",false);
@@ -88,6 +87,7 @@ public class FriendFragment extends Fragment {
         getFriendBalances(context,username);
 
         /*********Call Your Add Friend Dialog here********/
+        //method to add new friend and create the add friend dialogue
         buildAddNewFriendDialog();
         btnAddFriends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,15 +96,14 @@ public class FriendFragment extends Fragment {
             }
         });
 
-
-
-
-
-
         return view;
     }
 
     /*********Build and Custom Your Add Friend Dialog here********/
+    //1. add friend diaog creation
+    //2. user adds the username of the friend registered in app
+    //3. pass the parameters to card view
+    //4. default balance of the new friend is 0
     private void buildAddNewFriendDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         View viewDialogAddFriend = getLayoutInflater().inflate(R.layout.popup_add_new_friend, null);
@@ -136,6 +135,8 @@ public class FriendFragment extends Fragment {
 
     /*********Build A single Friend Card Here everytime you add a new friend,
      * You can also custom more information for this friend here.   ********/
+    //create card view of the new friend in the friend page
+    //save the card view details in shared preferences so that we can switch between users and tabs
     private void addNewFriendCard(String Username) {
         View viewNewFriendCard = getLayoutInflater().inflate(R.layout.cardview_new_friend, null); // inflate your new friend card view
         TextView tvFriendName = viewNewFriendCard.findViewById(R.id.tvFriendName);
@@ -168,7 +169,7 @@ public class FriendFragment extends Fragment {
 
        // containerFriendCards.addView(viewNewFriendCard);
     }
-
+    //function to get ledger balance of friends from the backend and breakdown of money to pay and money owed
     public void getFriendBalances(Context context,String username){
         //1. create an instance of friend methods interface defined in our FriendMethods class
         FriendMethods friendMethods = LoginRetrofitClient.getRetrofitInstance().create(FriendMethods.class);
@@ -178,28 +179,28 @@ public class FriendFragment extends Fragment {
         call.enqueue(new Callback<List<FriendBalanceModel>>() {
             @Override
             public void onResponse(Call<List<FriendBalanceModel>> call, Response<List<FriendBalanceModel>> response) {
-                Log.d(TAG,"response code :"+response.code());
+                Log.d(TAG, "response code :" + response.code());
 
-                if(response.code()==Constants.RESPONSE_OK){
+                if (response.code() == Constants.RESPONSE_OK) {
                     List<FriendBalanceModel> friendBalanceModels = response.body();
                     System.out.println(friendBalanceModels.toString());
 
-                    for(FriendBalanceModel friendBalanceModel : friendBalanceModels){
+                    for (FriendBalanceModel friendBalanceModel : friendBalanceModels) {
                         //add each friend balance model to cards
 
                         //1. get view to card fragment
-                        View newCard = getLayoutInflater().inflate(R.layout.cardview_new_friend,null);
+                        View newCard = getLayoutInflater().inflate(R.layout.cardview_new_friend, null);
                         TextView tvFriendName = newCard.findViewById(R.id.tvFriendName);
                         TextView tvBalance = newCard.findViewById(R.id.tvFriendBalance);
                         TextView tvStatus = newCard.findViewById(R.id.tvFriendStatus);
                         Button btnPay = newCard.findViewById(R.id.btnFriendStatus);
-                        double balance = friendBalanceModel.getAmountOwed()-friendBalanceModel.getAmountToPay();
-                        if(balance<0){
+                        double balance = friendBalanceModel.getAmountOwed() - friendBalanceModel.getAmountToPay();
+                        if (balance < 0) {
                             tvStatus.setText("To pay : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.takeBackRed));
                             tvBalance.setTextColor(getResources().getColor(R.color.takeBackRed));
                             setPayOnClick(btnPay, friendBalanceModel.getFriend_username(), Math.abs(balance));
-                        }else if(balance>0) {
+                        } else if (balance > 0) {
                             tvStatus.setText("To take back : $");
                             tvStatus.setTextColor(getResources().getColor(R.color.quantum_googgreen));
                             setRemindOnClick(btnPay, friendBalanceModel.getFriend_username(), balance);
@@ -215,7 +216,6 @@ public class FriendFragment extends Fragment {
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<List<FriendBalanceModel>> call, Throwable t) {
                 //error getting cards
@@ -224,7 +224,7 @@ public class FriendFragment extends Fragment {
             }
         });
     }
-
+    //method to add friend, integrated with the backend
     public void add(Context context, String username, String friendName){
 
         //1. create an instance of friend methods interface defined in our FriendMethods class
