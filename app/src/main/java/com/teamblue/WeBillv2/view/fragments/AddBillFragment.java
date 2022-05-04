@@ -377,10 +377,12 @@ public class AddBillFragment extends Fragment {
                 }else if(TextUtils.isEmpty(btnDatePicker.getText().toString())){
                     btnDatePicker.setError("Must Not Be Empty!");
                         return;
-                }else if(TextUtils.isEmpty(edtAddressAddBill.getText().toString())){
-                    edtAddressAddBill.setError("Must Not Be Empty!");
-                    return;
-                }else{
+                }
+//                else if(TextUtils.isEmpty(edtAddressAddBill.getText().toString())){
+//                    edtAddressAddBill.setError("Must Not Be Empty!");
+//                    return;
+//                }
+                else{
                     DecimalFormat df = new DecimalFormat("###.00");
                     df.setRoundingMode(RoundingMode.DOWN);
                     Bundle bundle = new Bundle();

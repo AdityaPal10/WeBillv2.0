@@ -186,26 +186,27 @@ public class SplitBillActivity extends AppCompatActivity {
                 } else if (edtPayerName.getSelectedItem().toString().equals("")) {
                     Toast.makeText(SplitBillActivity.this, "Please select a payer!", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (Double.valueOf(tvRemainAmount.getText().toString()) != 0) {
+                }
+                else if (Double.valueOf(tvRemainAmount.getText().toString()) != 0) {
                     Toast.makeText(SplitBillActivity.this, "You Still Have Remain Amount", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    Address geocodedAddress = null;
+//                    Geocoder geocoder = new Geocoder(getApplicationContext());
+//                    Address geocodedAddress = null;
 //                    DecimalFormat df = new DecimalFormat("###.#####");
-                    try {
-                        List<Address> geocodedAddressList = geocoder.getFromLocationName(edtAddressSplitBill.getText().toString(), 1);
-                        geocodedAddress = geocodedAddressList.get(0);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        List<Address> geocodedAddressList = geocoder.getFromLocationName(edtAddressSplitBill.getText().toString(), 1);
+//                        geocodedAddress = geocodedAddressList.get(0);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                     System.out.println("USERNAME: "+ username);
                     System.out.println("BILL_NAME: "+ edtActivityNameSplitBill.getText().toString());
                     System.out.println("TOTAL_AMOUNT: "+ tvTotalAmountSplitBill.getText().toString());
                     System.out.println("DATE: "+ btnDatePickerSplitBill.getText().toString());
                     System.out.println("PAID_BY: "+ selectedPayerName);
-                    System.out.println("LAT: "+ geocodedAddress.getLatitude());
-                    System.out.println("LNG: "+ geocodedAddress.getLongitude());
+//                    System.out.println("LAT: "+ geocodedAddress.getLatitude());
+//                    System.out.println("LNG: "+ geocodedAddress.getLongitude());
                     System.out.println(selectedFriendsMap);
                     if((selectedFriendsMap.size()==1)&&(selectedPayerName.equalsIgnoreCase(selectedFriendsMap.keySet().toArray()[0].toString()))){
                         Toast.makeText(SplitBillActivity.this, "Payer can't be the only splitter!", Toast.LENGTH_SHORT).show();
@@ -218,8 +219,8 @@ public class SplitBillActivity extends AppCompatActivity {
                                 Double.parseDouble(tvTotalAmountSplitBill.getText().toString()),
                                 btnDatePickerSplitBill.getText().toString(),
                                 selectedPayerName,
-                                Double.toString(geocodedAddress.getLatitude()),
-                                Double.toString(geocodedAddress.getLongitude()),
+                                Double.toString(43),
+                                Double.toString(43),
                                 selectedFriendsMap);
                         putBillSplit(getApplicationContext(),splitBill);
                     }
