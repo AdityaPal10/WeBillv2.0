@@ -97,6 +97,9 @@ public class AccountFragment extends Fragment {
                 buildChangePhoneNumberDialog();
             }
         });
+
+        //1. Contact Us button opens email intent and directs you to the developers through your email cient.
+        // the user only needs to enter their inquiry and hit send
         btnContactUs= (Button) view.findViewById(R.id.btnContactUs);
         btnContactUs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +117,7 @@ public class AccountFragment extends Fragment {
                 //emailIntent.putExtra(Intent.EXTRA_CC, CC);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "WeBill Contact Developers");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Please enter your inquiry here");
-
+                //in case there is no email client installed on the phone, it wil catch the exception
                 try {
                     startActivity(Intent.createChooser(emailIntent, "Send mail..."));
                     Log.i("Finished sending", "");
@@ -154,6 +157,10 @@ public class AccountFragment extends Fragment {
         return view;
     }
 
+    //build a dialogue to change phone number
+    //will check if the phone number is a valid string
+    //will check if the new phone number and confirm phone number match
+
     private void buildChangePhoneNumberDialog() {
         AlertDialog.Builder phoneNumberDialog = new AlertDialog.Builder(this.getContext());
         phoneNumberDialog.setTitle("Modify Phone Number");
@@ -173,7 +180,7 @@ public class AccountFragment extends Fragment {
         ll.addView(confirmPhoneNumber);
         phoneNumberDialog.setView(ll);
 
-
+        //the entered phone number should start with + and should have only digits and length should be between 10 and 13 characters
         phoneNumberDialog.setPositiveButton("RESET PHONE NUMBER",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -186,6 +193,7 @@ public class AccountFragment extends Fragment {
                                 Toast.makeText(phoneNumberDialog.getContext(), "new phone number and confirm number don't match", Toast.LENGTH_SHORT).show();
                             }
                             else {
+                                //will modify the phone number from the backend
                                 SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                                 String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
                             ModifyPhoneNumberService modifyPhoneNumberService=new ModifyPhoneNumberService();
@@ -204,7 +212,7 @@ public class AccountFragment extends Fragment {
         AlertDialog resetPhoneNumber = phoneNumberDialog.create();
         resetPhoneNumber.show();
     }
-
+    //method to change password of the user
     private void buildChangePasswordDialog() {
         AlertDialog.Builder passwordDialog = new AlertDialog.Builder(this.getContext());
         passwordDialog.setTitle("RESET PASSWORD");
@@ -216,7 +224,7 @@ public class AccountFragment extends Fragment {
         oldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
         confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
+        //prompt the user to enter the old password and the new password and confirm the new password
         oldPass.setHint("Old Password");
         newPass.setHint("New Password");
         confirmPass.setHint("Confirm Password");
@@ -230,6 +238,11 @@ public class AccountFragment extends Fragment {
         passwordDialog.setView(ll);
         passwordDialog.setPositiveButton("RESET PASSWORD",
                 new DialogInterface.OnClickListener() {
+                    //1. method to first verify if the new and confirm password match
+                    //2. then check that the old password entered is correct
+                    //3. check if the new password is not the same as the old password
+                    //4. update the password in the backend if every condition is passed
+
                     public void onClick(DialogInterface dialog, int id) {
                         SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
                         if (!newPass.getEditableText().toString().equals(confirmPass.getEditableText().toString())){
@@ -255,12 +268,16 @@ public class AccountFragment extends Fragment {
                         dialog.cancel();
                     }
                 });
+
+        //cancel button for reset password
         passwordDialog.setNegativeButton("CANCEL",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
+
+        //create the reset password dialogue
 
         AlertDialog resetPassword = passwordDialog.create();
         resetPassword.show();
@@ -293,7 +310,7 @@ public class AccountFragment extends Fragment {
 //                });
 //        dialogChangeUsername = builder.create();
 //    }
-
+// build logout dialog
     private void buildUserLogoutDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());
         //Choose Dialog Layout here
@@ -309,6 +326,7 @@ public class AccountFragment extends Fragment {
                         startActivity(intent);
                     }
                 })
+                //cancel button for closing the logout prompt
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -320,6 +338,7 @@ public class AccountFragment extends Fragment {
     }
 
     // Building Dialog for Choosing Profile Pic
+    //allows the user to change the profile pic and choose from a variety of clip arts
     private void buildProfilePicDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this.getContext());
         //Choose Dialog Layout here
@@ -390,7 +409,7 @@ public class AccountFragment extends Fragment {
 
     }
 
-
+//save all the data in shared preferences to use later in the app
     public void saveData(){
         //create a shared preferences object, on private mode means no other app can modify the data
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
@@ -401,6 +420,7 @@ public class AccountFragment extends Fragment {
 //        Toast.makeText(this.getContext(), "Saved data", Toast.LENGTH_SHORT).show();
     }
 
+    //load data from the shared preferences
     public void loadData(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
         savedImg = sharedPreferences.getInt("IMGID",R.drawable.girl);
