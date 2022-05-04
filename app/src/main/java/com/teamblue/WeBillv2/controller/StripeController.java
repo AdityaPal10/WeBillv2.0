@@ -8,6 +8,8 @@ import com.teamblue.WeBillv2.model.pojo.PayFriendModel;
 import com.teamblue.WeBillv2.model.pojo.User;
 import com.teamblue.WeBillv2.service.StripeService;
 
+// intermediary or "manager" between StripeService and the activities that need to call the
+// Stripe API
 public class StripeController {
 
     StripeService stripeService = new StripeService();

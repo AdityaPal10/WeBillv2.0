@@ -30,8 +30,10 @@ public class StripeService {
      * @param user a User object that holds the user's username
      */
     public void createAccount(Context context, User user) {
+        // Toast to let users know this might take a while
         Toast.makeText(context, "Just a moment please", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
+        // make the call to backend and do something based on response
         Call<UserStripeAccount> call = stripeMethods.createStripeAccounts(user);
         call.enqueue(new Callback<UserStripeAccount>() {
             @Override
@@ -59,9 +61,9 @@ public class StripeService {
      * @param mode either "account" or "customer" to signify which value is saved in preferences
      */
     public void getAccount(Context context, String username, String mode) {
-        // Toast.makeText(context, "Processing...", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<UserStripeAccount> call = stripeMethods.getStripeAccounts(username);
+        // call to the backend, do something based on the response
         call.enqueue(new Callback<UserStripeAccount>() {
             @Override
             public void onResponse(Call<UserStripeAccount> call, Response<UserStripeAccount> response) {
@@ -97,15 +99,18 @@ public class StripeService {
      * @param username the user's username, needed to fetch their details
      */
     public void getPaymentSheet(Context context, String username, String cusID) {
+        // toast to let the user know this might take a bit of time
         Toast.makeText(context, "Another moment please", Toast.LENGTH_SHORT).show();
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<PaymentSheetModel> call = stripeMethods.stripePaymentSheet(username);
+        // call to the backend, do something based on the response
         call.enqueue(new Callback<PaymentSheetModel>() {
             @Override
             public void onResponse(Call call, Response response) {
                 if(response.code() == Constants.RESPONSE_OK) {
                     PaymentSheetModel result = (PaymentSheetModel) response.body();
-                    // create the intent and grab the info we need to add as the metadata for the Stripe payment sheet
+                    // create an intent to PaymentDetailsActivity (where we get card details)
+                    // and grab info we need as metadata for the Stripe payment sheet
                     Intent intent = new Intent(context, PaymentDetailsActivity.class);
                     intent.putExtra("setupIntent", result.getSetupIntent());
                     intent.putExtra("customerId", cusID);
@@ -130,11 +135,13 @@ public class StripeService {
     public void payFriend(Context context, PayFriendModel payFriendModel) {
         StripeMethods stripeMethods = LoginRetrofitClient.getRetrofitInstance().create(StripeMethods.class);
         Call<LoginModel> call = stripeMethods.payFriendTransaction(payFriendModel);
+        // call to backend, do something based on response
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
                 if (response.code() == Constants.RESPONSE_OK) {
                     LoginModel payResponse = (LoginModel) response.body();
+                    // toast for payment status
                     Toast.makeText(context, "Payment " + payResponse.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

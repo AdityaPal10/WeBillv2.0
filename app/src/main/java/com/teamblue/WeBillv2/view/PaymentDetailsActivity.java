@@ -53,7 +53,7 @@ public class PaymentDetailsActivity extends AppCompatActivity {
         });
     }
 
-    // method to initiate the payment sheet with the necessary metadata and present it
+    // method to initiate or configure the payment sheet with the necessary metadata and present it
     private void initPaymentSheet() {
         try {
             customerConfig = new PaymentSheet.CustomerConfiguration(customerId, ephKey);

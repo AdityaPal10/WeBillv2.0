@@ -45,6 +45,7 @@ public class ModifyPhoneNumberService {
     });
     }
 
+    // network call to our backend to fetch the given user's phone number
     public void getPhoneNumber(Context context, String username) {
         AccountsMethods accountsMethods = LoginRetrofitClient.getRetrofitInstance().create(AccountsMethods.class);
         Call<ModifyPhoneNumberModel> call = accountsMethods.getPhoneNumber(username);

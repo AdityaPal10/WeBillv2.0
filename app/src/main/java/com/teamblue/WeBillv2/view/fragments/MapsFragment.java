@@ -48,7 +48,7 @@ public class MapsFragment extends Fragment {
     private final int LOCATION_REQUEST_CODE = 7002;
     private LatLng initialLoc = new LatLng(42.360081, -71.058884); // initially set to Boston
 
-    private int ZOOM = 13;  // ranges from 2 to 21; the higher the num, the more zoomed in
+    private int ZOOM = 13;  // the zoom for map; ranges from 2 to 21; the higher the num, the more zoomed in
     private ClusterManager<LocationItem> clusterManager;
     private LocationItem clickedClusterItem;
 
@@ -67,7 +67,7 @@ public class MapsFragment extends Fragment {
             // set the map coordinates, move cam to coordinates, and zoom in
             // if permissions were granted, coordinates set to user's current location;
             // otherwise, coordinates set to Boston
-            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);    // set to basic map
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);    // set to basic map type
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLoc, ZOOM));
 
             // initialize the cluster manager with the context and the map
@@ -111,6 +111,8 @@ public class MapsFragment extends Fragment {
                     List<LocationModel> locationData = expLocationList;
                     List<LocationItem> locationItems = new ArrayList<>();
                     if (!locationData.isEmpty()) {
+                        // for each location, grab the info for the info window that shows when
+                        // a marker is clicked
                         for (LocationModel location : locationData) {
                             locationItems.add(new LocationItem(
                                     location.getLatitude(), location.getLongitude(),
@@ -132,8 +134,11 @@ public class MapsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // using FLPC to get the device current location and set it as the "default" location
+        // when we load the map fragment
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(getContext());
 
+        // requesting permissions
         if (ContextCompat.checkSelfPermission(this.getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getContext(),
@@ -188,6 +193,8 @@ public class MapsFragment extends Fragment {
         });
     }
 
+    // a custom info window since the default default info window is too small to hold the
+    // necessary info
     public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         private final View customContentsView;

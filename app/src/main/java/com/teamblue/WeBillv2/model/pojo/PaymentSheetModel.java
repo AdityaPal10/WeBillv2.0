@@ -1,5 +1,6 @@
 package com.teamblue.WeBillv2.model.pojo;
 
+// object to hold the data needed to configure a Stripe payment sheet
 public class PaymentSheetModel {
 
     private String setupIntent;

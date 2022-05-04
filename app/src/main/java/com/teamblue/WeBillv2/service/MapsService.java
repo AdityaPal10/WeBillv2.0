@@ -26,14 +26,17 @@ public class MapsService {
     private String TAG = "ExpLocation";
     ArrayList<LocationModel> expLocationList= new ArrayList<>();
 
+    // network call to our backend; fetches locations of the user's expenses
     public void getExpenseLocations(Context context, MapsController mapsControllerCallback){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
         String username = sharedPreferences.getString(Constants.USERNAME_KEY,"");
         String year = sharedPreferences.getString(Constants.FILTER_YEAR,Integer.toString(Year.now().getValue()));
 
+        // instance of maps methods interface as defined in MapMethod class
         MapsMethods mapsMethods = LoginRetrofitClient.getRetrofitInstance().create(MapsMethods.class);
         Call<ArrayList<LocationModel>> call = mapsMethods.getExpenseLocation(new MapsRequestModel(username,year));
 
+        // call to backend, do something based on response
         call.enqueue(new Callback<ArrayList<LocationModel>>() {
             @Override
             public void onResponse(Call<ArrayList<LocationModel>> call, Response<ArrayList<LocationModel>> response) {

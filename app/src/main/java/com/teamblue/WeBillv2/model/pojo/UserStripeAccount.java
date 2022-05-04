@@ -1,5 +1,6 @@
 package com.teamblue.WeBillv2.model.pojo;
 
+// object to contain a user's Stripe account_id and Stripe customer_id
 public class UserStripeAccount {
 
     private String username;

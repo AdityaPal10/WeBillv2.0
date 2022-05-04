@@ -113,7 +113,7 @@ public class LoginService extends AppCompatActivity {
        password - the edit text widget where the user enters their password
 
        Return type:
-       void - the function if successful will start an intent to the friends activity, else will empty the fields and allow user to re-enter the details.
+       void - the function if successful will start an intent to the stripe accounts activity, else will empty the fields and allow user to re-enter the details.
      */
     public void registerUser(Context context,SignUpUser signUpUser){
         Log.d(TAG,signUpUser.getUsername().toString().trim());
@@ -148,7 +148,7 @@ public class LoginService extends AppCompatActivity {
 
                     //move to activity if successful login
                     if(signUpResponse.getStatus()==Constants.RESPONSE_OK){
-                        //create intent to move to friends activity on successful sign in
+                        //create intent to move to stripe accounts activity on successful sign in
                         Intent intent = new Intent(context, StripeAccountsActivity.class);
                         intent.putExtra("username", signUpUser.getUsername().trim());
                         //since calling intent from another activity have to set this flag to true

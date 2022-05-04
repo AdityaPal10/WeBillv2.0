@@ -97,10 +97,6 @@ public class FriendFragment extends Fragment {
         });
 
 
-
-
-
-
         return view;
     }
 
@@ -141,11 +137,7 @@ public class FriendFragment extends Fragment {
         TextView tvFriendName = viewNewFriendCard.findViewById(R.id.tvFriendName);
         tvFriendName.setText(Username);
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-       // SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        //int highScore = sharedPref.getInt(getString(R.string.saved_high_score_key), defaultValue);
         String loggedInUsername = sharedPref.getString(Constants.USERNAME_KEY,"");
-        //FriendService friendService=new FriendService();
-        //friendService.addFriend(context,loggedInUsername ,Username);
         add(context,loggedInUsername,Username);
         /*******Right Now I just consider Initial Status of a friend card as Balance:0.00 , @+id/btnFriendStatus background as @drawable/credit_card********/
 
@@ -193,6 +185,8 @@ public class FriendFragment extends Fragment {
                         TextView tvBalance = newCard.findViewById(R.id.tvFriendBalance);
                         TextView tvStatus = newCard.findViewById(R.id.tvFriendStatus);
                         Button btnPay = newCard.findViewById(R.id.btnFriendStatus);
+                        // calculate balance: positive -> friends owe us, negative -> we owe friends
+                        // depending on the balance, set the views and onClickListener
                         double balance = friendBalanceModel.getAmountOwed()-friendBalanceModel.getAmountToPay();
                         if(balance<0){
                             tvStatus.setText("To pay : $");
@@ -263,8 +257,6 @@ public class FriendFragment extends Fragment {
                             Toast.makeText(context,"Error adding friend, please try again",Toast.LENGTH_LONG).show();
                     }
                     Log.d(TAG,"Error adding friend,please try again");
-                    //friendUsername.setText("");
-                    //Toast.makeText(context,"Error adding friend,please try again",Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -291,9 +283,11 @@ public class FriendFragment extends Fragment {
         // make sure preferences has account_id/customer_id that we'll need when paying
         SharedPreferences sharedPref = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         String username = sharedPref.getString(Constants.USERNAME_KEY, null);
+        // the user is the one who pays so we need the customer_id
         if (!sharedPref.contains("cus_" + username)){
             stripeController.getStripeAccounts(context, username, "customer");
         }
+        // we need the friend's account_id to list it as the transfer destination
         if (!sharedPref.contains("acc_" + friend)) {
             stripeController.getStripeAccounts(context, friend, "account");
         }
@@ -306,7 +300,6 @@ public class FriendFragment extends Fragment {
             public void onClick(View view) {
                 String scrCustomer = sharedPref.getString("cus_" + username, null);
                 String destAccount = sharedPref.getString("acc_" + friend, null);
-                // Toast.makeText(context, scrCustomer + "\n" + destAccount, Toast.LENGTH_LONG).show();
                 stripeController.stripeTransaction(context, scrCustomer, destAccount, cents);
             }
         });
@@ -322,6 +315,7 @@ public class FriendFragment extends Fragment {
         button.setBackgroundResource(R.drawable.bell);
 
         // make sure preferences has the phone number for the friend we want to remind
+        // if it doesn't, make an api call to the backend
         SharedPreferences sharedPref = context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         if (!sharedPref.contains("tel_" + friend)) {
             ModifyPhoneNumberService service = new ModifyPhoneNumberService();
@@ -331,7 +325,7 @@ public class FriendFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // create the text message and SMS intent
+                // creating the text message and SMS intent
                 String number = sharedPref.getString("tel_" + friend, "1234567890");
                 String message = "Hey, just reminding you that you still owe me $" + String.format(Locale.US,"%.2f", balance);
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null));
