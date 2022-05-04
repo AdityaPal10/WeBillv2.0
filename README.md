@@ -4,10 +4,15 @@ Team Blue
 Coded in MVC
 
 **Extra Credit**
+
 • Proper request of device permissions for 5.1 and above. (Camera and Device Location Access)
+
 • Using/Reusing Fragments with interfaces for communication.
+
 • Use of RecyclerView or CardView
+
 • Good use of Menus.
+
 • Targeting multiple locales. (Supports English and Chinese System language)
 
 **Before you run the app**
@@ -47,8 +52,10 @@ Once AI scanner fill the result, you are free to modify any information that is 
 7. Once finish entering the bill conclusions, click "Save". Bill information will go to "My Bills" and "Activity" menu
 
 **Activity menu**
+
 Here, you will able to see your spending activities by showing the location of your bill, we record everybill you spent at anywhere. Click a pin on the map, you will see a tag about your spending activities at this location. Longpress the tag, it shows you the details of this tag. You are able to see each bills you spent at this place.
 
 **Account menu**
+
 You are able to Reset Password, Modify Phone Number, Contact Us, and select filter for "My Bills" menu.
 
