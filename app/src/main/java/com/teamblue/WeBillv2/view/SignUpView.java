@@ -24,7 +24,7 @@ public class SignUpView extends AppCompatActivity {
 
     private Button register;
     private LoginController loginController = new LoginController();
-
+//initialize variables and check that the fields during sign up are not empty
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
