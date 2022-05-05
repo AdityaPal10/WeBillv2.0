@@ -154,6 +154,7 @@ public class AddBillFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    // Send bill image as BASE64 String to Veryfi API to obtain result scanned data.
     private void scanBillFromApi(LayoutInflater layoutInflater,ViewGroup container,String filedata){
         Log.d(TAG2,"inside scan bill");
         VeryfiMethods veryfiMethods = VeryfiRetrofitClient.getRetrofitInstance().create(VeryfiMethods.class);
@@ -322,6 +323,7 @@ public class AddBillFragment extends Fragment {
         startActivityForResult(autocompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
+    //Click listener for scanning bill
     private void scanBillOnClickListener(View view){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -410,7 +412,6 @@ public class AddBillFragment extends Fragment {
 //        }
 //    }
 
-
     private String getTodaysDate() {
         //Set default date as today
         Calendar cal = Calendar.getInstance();
@@ -421,6 +422,7 @@ public class AddBillFragment extends Fragment {
         return makeDateString(day,month,year);
     }
 
+    //Initialize Date picker
     private void initDatePicker() {
             DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
                 @Override
@@ -442,6 +444,7 @@ public class AddBillFragment extends Fragment {
             datePickerDialog = new DatePickerDialog(getActivity(),style,dateSetListener,year,month,day);//Debug
         }
 
+        //Format Date String
         private String createDate(String dateString){
             int year = Integer.parseInt(dateString.split(" ")[0].split("-")[0]);
             int month = Integer.parseInt(dateString.split(" ")[0].split("-")[1]);
