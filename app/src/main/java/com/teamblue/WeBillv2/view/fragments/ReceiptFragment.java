@@ -163,6 +163,11 @@ public class ReceiptFragment extends Fragment {
 //    }
 
     //make network call to receive bills belonging to user
+    /**
+     * Service call to get bills for user
+     * @param context android context
+     * @param username the username of the user
+     */
     public void getBillsForUser(Context context, String username) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.TEMP_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences permSharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
@@ -328,7 +333,7 @@ public class ReceiptFragment extends Fragment {
 
     }
 
-
+    /**Save Data to Shared Preferences**/
     public void saveData(){
         //create a shared preferences object, on private mode means no other app can modify the data
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
@@ -338,6 +343,7 @@ public class ReceiptFragment extends Fragment {
 //        Toast.makeText(this.getContext(), "Saved data", Toast.LENGTH_SHORT).show();
     }
 
+    /**Load Data from Shared Preferences**/
     public void loadData(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
         savedFilterYear = sharedPreferences.getString("FILTERYEAR","2000");

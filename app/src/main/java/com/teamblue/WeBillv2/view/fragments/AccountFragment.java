@@ -470,6 +470,7 @@ public class AccountFragment extends Fragment {
 //        Toast.makeText(this.getContext(), "Loaded Data", Toast.LENGTH_SHORT).show();
     }
 
+    //Set the application's filter year to current year.
     public void setDefaultAppYear(){
         String currentYear = Integer.toString(Year.now().getValue());
         //set it to preferences
@@ -480,6 +481,7 @@ public class AccountFragment extends Fragment {
         Log.d("=======TAG======",(sharedPreferences.getString(Constants.FILTER_YEAR,Integer.toString(Year.now().getValue()))));
     }
 
+    //Sets the application's filter year to the year selected in the Account Tab.
     public void setAppYear(String year){
         //set it to preferences
         SharedPreferences sharedPreferences = getActivity().getBaseContext().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);

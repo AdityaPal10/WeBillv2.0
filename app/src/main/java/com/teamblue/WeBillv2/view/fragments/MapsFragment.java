@@ -87,6 +87,7 @@ public class MapsFragment extends Fragment {
                 }
             });
 
+            //Info Window long click listener set to cluster manager
             clusterManager.setOnClusterItemInfoWindowLongClickListener(new ClusterManager.OnClusterItemInfoWindowLongClickListener<LocationItem>() {
                 @Override
                 public void onClusterItemInfoWindowLongClick(LocationItem item) {
