@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText passwordEditText;
 
     private Button btnSkip; // Skip login for developer testing (Delete after finished)
-
+//create an instance of login controller
     private LoginController loginController = new LoginController();
 
     @Override
@@ -73,12 +73,12 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
     }
-
+//intent to go to the sign up page
     public void segueToSignUpActivity(){
         Intent intent = new Intent(this,SignUpView.class);
         startActivity(intent);
     }
-
+//function to set the default year
     public void setDefaultAppYear(){
         String currentYear = Integer.toString(Year.now().getValue());
         //set it to preferences
